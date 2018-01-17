@@ -1,1 +1,10 @@
-Þetta er textaskrá og þið megið endilega uppfæra hana
+Þetta er textasfíll og þið  endilega uppfæra hana.
+
+
+Hér er ég, Kristófer að uppfæra síðuna.
+
+
+$$$$$$$$$$$$-----
+
+
+"""
