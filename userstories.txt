@@ -70,6 +70,8 @@ Sem söluaðili vil ég geta selt mörg herbergi í einu til stórs hóps.
 
 Sem hóteleigandi vil ég geta tekið frá herbergi fyrir nákomna (nepotismi).
 
-Sem söluaðili vil ég geta hætt við sölu á herbergjum.
+Sem söluaðili vil ég geta hætt við sölu á herbergjum, ef viðskiptavinur veikist skyndilega.
 
-Sem söluaðili vil ég geta gefið afslætti af einstaka herbergjum.
+Sem söluaðili vil ég geta gefið afslætti af einstaka herbergjum, fyrir efnaminna fólk.
+
+Sem hóteleigandi vil ég geta gefið tímabunda afslætti af öllum herbergjum, s.s. á low-season til að auka tekjur.
