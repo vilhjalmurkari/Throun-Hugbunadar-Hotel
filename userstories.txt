@@ -75,3 +75,5 @@ Sem söluaðili vil ég geta hætt við sölu á herbergjum, ef viðskiptavinur veikist 
 Sem söluaðili vil ég geta gefið afslætti af einstaka herbergjum, fyrir efnaminna fólk.
 
 Sem hóteleigandi vil ég geta gefið tímabunda afslætti af öllum herbergjum, s.s. á low-season til að auka tekjur.
+
+Sem vefstjóri vil ég geta breytt verðum hótelherbergja varanlega, s.s. þegar hótel fer í uppbyggingu.
