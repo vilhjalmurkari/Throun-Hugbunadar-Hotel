@@ -47,16 +47,24 @@ Snjólfur er hræddur um að NSA uppgötvi sig. Hann vill full privacy.
 Tillaga að betri notendasögum:
 
 Sem notandi vil ég geta valið hversu margir munu gista á hótelinu til þess að geta fundið herbergi við hæfi
+** Hvað er verið að forrita? Er verið að leita að svefnplássi? Alls átta pláss, eða tvö herbergi með fjögur pláss?**
+---- 
+-> 2.25 tíma
 
 Sem notandi vil ég geta fundið hótel gistingu eftir verði, svo ég geti fundið eitthvað sem ég hef efni á.
+-> 2 tíma
 
 Sem notandi vil ég geta fundið hótel sem eru aðeins fyrir fullorðna, því mér líkar ekki við börn.
+-> 2.875
 
 Sem notandi vil ég geta fundið hótel sem eru í návist við strendur, því ég vil taka lit.
+-> 2 tímar
 
 Sem notandi vil ég geta séð hvort hótelið bjóði upp á herbergi með minibar.
+-> 1.875 tímar
 
 Sem notandi vil ég geta fundið hótel sem bjóða upp á fínan mat, því ég er matgæðingur.
+-> 
 
 Sem notandi vil ég geta fundið út úr því hvort leyft sé að hafa dýr með sér á hótelið,(einhver rök).
 
@@ -67,6 +75,7 @@ Sem foreldri vil ég geta haft aðstæðu fyrir börnin mín yfir daginn á með við ger
 Sem notandi vil ég geta haft aðgang að líkamsrækt svo ég detti ekki úr formi í fríinu.
 
 Sem söluaðili vil ég geta selt mörg herbergi í einu til stórs hóps.
+**Notandi, ekki söluaðili. Kaupa mörg herbergi. Karfa?**
 
 Sem hóteleigandi vil ég geta tekið frá herbergi fyrir nákomna (nepotismi).
 
