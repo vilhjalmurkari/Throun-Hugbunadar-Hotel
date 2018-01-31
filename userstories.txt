@@ -70,7 +70,7 @@ Sem notandi vil ég geta fundið út úr því hvort leyft sé að hafa dýr með sér á hó
 
 Sem notandi vil ég geta komist að því hvað hótel bjóða upp á nettengingu.
 
-Sem foreldri vil ég geta haft aðstæðu fyrir börnin mín yfir daginn á með við gerum eitthvað.
+Sem foreldri vil ég geta haft aðstöðu fyrir börnin mín yfir daginn á með við gerum eitthvað.
 
 Sem notandi vil ég geta haft aðgang að líkamsrækt svo ég detti ekki úr formi í fríinu.
 
@@ -86,3 +86,5 @@ Sem söluaðili vil ég geta gefið afslætti af einstaka herbergjum, fyrir efnaminna
 Sem hóteleigandi vil ég geta gefið tímabunda afslætti af öllum herbergjum, s.s. á low-season til að auka tekjur.
 
 Sem vefstjóri vil ég geta breytt verðum hótelherbergja varanlega, s.s. þegar hótel fer í uppbyggingu.
+
+Sem notandi vil ég geta valið hve margar stjörnur hótelið hefur, því ég vil getað stjórnað gæðum hótelsins sem ég vel.
