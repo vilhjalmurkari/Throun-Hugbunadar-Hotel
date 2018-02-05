@@ -1,2 +1,7 @@
 # Throun-Hugbunadar-Hotel
-Verkefni Ã­ Ã¾rÃ³un hugbÃºnaÃ°ar!
+Verkefni í Şróun Hugbúnağar!
+
+### Athugasemdir
+1.   
+Um hvernig má gera HTTPS Java Servlet síğu:
+https://www.codeproject.com/Tips/1043003/Create-a-Simple-Web-Server-in-Java-HTTPS-Server
