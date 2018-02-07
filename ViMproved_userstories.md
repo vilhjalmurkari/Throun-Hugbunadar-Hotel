@@ -20,7 +20,6 @@ Andri Valur viðurkenndi í tima að **Planning Poker** og **Card Sorting** *gætu* 
 Hér eru **Effort** mælt í **persónudögum** (þ.e. 2 klst. af gagnlegri vinnu).
 
 | Sprint | User Story |                     User Story                        | Priority |  Estimated  |    Actual   | Done? |
-|        |     ID     |                                                       |          | Team Effort | Team Effort |       |
 |:------:|:----------:|-------------------------------------------------------|:--------:|-------------|-------------|-------|
-|   1    |     ?      | Sem notandi vil ég geta valið *features* við hótelin sem ég vel.||           |             |       |
-
+|   1    |     ?      | Sem notandi vil ég geta valið *features* við hótelin sem ég vel. |             |             |       |
+|        |     ID     |                                                       |          | Team Effort | Team Effort |       |
