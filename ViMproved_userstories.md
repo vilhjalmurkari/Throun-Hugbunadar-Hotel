@@ -19,6 +19,7 @@ Andri Valur viðurkenndi í tima að **Planning Poker** og **Card Sorting** *gætu* 
 #### Þetta er ekki alveg að virka. Hvernig fáum við töflur til að virka?
 Hér eru **Effort** mælt í **persónudögum** (þ.e. 2 klst. af gagnlegri vinnu).
 Sprint|User Story ID|User Story|Priority|Estimated Team Effort|Actual Team Effort|Done?
+|:------:|:----------:|-------------------------------------------------------|:--------:|-------------|-------------|-------|------|
 |# 1|Sem notandi vil ég geta sett skorður á leitina til að henta mínum þörfum|10|||
 |# 2|Sem notandi vil ég geta valið stærð herbergja (í mannfjölda) því margir þurfa gista saman|20|||
 |# 3|Sem notandi vil ég geta keypt mörg herbergi í einu því ég er að panta fyrir stóran hóp|30|||
