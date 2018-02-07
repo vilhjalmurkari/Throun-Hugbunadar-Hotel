@@ -18,8 +18,13 @@ Andri Valur viðurkenndi í tima að **Planning Poker** og **Card Sorting** *gætu* 
 
 #### Þetta er ekki alveg að virka. Hvernig fáum við töflur til að virka?
 Hér eru **Effort** mælt í **persónudögum** (þ.e. 2 klst. af gagnlegri vinnu).
-
-| Sprint | User Story |                     User Story                        | Priority |  Estimated  |    Actual   | Done? |
-|:------:|:----------:|-------------------------------------------------------|:--------:|-------------|-------------|-------|
-|   1    |     ?      | Sem notandi vil ég geta valið *features* við hótelin sem ég vel. |             |             |       |
-|        |     ID     |                                                       |          | Team Effort | Team Effort |       |
+Sprint|User Story ID|User Story|Priority|Estimated Team Effort|Actual Team Effort|Done?
+|# 1|Sem notandi vil ég geta sett skorður á leitina til að henta mínum þörfum|10|||
+|# 2|Sem notandi vil ég geta valið stærð herbergja (í mannfjölda) því margir þurfa gista saman|20|||
+|# 3|Sem notandi vil ég geta keypt mörg herbergi í einu því ég er að panta fyrir stóran hóp|30|||
+|# 4|Sem notandi vil ég geta séð hvað herbergi kostar því peningarnir eru af skornum skammti|20|||
+|# 5|"Sem notandi vil ég geta hætt við körfuna á herbergi því ég er bara að ""window shop""-a"||||
+|# 6|Sem hóteleigandi vil ég geta tekið frá herbergi því bróðir er mikilvægur|?|||
+|# 7|Sem notandi vil ég geta hætt við kaup á herbergi því ég veiktist skyndilega||||
+|# 8|Sem hóteleigandi vil ég geta gefið tímabundna afslætti af herbergjum því það er low-season||||
+|# 9|Sem hóteleigandi vil ég geta breyttt verðum hótelherbergja varanlega því gerðar voru endurbætur||||
