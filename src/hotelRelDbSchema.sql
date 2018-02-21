@@ -1,4 +1,4 @@
-CREATE TABLE Hotel( 
+CREATE TABLE Hotels( 
 	name VARCHAR(32),
 	rating INT,
 	description VARCHAR(140),
@@ -12,23 +12,35 @@ CREATE TABLE Hotel(
 	*/
 );
 
-CREATE TABLE Hotel_tag(
+CREATE TABLE Hotel_tags(
 	hotel_name VARCHAR(32),
 	hotel_zipcode INT,
 	tag_name VARCHAR(32),--þettaeru16stafir, vikrar smá lítið...
-	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotel(name, zipcode)
+	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotels(name, zipcode)
 );
 
-CREATE TABLE Room(
+CREATE TABLE Rooms(
 	--þetta id mun fá gildi sjálfkrafa við innsetningu í tölfuna(sjá https://sqlite.org/autoinc.html)
 	id INT PRIMARY KEY,
 	hotel_name VARCHAR(32),
 	hotel_zipcode INT,
 	size INT,
-	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotel(name, zipcode)
+	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotels(name, zipcode)
 );
 
-CREATE TABLE Room_tag( 
+CREATE TABLE Room_tags( 
 	room_id INT,
-	FOREIGN KEY (room_id) REFERENCES Room(id)	
+	FOREIGN KEY (room_id) REFERENCES Rooms(id)
+);
+
+CREATE TABLE Bookings(
+	user_id INT,
+	room_id INT,
+	FOREIGN KEY(user_id) REFERENCES Users(id),
+	FOREIGN KEY(room_id) REFERENCES Rooms(id)
+);
+
+CREATE TABLE Users(
+	id INT PRIMARY KEY,
+	name VARCHAR(64)
 );
