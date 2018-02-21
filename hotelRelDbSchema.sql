@@ -1,22 +1,31 @@
 CREATE TABLE Hotel( 
-	--þetta er þægilegt því nú mun hver ný röð í Hotel fá sjálfgefið id sem er hæsta id-ið í töflunni + 1
-	id INT PRIMARY KEY,
 	name VARCHAR(32),
 	rating INT,
 	description VARCHAR(140),
 	zipcode INT,
+	PRIMARY KEY(name, zipcode)
+	/*
+	name + zipcode make-ar sense því held það séu ekki hótel á sama stað með sama nafn
+	ef við værum með id þá værum við í raun og veru að gera þetta nema við myndum leyfa það að
+	hótel megi hafa sama nafn og sama zip kóða samtímis, og þá þyrftum við einhvernveginn að vinna
+	okkur úr því ef það kemur upp, en hér segjum við einfaldlega að það sé ekki leyfilegt.
+	*/
 );
 
 CREATE TABLE Hotel_tag(
-	hotel_id INT,
+	hotel_name VARCHAR(32),
+	hotel_zipcode INT,
 	tag_name VARCHAR(32),--þettaeru16stafir, vikrar smá lítið...
-	FOREIGN KEY (hotel_id) REFERENCES Hotel(id)
+	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotel(name, zipcode)
 );
 
-CREATE TABLE Room(  
+CREATE TABLE Room(
+	--þetta id mun fá gildi sjálfkrafa við innsetningu í tölfuna(sjá https://sqlite.org/autoinc.html)
 	id INT PRIMARY KEY,
-	hotel_id INT,
-	FOREIGN KEY (hotel_id) REFERENCES Hotel(id)
+	hotel_name VARCHAR(32),
+	hotel_zipcode INT,
+	size INT,
+	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotel(name, zipcode)
 );
 
 CREATE TABLE Room_tag( 
