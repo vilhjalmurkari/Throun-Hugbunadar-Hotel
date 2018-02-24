@@ -72,6 +72,7 @@ class Booking {
 	//einhver föll hér
 }
 
+//NOTE: það vantar einhver svona dbController klasa(held að minnstakosti að það sé ætlast til þess)
 
 class hotelSearch {
 	//þetta gerir ekkert sérstakt eins og er.
