@@ -1,2 +1,3 @@
 *.swp
-./src/*.ucls
+*.\.ucls
+*.\.class
