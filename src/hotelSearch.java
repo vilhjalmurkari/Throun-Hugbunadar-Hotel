@@ -72,6 +72,9 @@ class Booking {
 	public Date end_date;
 	public boolean confirmed;
 
+	// Usage:	
+	// Before:	
+	// After:	
 	public Booking(int id, Room room, Date start_date, Date end_date) {
 		this.id = id;
 		this.room = room;
@@ -102,6 +105,65 @@ class SearchQuery {
 		this.size_max = size_max;
 	}
 }
+
+class DBmanager {
+
+	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
+		//...
+	}
+
+	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) {
+		//...
+	}
+
+	public static void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) {
+
+	}
+
+	public static void reserveRoom(int roomID) {
+
+	}
+
+	public static Hotel getHotel(String hotelName, String hotelZip) {
+		//Hotel(String name, int rating, String description, int zipcode, ArrayList<String> tags, ArrayList<Room> rooms)
+		return new Hotel(null, 0, null, 0, null, null);
+	}
+
+	public static void addHotel(Hotel hotel) {
+		System.out.println("A hotel has been added to the database. <Unimplemented>");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.out.println( "WHAT????");
+		}
+	}
+
+	public static void addHotels(ArrayList<Hotel> hotels) {
+		for(Hotel h : hotels) {
+			addHotel(h);
+		}
+	}
+
+	public static void addRoomToHotel(Room room, Hotel hotel) {
+		//:)
+	}
+
+	public static void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) {
+		for(Room r : rooms) {
+			addRoomToHotel(r, hotel);
+		}
+	}
+
+	public static ArrayList<Room> getHotelRooms(Hotel hotel) {
+		return new ArrayList<Room>();
+	}
+
+	public static ArrayList<Hotel> search(SearchQuery query) {
+		//sql query...
+		return new ArrayList<Hotel>();
+	}
+
+}
 //NOTE: það vantar einhver svona dbController klasa(held að minnstakosti að það sé ætlast til þess)
 
 class hotelSearch {
@@ -119,61 +181,26 @@ class hotelSearch {
 		//einhverjar fleiri týpur sem við viljum tryggja að séu á réttu format-i
 	}
 
-	public programState state;
-	public Scanner input;
-	public String inputString;
-	public char inputFrontChar;
-	public boolean newInput;
-	public boolean possibleMenuCommand;
+	private programState state;
+	private Scanner input;
+	private String inputString;
+	private boolean possibleMenuCommand;
 
 	public hotelSearch(programState startState, Scanner inputStream) {
 		state = startState;
 		input = inputStream;
 		inputString = "";
-		inputFrontChar = 0;
-		newInput = false;
 		possibleMenuCommand = false;
 	}
-	/*
-	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
-		//...
-	}
 
-	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) {
-		//...
-	}
-
-	public static void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) {
-
-	}
-
-	public static void reserveRoom(int roomID) {
-
-	}
-
-	public static void addHotel(Hotel hotel) {
-
-	}
-
-	public static void addRoomToHotel(Room room, Hotel hotel) {
-
-	}
-
-	public static ArrayList<Hotel> search(SearchQuery query) {
-		//sql query...
-		return new ArrayList<Hotel>();
-	}
-	*/
-
-	public void clearScreen() {
+	private void clearScreen() {
 		//ansi escape codes
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
 
-	public String checkAndAcceptInput(Scanner scanner, inputType type, String message) {
+	/*private String checkAndAcceptInput(Scanner scanner, inputType type, String message) {
 		String input = "";
-		char inputFrontChar = 0;
 		boolean accepted = true;
 		boolean showMessage = false;
 
@@ -204,9 +231,10 @@ class hotelSearch {
 		}while(!accepted);
 
 		return input;
-	}
+	}*/
 
-	public void displayMenuMessage() {
+	// Side-effect free ;)
+	private void displayMenuMessage() {
 		switch(state) {
 			case MENU:
 				System.out.println("Velkomin í hótelleitarforrit 7H");
@@ -214,7 +242,7 @@ class hotelSearch {
 				System.out.println();
 				System.out.println("1): Skrá hótel");
 				System.out.println("2): Skrá herbergi fyrir hótel");
-				System.out.println("3): Breyta verði á hótelherbergi");
+				System.out.println("3): Breyta verði hótelherbergja");
 			break;
 
 			case HOTEL_REG:
@@ -237,10 +265,32 @@ class hotelSearch {
 		System.out.println();
 	}
 
-	public void hotelRegInput() {
-		ArrayList<Hotel> hotelBuffer = new ArrayList<Hotel>();
+	private boolean affirm(String stringToParse) {
+		switch(stringToParse) {
+			case "n":
+			case "no":
+			case "nei":
+				return false;
 
-		while(true) {
+			case "j":
+			case "já":
+			case "ja":
+			case "y":
+			case "yes":
+				return true;
+
+			default:
+				System.out.println("túlkað sem nei");
+				return false;
+		}
+	}
+
+	// After:	A list of hotels has been added to the database.
+	private void hotelRegInput() {
+		ArrayList<Hotel> hotelBuffer = new ArrayList<Hotel>();
+		clearScreen();
+
+		for( boolean quitLoop = false ; !quitLoop ; ) {
 			System.out.println("Skráðu nafn á nýju hóteli:");
 			String newHotelName = input.next();
 
@@ -261,53 +311,111 @@ class hotelSearch {
 									  null));
 
 			System.out.println();
-			System.out.println("Vilt þú bæta við fleiri hótelum?");
+			System.out.println("Vilt þú bæta við fleiri hótelum? (Y/N)");
 			System.out.println();
+
+
 			//athuga hvort við viljum skrá fleiri hótel
-			/*
-			input = input.next();
-
-			if(input.charAt(0) == 'n' || input.charAt(0) == 'N') {
-				state = programState.MENU;
-				inputDone = true;
-				break;
-			}
-			*/
-
-			this.state = programState.MENU;
-			break
+			this.inputString = input.next().toLowerCase();
+			quitLoop = affirm(this.inputString);
 		}
 
-		//gera eitthvað query...
+		DBmanager.addHotels(hotelBuffer);
+		this.state = programState.MENU;
 	}
 
-	public void menuInput() {
-		String inputString = program.input.next();
+	//public Room(int id, int size, int bed_count, boolean shower, int price)
+	private void roomRegInput() {
+		ArrayList<Room> roomBuffer = new ArrayList<Room>();
+		String hotelName = "";
+		String hotelZip = "";
+		clearScreen();
 
-		switch(inputString.charAt(0)) {
+		for( boolean quitLoop = false ; !quitLoop ; ) {
+			System.out.println("Skráðu nafn hótelsins sem á að skrá herbergið fyrir:");
+			hotelName = input.next();
+
+			System.out.println("Skráðu póstfang hótelsins sem á að skrá herbergið fyrir:");
+			hotelZip = input.next();
+			System.out.println();
+
+			System.out.println("Skráðu stærð á nýju hótelherbergi:");
+			String newRoomSize = input.next();
+
+			System.out.println("Skráðu fjölda rúma í nýja hótelherberginu:");
+			String newRoomBedCount = input.next();
+
+			System.out.println("Er sturta í hótelherberginu? (Y/N)");
+			String newRoomHasShower = input.next();
+
+			System.out.println("Sláðu inn verð á nýja hótelherberginu:");
+			String newRoomPrice = input.next();
+
+			roomBuffer.add(new Room(-1,
+				 					Integer.parseInt(newRoomSize),
+				 					Integer.parseInt(newRoomBedCount),
+				 					Boolean.parseBoolean(newRoomHasShower),
+				 					Integer.parseInt(newRoomPrice)));
+
+			System.out.println();
+			System.out.println("Vilt þú bæta við fleiri hótelherbergjum? (Y/N)");
+			System.out.println();
+
+
+			//athuga hvort við viljum skrá fleiri herbergi
+			this.inputString = input.next().toLowerCase();
+			quitLoop = affirm(this.inputString);
+		}
+
+		DBmanager.addRoomsToHotel(roomBuffer, DBmanager.getHotel(hotelName, hotelZip));
+		this.state = programState.MENU;
+	}
+
+	private void changeHotelRoomPriceInput() {
+		System.out.println("Skráðu nafn hótelsins:");
+		String hotelName = input.next();
+
+		System.out.println("Skráðu póstfang hótelsins:");
+		String hotelZip = input.next();
+		System.out.println();
+
+		//TODO: prósenta o.fl.
+		System.out.println("Skráðu inn verðbreytingu:");
+		String priceChange = input.next();
+
+		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
+		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getHotelRooms(hotel));
+
+		this.state = programState.MENU;
+	}
+
+	// Before:	The program is in some state.
+	// After:	The program is in a state specified by <inputString>
+	private void menuInput() {
+		this.inputString = input.next();
+
+		switch(this.inputString.charAt(0)) {
 			case '1':
-				state = programState.HOTEL_REG;
-				newInput = true;
+				this.state = programState.HOTEL_REG;
 			break;
 
 			case '2':
-				state = programState.ROOM_REG;
-				newInput = true;
+				this.state = programState.ROOM_REG;
 			break;
 
 			case '3':
-				state = programState.CHANGE_ROOM_PRICE;
-				newInput = true;
+				this.state = programState.CHANGE_ROOM_PRICE;
 			break;
 
 			default:
-				possibleMenuCommand = true;
+ 				this.possibleMenuCommand = true;
 			break;
 		}
 	}
 
-	public void navigationInput() {
-		switch(inputFrontChar) {
+	// After:	The display has been changed to specified menu screen.
+	private void navigationInput() {
+		switch(this.inputString.charAt(0)) {
 			case 'h':
 				System.exit(0);
 			break;
@@ -315,7 +423,6 @@ class hotelSearch {
 			case 'b':
 				if(state != programState.MENU) {
 					state = programState.MENU;
-					newInput = true;
 				}else {
 					System.out.println();
 					System.out.println("Skipun óþekkt, reynið aftur.");
@@ -332,44 +439,34 @@ class hotelSearch {
 	}
 
 	//þetta gerir ekkert sérstakt eins og er.
+	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
 		hotelSearch program = new hotelSearch(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
 
 		while(true) {
 			program.clearScreen();
-
 			program.displayMenuMessage();
+			
+			switch(program.state) {
+				case MENU:
+					program.menuInput();
+				break;
 
-			while(!program.newInput) {
-				switch(state) {
-					case MENU:
-						program.menuInput();
-					break;
+				case HOTEL_REG:
+					program.hotelRegInput();
+				break;
 
-					case HOTEL_REG:
-						program.hotelRegInput();
-					break;
+				case ROOM_REG:
+					program.roomRegInput();
+				break;
 
-					case ROOM_REG:
-						switch(program.inputFrontChar) {
-							default:
-								program.possibleMenuCommand = true;
-							break;
-						}
-					break;
+				case CHANGE_ROOM_PRICE:
+					program.changeHotelRoomPriceInput();
+				break;
+			}
 
-					case CHANGE_ROOM_PRICE:
-						switch(program.inputFrontChar) {
-							default:
-								program.possibleMenuCommand = true;
-							break;
-						}
-					break;
-				}
-
-				if(program.possibleMenuCommand) {
-					program.navigationInput();
-				}
+			if(program.possibleMenuCommand) {
+				program.navigationInput();
 			}
 		}
 
@@ -389,6 +486,7 @@ class hotelSearch {
 			}
 		}
 		catch(SQLException e) {
+		sqli
 			System.err.println(e.getMessage());
 		}finally {
 			try {
