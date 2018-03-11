@@ -119,6 +119,22 @@ class hotelSearch {
 		//einhverjar fleiri týpur sem við viljum tryggja að séu á réttu format-i
 	}
 
+	public programState state;
+	public Scanner input;
+	public String inputString;
+	public char inputFrontChar;
+	public boolean newInput;
+	public boolean possibleMenuCommand;
+
+	public hotelSearch(programState startState, Scanner inputStream) {
+		state = startState;
+		input = inputStream;
+		inputString = "";
+		inputFrontChar = 0;
+		newInput = false;
+		possibleMenuCommand = false;
+	}
+	/*
 	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
 		//...
 	}
@@ -147,17 +163,19 @@ class hotelSearch {
 		//sql query...
 		return new ArrayList<Hotel>();
 	}
+	*/
 
-	public static void clearScreen() {
+	public void clearScreen() {
 		//ansi escape codes
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
 
-	public static String checkAndAcceptInput(Scanner scanner, inputType type, String message) {
+	public String checkAndAcceptInput(Scanner scanner, inputType type, String message) {
 		String input = "";
 		char inputFrontChar = 0;
 		boolean accepted = true;
+		boolean showMessage = false;
 
 		do {
 			input = scanner.next();
@@ -175,6 +193,12 @@ class hotelSearch {
 							break;
 						}
 					}
+
+					if(!accepted) {
+						System.out.println();
+						System.out.println(message);
+						System.out.println();
+					}
 				break;
 			}
 		}while(!accepted);
@@ -182,152 +206,169 @@ class hotelSearch {
 		return input;
 	}
 
-	//þetta gerir ekkert sérstakt eins og er.
-	public static void main(String[] args) throws ClassNotFoundException {
-		Scanner stdInput = new Scanner(System.in).useDelimiter("\n");
-		programState state = programState.MENU;
+	public void displayMenuMessage() {
+		switch(state) {
+			case MENU:
+				System.out.println("Velkomin í hótelleitarforrit 7H");
+				System.out.println("vinsamlegast sláðu inn tölu sem samsvarast eftirfarandi valmöguleikum:");
+				System.out.println();
+				System.out.println("1): Skrá hótel");
+				System.out.println("2): Skrá herbergi fyrir hótel");
+				System.out.println("3): Breyta verði á hótelherbergi");
+			break;
+
+			case HOTEL_REG:
+				System.out.println("Sláðu inn viðeigandi upplýsingar um hótelið:");
+			break;
+
+			case ROOM_REG:
+				System.out.println("hér getur þú skráð herbergi");
+			break;
+
+			case CHANGE_ROOM_PRICE:
+				System.out.println("hér getur þú breytt verði á hótelherbergjum");
+			break;
+		}
+
+		System.out.println();
+		System.out.print("(h): Hætta ");
+		if(state != programState.MENU) System.out.print("- (b) Til baka");
+		System.out.println();
+		System.out.println();
+	}
+
+	public void hotelRegInput() {
 		ArrayList<Hotel> hotelBuffer = new ArrayList<Hotel>();
 
 		while(true) {
-			clearScreen();
+			System.out.println("Skráðu nafn á nýju hóteli:");
+			String newHotelName = input.next();
 
-			switch(state) {
-				case MENU:
-					System.out.println("Velkomin í hótelleitarforrit 7H");
-					System.out.println("vinsamlegast sláðu inn tölu sem samsvarast eftirfarandi valmöguleikum:");
-					System.out.println();
-					System.out.println("1): Skrá hótel");
-					System.out.println("2): Skrá herbergi fyrir hótel");
-					System.out.println("3): Breyta verði á hótelherbergi");
-				break;
+			System.out.println("Skráðu póstfang nýja hótelsins:");
+			String newHotelZip = input.next();
 
-				case HOTEL_REG:
-					System.out.println("Sláðu inn viðeigandi upplýsingar um hótelið:");
-				break;
+			System.out.println("Skráðu lýsingu á nýja hótelinu:");
+			String newHotelDesription = input.next();
 
-				case ROOM_REG:
-					System.out.println("hér getur þú skráð herbergi");
-				break;
+			System.out.println("Skráðu stjörnufjölda nýja hótelsins:");
+			String newHotelRating = input.next();
 
-				case CHANGE_ROOM_PRICE:
-					System.out.println("hér getur þú breytt verði á hótelherbergjum");
+			hotelBuffer.add(new Hotel(newHotelName, 
+									  Integer.parseInt(newHotelRating),
+									  newHotelDesription, 
+									  Integer.parseInt(newHotelZip), 
+									  null, 
+									  null));
+
+			System.out.println();
+			System.out.println("Vilt þú bæta við fleiri hótelum?");
+			System.out.println();
+			//athuga hvort við viljum skrá fleiri hótel
+			/*
+			input = input.next();
+
+			if(input.charAt(0) == 'n' || input.charAt(0) == 'N') {
+				state = programState.MENU;
+				inputDone = true;
 				break;
 			}
+			*/
 
-			System.out.println();
-			System.out.print("(h): Hætta ");
-			if(state != programState.MENU) System.out.print("- (b) Til baka");
-			System.out.println();
-			System.out.println();
+			this.state = programState.MENU;
+			break
+		}
 
-			String input = "";
-			char inputFrontChar = 0;
-			boolean inputDone = false;
+		//gera eitthvað query...
+	}
 
-			while(!inputDone) {
-				boolean possibleMenuCommand = false;
+	public void menuInput() {
+		String inputString = program.input.next();
 
+		switch(inputString.charAt(0)) {
+			case '1':
+				state = programState.HOTEL_REG;
+				newInput = true;
+			break;
+
+			case '2':
+				state = programState.ROOM_REG;
+				newInput = true;
+			break;
+
+			case '3':
+				state = programState.CHANGE_ROOM_PRICE;
+				newInput = true;
+			break;
+
+			default:
+				possibleMenuCommand = true;
+			break;
+		}
+	}
+
+	public void navigationInput() {
+		switch(inputFrontChar) {
+			case 'h':
+				System.exit(0);
+			break;
+
+			case 'b':
+				if(state != programState.MENU) {
+					state = programState.MENU;
+					newInput = true;
+				}else {
+					System.out.println();
+					System.out.println("Skipun óþekkt, reynið aftur.");
+					System.out.println();
+				}
+			break;
+
+			default:
+				System.out.println();
+				System.out.println("Skipun óþekkt, reynið aftur.");
+				System.out.println();
+			break;
+		}
+	}
+
+	//þetta gerir ekkert sérstakt eins og er.
+	public static void main(String[] args) throws ClassNotFoundException {
+		hotelSearch program = new hotelSearch(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
+
+		while(true) {
+			program.clearScreen();
+
+			program.displayMenuMessage();
+
+			while(!program.newInput) {
 				switch(state) {
 					case MENU:
-						input = stdInput.next();
-						inputFrontChar = input.charAt(0);
-
-						switch(inputFrontChar) {
-							case '1':
-								state = programState.HOTEL_REG;
-								inputDone = true;
-							break;
-
-							case '2':
-								state = programState.ROOM_REG;
-								inputDone = true;
-							break;
-
-							case '3':
-								state = programState.CHANGE_ROOM_PRICE;
-								inputDone = true;
-							break;
-
-							default:
-								possibleMenuCommand = true;
-							break;
-						}
+						program.menuInput();
 					break;
 
 					case HOTEL_REG:
-						while(true) {
-							System.out.println("Skráðu nafn á nýju hóteli:");
-							String newHotelName = stdInput.next();
-
-							System.out.println("Skráðu póstfang nýja hótelsins:");
-							String newHotelZip = stdInput.next();
-
-							System.out.println("Skráðu lýsingu á nýja hótelinu:");
-							String newHotelDesription = stdInput.next();
-
-							System.out.println("Skráðu stjörnufjölda nýja hótelsins:");
-							String newHotelRating = stdInput.next();
-
-							hotelBuffer.add(new Hotel(newHotelName, 
-													  Integer.parseInt(newHotelRating),
-													  newHotelDesription, 
-													  Integer.parseInt(newHotelZip), 
-													  null, 
-													  null));
-
-							System.out.println();
-							System.out.println("Vilt þú bæta við fleiri hótelum?");
-							System.out.println();
-							input = stdInput.next();
-
-							if(input.charAt(0) == 'n' || input.charAt(0) == 'N') {
-								state = programState.MENU;
-								inputDone = true;
-								break;
-							}
-						}
+						program.hotelRegInput();
 					break;
 
 					case ROOM_REG:
-						switch(inputFrontChar) {
+						switch(program.inputFrontChar) {
 							default:
-								possibleMenuCommand = true;
+								program.possibleMenuCommand = true;
 							break;
 						}
 					break;
 
 					case CHANGE_ROOM_PRICE:
-						switch(inputFrontChar) {
+						switch(program.inputFrontChar) {
 							default:
-								possibleMenuCommand = true;
+								program.possibleMenuCommand = true;
 							break;
 						}
 					break;
 				}
 
-				if(possibleMenuCommand) {
-					switch(inputFrontChar) {
-						case 'h':
-							System.exit(0);
-						break;
-
-						case 'b':
-							if(state != programState.MENU) {
-								state = programState.MENU;
-								inputDone = true;
-							}else {
-								System.out.println();
-								System.out.println("Skipun óþekkt, reynið aftur.");
-								System.out.println();
-							}
-						break;
-
-						default:
-							System.out.println();
-							System.out.println("Skipun óþekkt, reynið aftur.");
-							System.out.println();
-						break;
-					}
+				if(program.possibleMenuCommand) {
+					program.navigationInput();
 				}
 			}
 		}
