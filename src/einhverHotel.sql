@@ -1,0 +1,10 @@
+insert into Hotels (name, rating, description, zipcode) values ('Holt', 4, 'Frábært hótel á besta stað', 107);
+insert into Hotels (name, rating, description, zipcode) values ('Hilton', 5, 'Skemmtilegt fjölskylduhótel með góðan morgunverð', 107);
+insert into Hotels (name, rating, description, zipcode) values ('Leifur Eiríksson', 3, 'Með betri hótelum, en staðsetning ekki nægilega góð', 200);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 2);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 4);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Holt', 107, 2);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 6);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 2);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 4);
+insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 3);

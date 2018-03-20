@@ -44,6 +44,9 @@ class Room {
 	}
 
 	//einhver föll hér
+	public int getRoomSize() {
+		return this.size;
+	}
 
 }
 
