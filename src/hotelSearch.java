@@ -22,6 +22,9 @@ class Hotel {
 	}
 
 	//einhver föll hér
+	public int getHotelRating() {
+		return this.rating;
+	}
 }
 
 class Room {
@@ -41,6 +44,7 @@ class Room {
 	}
 
 	//einhver föll hér
+
 }
 
 class User {
@@ -72,9 +76,9 @@ class Booking {
 	public Date end_date;
 	public boolean confirmed;
 
-	// Usage:	
-	// Before:	
-	// After:	
+	// Usage:
+	// Before:
+	// After:
 	public Booking(int id, Room room, Date start_date, Date end_date) {
 		this.id = id;
 		this.room = room;
@@ -296,6 +300,7 @@ class hotelSearch {
 
 			System.out.println("Skráðu póstfang nýja hótelsins:");
 			String newHotelZip = input.next();
+			System.out.println(newHotelZip);
 
 			System.out.println("Skráðu lýsingu á nýja hótelinu:");
 			String newHotelDesription = input.next();
@@ -303,11 +308,11 @@ class hotelSearch {
 			System.out.println("Skráðu stjörnufjölda nýja hótelsins:");
 			String newHotelRating = input.next();
 
-			hotelBuffer.add(new Hotel(newHotelName, 
-									  Integer.parseInt(newHotelRating),
-									  newHotelDesription, 
-									  Integer.parseInt(newHotelZip), 
-									  null, 
+			hotelBuffer.add(new Hotel(newHotelName,
+										Integer.parseInt(newHotelRating),
+									  newHotelDesription,
+									  Integer.parseInt(newHotelZip),
+									  null,
 									  null));
 
 			System.out.println();
@@ -446,7 +451,7 @@ class hotelSearch {
 		while(true) {
 			program.clearScreen();
 			program.displayMenuMessage();
-			
+
 			switch(program.state) {
 				case MENU:
 					program.menuInput();
