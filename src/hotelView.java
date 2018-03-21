@@ -1,179 +1,10 @@
-//keyrsla: java -cp .:sqlite-jdbc....jar hotelSearch
+//keyrsla: java -cp .:sqlite-jdbc....jar hotelView
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Hotel {
-	public String name;
-	public int rating;
-	public String description;
-	public int zipcode;
-	public ArrayList<String> tags;
-	public ArrayList<Room> rooms;
-
-	public Hotel(String name, int rating, String description, int zipcode, ArrayList<String> tags, ArrayList<Room> rooms) {
-		this.name = name;
-		this.rating = rating;
-		this.description = description;
-		this.zipcode = zipcode;
-		this.tags = tags;
-		this.rooms = rooms;
-	}
-
-	//einhver föll hér
-	public int getHotelRating() {
-		return this.rating;
-	}
-}
-
-class Room {
-	public int id;
-	public int size;
-	//mögulega eitthvað til að gera þessi eigindi aðeins meira modular... bara mögulega
-	public int bed_count;
-	public boolean shower;
-	public int price;
-
-	public Room(int id, int size, int bed_count, boolean shower, int price) {
-		this.id = id;
-		this.size = size;
-		this.bed_count = bed_count;
-		this.shower = shower;
-		this.price = price;
-	}
-
-	//einhver föll hér
-	public int getRoomSize() {
-		return this.size;
-	}
-
-}
-
-class User {
-	public int id;
-	public String name;
-	public String email;
-	public ArrayList<Booking> bookings;
-
-	public User(int id, String name, String email, ArrayList<Booking> bookings) {
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.bookings = bookings;
-	}
-
-	public void cancelUnconfirmed() {
-		//...
-	}
-
-	public void cancelBooking(int key) {
-		//...
-	}
-}
-
-class Booking {
-	public int id;
-	public Room room;
-	public Date start_date;
-	public Date end_date;
-	public boolean confirmed;
-
-	// Usage:
-	// Before:
-	// After:
-	public Booking(int id, Room room, Date start_date, Date end_date) {
-		this.id = id;
-		this.room = room;
-		this.start_date = start_date;
-		this.end_date = end_date;
-		this.confirmed = false;
-	}
-
-	//einhver föll hér
-}
-
-class SearchQuery {
-	public ArrayList<Integer> zipcodes;
-	public int price_min;
-	public int price_max;
-	public int rating_min;
-	public int rating_max;
-	public int size_min;
-	public int size_max;
-
-	public SearchQuery(ArrayList<Integer> zipcodes, int price_min, int price_max, int rating_min, int rating_max, int size_min, int size_max) {
-		this.zipcodes = zipcodes;
-		this.price_min = price_min;
-		this.price_max = price_max;
-		this.rating_min = rating_min;
-		this.rating_max = rating_max;
-		this.size_min = size_min;
-		this.size_max = size_max;
-	}
-}
-
-class DBmanager {
-
-	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
-		//...
-	}
-
-	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) {
-		//...
-	}
-
-	public static void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) {
-
-	}
-
-	public static void reserveRoom(int roomID) {
-
-	}
-
-	public static Hotel getHotel(String hotelName, String hotelZip) {
-		//Hotel(String name, int rating, String description, int zipcode, ArrayList<String> tags, ArrayList<Room> rooms)
-		return new Hotel(null, 0, null, 0, null, null);
-	}
-
-	public static void addHotel(Hotel hotel) {
-		System.out.println("A hotel has been added to the database. <Unimplemented>");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			System.out.println( "WHAT????");
-		}
-	}
-
-	public static void addHotels(ArrayList<Hotel> hotels) {
-		for(Hotel h : hotels) {
-			addHotel(h);
-		}
-	}
-
-	public static void addRoomToHotel(Room room, Hotel hotel) {
-		//:)
-	}
-
-	public static void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) {
-		for(Room r : rooms) {
-			addRoomToHotel(r, hotel);
-		}
-	}
-
-	public static ArrayList<Room> getHotelRooms(Hotel hotel) {
-		return new ArrayList<Room>();
-	}
-
-	public static ArrayList<Hotel> search(SearchQuery query) {
-		//sql query...
-		return new ArrayList<Hotel>();
-	}
-
-}
-//NOTE: það vantar einhver svona dbController klasa(held að minnstakosti að það sé ætlast til þess)
-
-class hotelSearch {
+class hotelView {
 	enum programState {
 		MENU,
 		HOTEL_REG,
@@ -181,19 +12,12 @@ class hotelSearch {
 		CHANGE_ROOM_PRICE
 	}
 
-	enum inputType {
-		INTEGER,
-		FLOAT,
-		STRING
-		//einhverjar fleiri týpur sem við viljum tryggja að séu á réttu format-i
-	}
-
 	private programState state;
 	private Scanner input;
 	private String inputString;
 	private boolean possibleMenuCommand;
 
-	public hotelSearch(programState startState, Scanner inputStream) {
+	public hotelView(programState startState, Scanner inputStream) {
 		state = startState;
 		input = inputStream;
 		inputString = "";
@@ -206,41 +30,6 @@ class hotelSearch {
 		System.out.flush();
 	}
 
-	/*private String checkAndAcceptInput(Scanner scanner, inputType type, String message) {
-		String input = "";
-		boolean accepted = true;
-		boolean showMessage = false;
-
-		do {
-			input = scanner.next();
-			accepted = true;
-
-			//hér reynum við að afsanna að inntakið sé af þeirri gerð sem við viljum að það sé af
-			switch(type) {
-				case STRING:
-				break;
-
-				case INTEGER:
-					for(char c : input.toCharArray()) {
-						if(c < '0' || c > '9') {
-							accepted = false;
-							break;
-						}
-					}
-
-					if(!accepted) {
-						System.out.println();
-						System.out.println(message);
-						System.out.println();
-					}
-				break;
-			}
-		}while(!accepted);
-
-		return input;
-	}*/
-
-	// Side-effect free ;)
 	private void displayMenuMessage() {
 		switch(state) {
 			case MENU:
@@ -449,7 +238,7 @@ class hotelSearch {
 	//þetta gerir ekkert sérstakt eins og er.
 	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
-		hotelSearch program = new hotelSearch(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
+		hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
 
 		while(true) {
 			program.clearScreen();
