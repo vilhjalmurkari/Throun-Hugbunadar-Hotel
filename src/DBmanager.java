@@ -1,6 +1,16 @@
 import java.util.ArrayList;
 
 public class DBmanager {
+	
+	Connection connection;
+	Statement sqlStatement;
+
+
+///Krisi er ad leika ser
+	public static void init() throws SQLException {
+		Class.forName("org.sqlite.JDBC");
+		connection = DriverManager.getConnection("jdbc:sqlite:testdb.db");
+	}
 
 	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
 		//...
