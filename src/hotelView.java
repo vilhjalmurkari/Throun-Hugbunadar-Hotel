@@ -24,6 +24,16 @@ class hotelView {
 		possibleMenuCommand = false;
 	}
 
+	private int parseNumber(String s) {
+		int result = 0;
+
+		for(char c : s.toCharArray()) {
+			result = result * 10 + (int)(c - '0');
+		}
+
+		return result;
+	} 
+
 	private void clearScreen() {
 		//ansi escape codes
 		System.out.print("\033[H\033[2J");
