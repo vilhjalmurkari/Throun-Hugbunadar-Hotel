@@ -19,5 +19,7 @@ class Booking {
 		this.confirmed = false;
 	}
 
-	//einhver föll hér
+	public static void confirmBooking(){
+		this.confirmed = true;
+	}
 }

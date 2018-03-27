@@ -56,4 +56,12 @@ public class DBmanager {
 		//sql query...
 		return new ArrayList<Hotel>();
 	}
+
+	public static void addUser(User user) {
+		//sql query...
+	}
+	
+	public static void addBooking(Booking booking) {
+		//sql query...
+	}
 }
