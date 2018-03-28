@@ -21,4 +21,9 @@ class User {
 	public void cancelBooking(int key) {
 		//...
 	}
+
+	public void updateEmail(String newEmail) {
+		this.email = newEmail;
+	}
+
 }
