@@ -23,7 +23,8 @@ class User {
 		//...
 	}
 
-	public void addBooking(Booking booking) {
-		this.bookings.add(booking);
+	public void updateEmail(String newEmail) {
+		this.email = newEmail;
 	}
+
 }
