@@ -4,17 +4,18 @@ import java.util.ArrayList;
 class Room {
 	public int id;
 	public int size;
-	//mögulega eitthvað til að gera þessi eigindi aðeins meira modular... bara mögulega
-	public int bed_count;
-	public boolean shower;
+	//public boolean shower;
 	public int price;
+	public int bed_count;
+	public ArrayList<String> tags;
 
-	public Room(int id, int size, int bed_count, boolean shower, int price) {
+	public Room(int id, int size, int bed_count, int price, ArrayList<String> tags) {
 		this.id = id;
 		this.size = size;
 		this.bed_count = bed_count;
-		this.shower = shower;
+		//this.shower = shower;
 		this.price = price;
+		this.tags = tags;
 	}
 
 	//einhver föll hér

@@ -24,15 +24,26 @@ class hotelView {
 		possibleMenuCommand = false;
 	}
 
-	private int parseNumber(String s) {
-		int result = 0;
+	public static long parseNumber(String s) {
+		long result = 0;
+		boolean minus = false;
+
+		if(s.charAt(0) == '-') {
+			minus = true;
+			s = s.substring(1, s.length());
+		}
 
 		for(char c : s.toCharArray()) {
 			result = result * 10 + (int)(c - '0');
 		}
 
-		return result;
-	} 
+		//return minus ? -result : result;
+		if(minus) {
+			return -result;
+		}else {
+			return result;
+		}
+	}
 
 	private void clearScreen() {
 		//ansi escape codes

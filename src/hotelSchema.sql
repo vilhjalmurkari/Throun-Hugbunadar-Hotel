@@ -21,15 +21,18 @@ CREATE TABLE Hotel_tags(
 
 CREATE TABLE Rooms(
 	--þetta id mun fá gildi sjálfkrafa við innsetningu í tölfuna(sjá https://sqlite.org/autoinc.html)
-	id INTEGEREGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY,
 	hotel_name VARCHAR(32),
 	hotel_zipcode INTEGER,
 	size INTEGER,
+	price INTEGER,
+	bed_count INTEGER,
 	FOREIGN KEY (hotel_name, hotel_zipcode) REFERENCES Hotels(name, zipcode)
 );
 
 CREATE TABLE Room_tags(
 	room_id INTEGER,
+	tag_name VARCHAR(32),
 	FOREIGN KEY (room_id) REFERENCES Rooms(id)
 );
 
