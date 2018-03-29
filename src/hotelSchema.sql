@@ -1,4 +1,4 @@
-CREATE TABLE Hotels( 
+CREATE TABLE Hotels(
 	name VARCHAR(32),
 	rating INT,
 	description VARCHAR(140),
@@ -21,7 +21,7 @@ CREATE TABLE Hotel_tags(
 
 CREATE TABLE Rooms(
 	--þetta id mun fá gildi sjálfkrafa við innsetningu í tölfuna(sjá https://sqlite.org/autoinc.html)
-	id INT PRIMARY KEY,
+	id INTEGER PRIMARY KEY,
 	hotel_name VARCHAR(32),
 	hotel_zipcode INT,
 	size INT,
