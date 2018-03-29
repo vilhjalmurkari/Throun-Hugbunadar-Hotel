@@ -21,7 +21,9 @@ public class DBmanager {
 			System.out.println("Unable to make SQL connection.");
 		}
 	}
-
+	
+	// Notkun: getAllHotels()
+	// Skilar: ArrayList af öllum hótelum í gagnagrunni.
 	public static ArrayList<Hotel> getAllHotels() throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels");
@@ -42,7 +44,9 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	
+	// Notkun: getRoomFromHotel( hotelname, zip)
+	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
+	//         Ath. hotelname, zip er lykill.
 	public static ArrayList<Room> getRoomFromHotel( String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name +
