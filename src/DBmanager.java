@@ -19,6 +19,7 @@ public class DBmanager {
 			System.out.println("Couldn't find jdbc file.");
 		} catch( SQLException e ) {
 			System.out.println("Unable to make SQL connection.");
+			throw new SQLException(e.getmessage());
 		}
 	}
 
@@ -44,10 +45,10 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	// Notkun: getRoomFromHotel( hotelname, zip)
+	// Notkun: getRoomsFromHotel( hotelname, zip)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
 	//         Ath. hotelname, zip er lykill.
-	public static ArrayList<Room> getRoomFromHotel( String hotel_name, int hotel_zipcode) throws SQLException {
+	public static ArrayList<Room> getRoomsFromHotel( String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name +
 			"\" AND hotel_zipcode=" + hotel_zipcode + ";";
@@ -70,8 +71,13 @@ public class DBmanager {
 
 
 
-	public static void setRoomPrice(double price, ArrayList<Room> rooms) {
-		//...
+	public static void setRoomPrice(double price, ArrayList<Room> rooms) throws SQLException {
+		PreparedStatement ps = conn.preparedStatement("UPDATE TABLE Rooms SET price=? WHERE id=?");
+		for( Room r : rooms ) {
+			ps.setInteger(1,price);
+			ps.setInteger(2,r.id);
+			ps.executeUpdate();
+		}
 	}
 
 	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) {
@@ -83,20 +89,13 @@ public class DBmanager {
 	}
 
 	public static void reserveRoom(int roomID) {
-
+		
 	}
 
-	public static Hotel getHotel(String hotelName, String hotelZip) {
-		return null;
-	}
-
-	public static void addHotel(Hotel hotel) {
+	public static void addHotel(Hotel hotel) throws SQLException {
 		System.out.println("A hotel has been added to the database. <Unimplemented>");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			System.out.println( "Something didn't work properly.");
-		}
+		
+		sqlStatement
 	}
 
 	public static void addHotels(ArrayList<Hotel> hotels) {
