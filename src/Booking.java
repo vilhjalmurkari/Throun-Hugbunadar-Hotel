@@ -19,7 +19,7 @@ class Booking {
 		this.confirmed = false;
 	}
 
-	public static void confirmBooking(){
+	public void confirmBooking(){
 		this.confirmed = true;
 	}
 }
