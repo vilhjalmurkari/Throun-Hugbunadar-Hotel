@@ -29,7 +29,7 @@ public class DBmanager {
 		while(rset.next()) {
 
 			String hotel_name = rset.getString("name");
-			int hotel_zipcode = rset.getInt("zipcode"); 
+			int hotel_zipcode = rset.getInt("zipcode");
 
 			Hotel h = new Hotel(
 				hotel_name,
@@ -178,11 +178,13 @@ public class DBmanager {
 		}
 	}
 
-	public static void bookRoom(int room_id, int user_id) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id) VALUES(?, ?)");
+	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date) VALUES(?, ?, ?, ?)");
 
 		ps.setInt(1, user_id);
 		ps.setInt(2, room_id);
+		ps.setLong(3, start_date);
+		ps.setLong(4, end_date);
 
 		ps.executeUpdate();
 	}

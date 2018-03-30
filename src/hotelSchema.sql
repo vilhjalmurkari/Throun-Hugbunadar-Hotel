@@ -39,11 +39,14 @@ CREATE TABLE Room_tags(
 CREATE TABLE Bookings(
 	user_id INTEGER,
 	room_id INTEGER,
+	start_date INTEGER,
+	end_date INTEGER,
 	FOREIGN KEY(user_id) REFERENCES Users(id),
 	FOREIGN KEY(room_id) REFERENCES Rooms(id)
 );
 
 CREATE TABLE Users(
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(64)
+	name VARCHAR(64),
+	email VARCHAR(255)
 );

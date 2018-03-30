@@ -169,7 +169,7 @@ class hotelView {
 			System.out.println("Sláðu inn verð á nýja hótelherberginu:");
 			String newRoomPrice = input.next();
 
-			roomBuffer.add(new Room(-1,
+			roomBuffer.add(new Room(
 				 					Integer.parseInt(newRoomSize),
 				 					Integer.parseInt(newRoomBedCount),
 				 					Boolean.parseBoolean(newRoomHasShower),

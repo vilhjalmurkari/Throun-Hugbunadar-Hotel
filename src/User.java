@@ -27,4 +27,10 @@ class User {
 		this.email = newEmail;
 	}
 
+	public void makeBooking(Room room, Date start_date, Date end_date) {
+		Booking booking = new Booking(room, start_date, end_date);
+		bookings.add(booking);
+		DBmanager.bookRoom(this.id, room.id, start_date.getTime(), end_date.getTime());
+	}
+
 }
