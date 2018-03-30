@@ -45,6 +45,28 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
+	public static Hotel getHotel(String hotelName, String hotelZip) throws SQLException {
+		String query ="SELECT * FROM Hotels WHERE name= \"" + hotelName + "\" AND zipcode = " + hotelZip + ";";
+		ResultSet rset = sqlStatement.executeQuery(query);
+		Hotel hotel = null;
+
+		while(rset.next()) {
+
+			String hotel_name = rset.getString("name");
+			int hotel_zipcode = rset.getInt("zipcode");
+
+		 	hotel = new Hotel(
+				hotel_name,
+				rset.getInt("rating"),
+				rset.getString("description"),
+				hotel_zipcode,
+				getHotelTags(hotel_name, hotel_zipcode),
+				getRoomsFromHotel(hotel_name, hotel_zipcode)
+			);
+		}
+		return hotel;
+	}
+
 	private static ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
 		ResultSet rset = sqlStatement.executeQuery("SELECT tag_name FROM Hotel_tags WHERE hotel_name = \"" + hotel_name + "\" and hotel_zipcode = " + hotel_zipcode);
@@ -150,7 +172,10 @@ public class DBmanager {
 			ps.executeUpdate();
 		}
 
-		addRoomsToHotel(hotel.rooms, hotel);
+		if ( hotel.rooms != null ) {
+			addRoomsToHotel(hotel.rooms, hotel);
+		}
+		
 	}
 
 	public static void addHotels(ArrayList<Hotel> hotels) throws SQLException {

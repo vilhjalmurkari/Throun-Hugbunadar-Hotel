@@ -103,7 +103,7 @@ class hotelView {
 	}
 
 	// After:	A list of hotels has been added to the database.
-	private void hotelRegInput() {
+	private void hotelRegInput() throws SQLException {
 		ArrayList<Hotel> hotelBuffer = new ArrayList<Hotel>();
 		clearScreen();
 
@@ -143,7 +143,7 @@ class hotelView {
 	}
 
 	//public Room(int id, int size, int bed_count, boolean shower, int price)
-	private void roomRegInput() {
+	private void roomRegInput() throws SQLException {
 		ArrayList<Room> roomBuffer = new ArrayList<Room>();
 		String hotelName = "";
 		String hotelZip = "";
@@ -163,17 +163,19 @@ class hotelView {
 			System.out.println("Skráðu fjölda rúma í nýja hótelherberginu:");
 			String newRoomBedCount = input.next();
 
-			System.out.println("Er sturta í hótelherberginu? (Y/N)");
-			String newRoomHasShower = input.next();
+			//System.out.println("Er sturta í hótelherberginu? (Y/N)");
+			//String newRoomHasShower = input.next();
 
 			System.out.println("Sláðu inn verð á nýja hótelherberginu:");
 			String newRoomPrice = input.next();
 
-			roomBuffer.add(new Room(
+			roomBuffer.add(new Room(-1,
 				 					Integer.parseInt(newRoomSize),
 				 					Integer.parseInt(newRoomBedCount),
-				 					Boolean.parseBoolean(newRoomHasShower),
-				 					Integer.parseInt(newRoomPrice)));
+				 					Integer.parseInt(newRoomPrice),
+									null
+									)
+									);
 
 			System.out.println();
 			System.out.println("Vilt þú bæta við fleiri hótelherbergjum? (Y/N)");
@@ -185,11 +187,12 @@ class hotelView {
 			quitLoop = affirm(this.inputString);
 		}
 
-		DBmanager.addRoomsToHotel(roomBuffer, DBmanager.getHotel(hotelName, hotelZip));
+		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
+		DBmanager.addRoomsToHotel(roomBuffer, hotel);
 		this.state = programState.MENU;
 	}
 
-	private void changeHotelRoomPriceInput() {
+	private void changeHotelRoomPriceInput() throws SQLException {
 		System.out.println("Skráðu nafn hótelsins:");
 		String hotelName = input.next();
 
@@ -202,7 +205,7 @@ class hotelView {
 		String priceChange = input.next();
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getHotelRooms(hotel));
+		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomsFromHotel(hotel));
 
 		this.state = programState.MENU;
 	}
@@ -265,27 +268,36 @@ class hotelView {
 			program.clearScreen();
 			program.displayMenuMessage();
 
-			switch(program.state) {
-				case MENU:
+			try {
+				switch(program.state) {
+					case MENU:
 					program.menuInput();
-				break;
+					break;
 
-				case HOTEL_REG:
+					case HOTEL_REG:
 					program.hotelRegInput();
-				break;
+					break;
 
-				case ROOM_REG:
+					case ROOM_REG:
 					program.roomRegInput();
-				break;
+					break;
 
-				case CHANGE_ROOM_PRICE:
+					case CHANGE_ROOM_PRICE:
 					program.changeHotelRoomPriceInput();
-				break;
-			}
+					break;
+				}
 
-			if(program.possibleMenuCommand) {
-				program.navigationInput();
+				if(program.possibleMenuCommand) {
+					program.navigationInput();
+				}
+
 			}
+			catch (SQLException e)
+    	{
+        e.printStackTrace();
+				break;
+    	}
+
 		}
 
 		/*

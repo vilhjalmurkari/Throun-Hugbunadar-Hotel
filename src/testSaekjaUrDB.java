@@ -72,9 +72,9 @@ public class testSaekjaUrDB
           Room room = new Room(
           rset.getInt("id"),
           rset.getInt("size"),
-          0,
-          false,
-          10000
+          rset.getInt("bed_count"),
+          rset.getInt("price"),
+  				null
           );
           listOfRooms.add(room);
         }
