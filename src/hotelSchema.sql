@@ -41,6 +41,7 @@ CREATE TABLE Bookings(
 	room_id INTEGER,
 	start_date INTEGER,
 	end_date INTEGER,
+	confirmed BOOLEAN,
 	FOREIGN KEY(user_id) REFERENCES Users(id),
 	FOREIGN KEY(room_id) REFERENCES Rooms(id)
 );

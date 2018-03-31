@@ -207,12 +207,13 @@ public class DBmanager {
 	}
 
 	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date) VALUES(?, ?, ?, ?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
 		ps.setInt(1, user_id);
 		ps.setInt(2, room_id);
 		ps.setLong(3, start_date);
 		ps.setLong(4, end_date);
+		ps.setBoolean(5, false); // Bókanir eru alltaf fyrst óstaðfestar.
 
 		ps.executeUpdate();
 	}
@@ -320,14 +321,26 @@ public class DBmanager {
 	}
 
 
-	protected boolean isRoomFree( Room r, Date start_date, Date, end_date ) {
+	// Notkun: isRoomFree(r,s,e)
+	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
+	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
+	protected static boolean isRoomFree( Room r, int start_date, int end_date ) throws SQLException {
 		
-		PreparedStatement ps = conn.preparedStatement("SELECT * FROM Bookings WHERE startDate < ? AND ? > endDate AND id = ?");
-		ps.setDate(1, start_date);
-		ps.setDate(2, start_date);
+		PreparedStatement ps = connection.prepareStatement("SELECT COOUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
+		ps.setInt(1, start_date); // Opna bilið ]s;e[
+		ps.setInt(2, start_date);
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
-		return rs.size()==0;
+		return rs.getInt(0) == 0;
+	}
+	
+	// Notkun: confirmBooking(b)
+	// Fyrir:  b er bókun.
+	// Eftir:  b hefur verið staðfest í gagnagrunni.
+	protected static void confirmBooking(Booking b) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("UPDATE Bookings SET confirmed = T WHERE id = ?");
+		ps.setInt(1, b.id);
+		ps.executeUpdate();
 	}
 
 }
