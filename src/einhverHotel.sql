@@ -1,10 +1,10 @@
 insert into Hotels (name, rating, description, zipcode) values ('Holt', 4, 'Frábært hótel á besta stað', 107);
 insert into Hotels (name, rating, description, zipcode) values ('Hilton', 5, 'Skemmtilegt fjölskylduhótel með góðan morgunverð', 107);
 insert into Hotels (name, rating, description, zipcode) values ('Leifur Eiríksson', 3, 'Með betri hótelum, en staðsetning ekki nægilega góð', 200);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 2);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 4);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Holt', 107, 2);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 6);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Hilton', 107, 2);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 4);
-insert into Rooms (hotel_name, hotel_zipcode, size) values ('Leifur Eiríksson', 200, 3);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Hilton', 107, 30, 5000, 3);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Hilton', 107, 30, 7500, 2);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Holt', 107, 20, 20000, 2);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Leifur Eiríksson', 200, 35, 25000, 6);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Hilton', 107, 20, 15000, 4);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Leifur Eiríksson', 200, 20, 17500, 4);
+insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Leifur Eiríksson', 200, 40, 19000, 5);

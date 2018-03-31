@@ -15,6 +15,7 @@ public class DBmanager {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:testdb.db");
 			sqlStatement = connection.createStatement();
+
 		} catch( ClassNotFoundException e ) {
 			System.out.println("Couldn't find jdbc file.");
 		}
@@ -222,66 +223,52 @@ public class DBmanager {
 		int tala = 0;
 		String hotelString = "SELECT * FROM Hotels WHERE ";
 		for( Integer i: query.zipcodes) {
-			if (tala > 0) hotelString += "AND ";
+			if (tala > 0) hotelString += "OR ";
 
-			hotelString += "hotel_zipcode = " + i + " ";
-			tala++;
-		}
-
-		tala = 0;
-		String roomString = "SELECT * FROM Rooms WHERE ";
-
-		if (query.price_min != Integer.MIN_VALUE) {
-			if (tala > 0) roomString += "AND ";
-
-			roomString += "price > " + query.price_min + " ";
-			tala++;
-		}
-
-		if (query.price_max != Integer.MAX_VALUE) {
-			if (tala > 0) roomString += "AND ";
-
-			roomString += "price < " + query.price_max + " ";
+			hotelString += "zipcode = " + i + " ";
 			tala++;
 		}
 
 		if (query.rating_min != Integer.MIN_VALUE) {
-			if (tala > 0) roomString += "AND ";
+			if (tala > 0) hotelString += "AND ";
 
-			roomString += "hotel_rating > " + query.rating_min + " ";
+			hotelString += "rating >= " + query.rating_min + " ";
 			tala++;
 		}
 
 		if (query.rating_max != Integer.MAX_VALUE) {
-			if (tala > 0) roomString += "AND ";
+			if (tala > 0) hotelString += "AND ";
 
-			roomString += "hotel_rating < " + query.rating_max + " ";
+			hotelString += "rating <= " + query.rating_max + " ";
 			tala++;
+		}
+
+		// Gera Query fyrir herbergin
+		String roomString = "";
+
+		if (query.price_min != Integer.MIN_VALUE) {
+			roomString += "AND price >= " + query.price_min + " ";
+		}
+
+		if (query.price_max != Integer.MAX_VALUE) {
+			roomString += "AND price <= " + query.price_max + " ";
 		}
 
 		if (query.size_min != Integer.MIN_VALUE) {
-			if (tala > 0) roomString += "AND ";
-
-			roomString += "size > " + query.size_min + " ";
-			tala++;
+			roomString += "AND size >= " + query.size_min + " ";
 		}
 
 		if (query.size_max != Integer.MAX_VALUE) {
-			if (tala > 0) roomString += "AND ";
-
-			roomString += "size < " + query.size_max + " ";
-			tala++;
+			roomString += "AND size <= " + query.size_max + " ";
 		}
 
 		ArrayList<Hotel> hotels = getHotelsWithQuery(hotelString, roomString);
-
-
 		return hotels;
 	}
 
 	public static ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		ResultSet rset = sqlStatement.executeQuery(hotelQuery);
+	  ResultSet rset = sqlStatement.executeQuery(hotelQuery);
 
 		while(rset.next()) {
 
@@ -294,7 +281,7 @@ public class DBmanager {
 				rset.getString("description"),
 				hotel_zipcode,
 				getHotelTags(hotel_name, hotel_zipcode),
-				getRoomsFromHotel(hotel_name, hotel_zipcode)
+				getRoomsWithQuery(hotel_name, hotel_zipcode, roomQuery)
 			);
 
 			listOfHotels.add(hotel);
@@ -303,8 +290,11 @@ public class DBmanager {
 
 	}
 
-	public static ArrayList<Room> getRoomsWithQuery(String roomQuery) throws SQLException {
+	public static ArrayList<Room> getRoomsWithQuery(String hotel_name, int hotel_zipcode, String roomQuery) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
+
+		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name + "\" AND hotel_zipcode = " + hotel_zipcode + " ";
+		roomQuery = query + roomQuery;
 
 		ResultSet rset = sqlStatement.executeQuery(roomQuery);
 		int room_id = rset.getInt("id");
@@ -323,6 +313,5 @@ public class DBmanager {
 
 		return listOfRooms;
 	}
-
 
 }
