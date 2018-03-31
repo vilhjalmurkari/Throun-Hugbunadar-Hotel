@@ -244,6 +244,11 @@ public class DBmanager {
 		}
 
 		// Gera Query fyrir herbergin
+		//
+		// YIKES! Þetta er ekki fallegt
+		// Sérstaklega þessi skeyting strengja :O
+		//
+		// Betra kannski að nota PreparedStatement?
 		String roomString = "";
 
 		if (query.price_min != Integer.MIN_VALUE) {
@@ -312,6 +317,17 @@ public class DBmanager {
 		}
 
 		return listOfRooms;
+	}
+
+
+	protected boolean isRoomFree( Room r, Date start_date, Date, end_date ) {
+		
+		PreparedStatement ps = conn.preparedStatement("SELECT * FROM Bookings WHERE startDate < ? AND ? > endDate AND id = ?");
+		ps.setDate(1, start_date);
+		ps.setDate(2, start_date);
+		ps.setInt(3, r.id);
+		ResultSet rs = ps.executeQuery();
+		return rs.size()==0;
 	}
 
 }

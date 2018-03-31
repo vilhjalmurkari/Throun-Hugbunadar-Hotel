@@ -2,6 +2,7 @@ import java.util.Date;
 import java.util.ArrayList;
 
 class Booking {
+	public int id;
 	public Room room;
 	public Date start_date;
 	public Date end_date;

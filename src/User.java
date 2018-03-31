@@ -13,15 +13,29 @@ class User {
 		this.name = name;
 		this.email = email;
 		//Ættu bookings nokkuð að vera í constructornum?
-		this.bookings = bookings;
+		//   Nei, það ættu að vera til notendur án bókana
+		//this.bookings = bookings;
 	}
 
 	public void cancelUnconfirmed() {
-		//...
+		for( int i=0; i<bookings.size(); i++ ) {
+			if( bookings[i].confirmed )
+				bookings.remove(i);
+		}
+		System.out.println("All unconfirmed bookings have been canceled.");
 	}
 
 	public void cancelBooking(int key) {
-		//...
+		for( int i=0; i<bookings.size(); i++ ) {
+			if( bookings[i].confirmed ) {
+				System.out.println("Sorry, this booking has already been confirmed.");
+				break;
+			}
+			if( bookings[i].id==key ) {
+				bookings.remove(i);
+				break;
+			}
+		}
 	}
 
 	public void updateEmail(String newEmail) {
@@ -29,6 +43,8 @@ class User {
 	}
 
 	public void makeBooking(Room room, Date start_date, Date end_date) throws SQLException {
+		assert( DBmanager.isRoomFree(room, start_date, end_date ) );
+
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.add(booking);
 		DBmanager.bookRoom(this.id, room.id, start_date.getTime(), end_date.getTime());
