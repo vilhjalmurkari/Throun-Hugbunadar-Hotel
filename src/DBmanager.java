@@ -46,7 +46,7 @@ public class DBmanager {
 	}
 
 	public static Hotel getHotel(String hotelName, String hotelZip) throws SQLException {
-		String query ="SELECT * FROM Hotels WHERE name= \"" + hotelName + "\" AND zipcode = " + hotelZip + ";";
+		String query ="SELECT * FROM Hotels WHERE name= \"" + hotelName + "\" AND zipcode = " + hotelZip;
 		ResultSet rset = sqlStatement.executeQuery(query);
 		Hotel hotel = null;
 
@@ -66,6 +66,8 @@ public class DBmanager {
 		}
 		return hotel;
 	}
+
+
 
 	private static ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
@@ -175,7 +177,7 @@ public class DBmanager {
 		if ( hotel.rooms != null ) {
 			addRoomsToHotel(hotel.rooms, hotel);
 		}
-		
+
 	}
 
 	public static void addHotels(ArrayList<Hotel> hotels) throws SQLException {
@@ -214,8 +216,113 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-	public static ArrayList<Hotel> search(SearchQuery query) {
-		//sql query...
-		return new ArrayList<Hotel>();
+
+	public static ArrayList<Hotel> search(SearchQuery query) throws SQLException {
+
+		int tala = 0;
+		String hotelString = "SELECT * FROM Hotels WHERE ";
+		for( Integer i: query.zipcodes) {
+			if (tala > 0) hotelString += "AND ";
+
+			hotelString += "hotel_zipcode = " + i + " ";
+			tala++;
+		}
+
+		tala = 0;
+		String roomString = "SELECT * FROM Rooms WHERE ";
+
+		if (query.price_min != Integer.MIN_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "price > " + query.price_min + " ";
+			tala++;
+		}
+
+		if (query.price_max != Integer.MAX_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "price < " + query.price_max + " ";
+			tala++;
+		}
+
+		if (query.rating_min != Integer.MIN_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "hotel_rating > " + query.rating_min + " ";
+			tala++;
+		}
+
+		if (query.rating_max != Integer.MAX_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "hotel_rating < " + query.rating_max + " ";
+			tala++;
+		}
+
+		if (query.size_min != Integer.MIN_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "size > " + query.size_min + " ";
+			tala++;
+		}
+
+		if (query.size_max != Integer.MAX_VALUE) {
+			if (tala > 0) roomString += "AND ";
+
+			roomString += "size < " + query.size_max + " ";
+			tala++;
+		}
+
+		ArrayList<Hotel> hotels = getHotelsWithQuery(hotelString, roomString);
+
+
+		return hotels;
 	}
+
+	public static ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
+		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
+		ResultSet rset = sqlStatement.executeQuery(hotelQuery);
+
+		while(rset.next()) {
+
+			String hotel_name = rset.getString("name");
+			int hotel_zipcode = rset.getInt("zipcode");
+
+		 	Hotel hotel = new Hotel(
+				hotel_name,
+				rset.getInt("rating"),
+				rset.getString("description"),
+				hotel_zipcode,
+				getHotelTags(hotel_name, hotel_zipcode),
+				getRoomsFromHotel(hotel_name, hotel_zipcode)
+			);
+
+			listOfHotels.add(hotel);
+		}
+		return listOfHotels;
+
+	}
+
+	public static ArrayList<Room> getRoomsWithQuery(String roomQuery) throws SQLException {
+		ArrayList<Room> listOfRooms = new ArrayList<Room>();
+
+		ResultSet rset = sqlStatement.executeQuery(roomQuery);
+		int room_id = rset.getInt("id");
+
+		while(rset.next()) {
+			Room room = new Room(
+				room_id,
+				rset.getInt("size"),
+				rset.getInt("bed_count"),
+				rset.getInt("price"),
+				getRoomTags(room_id)
+			);
+
+			listOfRooms.add(room);
+		}
+
+		return listOfRooms;
+	}
+
+
 }

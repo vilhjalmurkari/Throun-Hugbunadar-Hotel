@@ -3,12 +3,12 @@ import java.util.ArrayList;
 
 class SearchQuery {
 	public ArrayList<Integer> zipcodes;
-	public int price_min;
-	public int price_max;
-	public int rating_min;
-	public int rating_max;
-	public int size_min;
-	public int size_max;
+	public int price_min = Integer.MIN_VALUE;
+	public int price_max = Integer.MAX_VALUE;
+	public int rating_min = Integer.MIN_VALUE;
+	public int rating_max = Integer.MAX_VALUE;
+	public int size_min = Integer.MIN_VALUE;
+	public int size_max = Integer.MAX_VALUE;
 
 	public SearchQuery(ArrayList<Integer> zipcodes, int price_min, int price_max, int rating_min, int rating_max, int size_min, int size_max) {
 		this.zipcodes = zipcodes;
