@@ -82,8 +82,8 @@ class hotelView {
 		System.out.println();
 	}
 
-	private boolean affirm(String stringToParse) {
-		switch(stringToParse) {
+	private boolean affirm(String input) {
+		switch(input) {
 			case "n":
 			case "no":
 			case "nei":
@@ -110,16 +110,19 @@ class hotelView {
 		for( boolean quitLoop = false ; !quitLoop ; ) {
 			System.out.println("Skráðu nafn á nýju hóteli:");
 			String newHotelName = input.next();
+			System.out.println();
 
 			System.out.println("Skráðu póstfang nýja hótelsins:");
 			String newHotelZip = input.next();
-			System.out.println(newHotelZip);
+			System.out.println();
 
 			System.out.println("Skráðu lýsingu á nýja hótelinu:");
 			String newHotelDesription = input.next();
+			System.out.println();
 
 			System.out.println("Skráðu stjörnufjölda nýja hótelsins:");
 			String newHotelRating = input.next();
+			System.out.println();
 
 			hotelBuffer.add(new Hotel(newHotelName,
 										Integer.parseInt(newHotelRating),
@@ -135,7 +138,7 @@ class hotelView {
 
 			//athuga hvort við viljum skrá fleiri hótel
 			this.inputString = input.next().toLowerCase();
-			quitLoop = affirm(this.inputString);
+			quitLoop = !affirm(this.inputString);
 		}
 
 		DBmanager.addHotels(hotelBuffer);
@@ -263,12 +266,14 @@ class hotelView {
 	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
 		hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
+		
+		try {
+			DBmanager.init();
 
-		while(true) {
-			program.clearScreen();
-			program.displayMenuMessage();
+			while(true) {
+				program.clearScreen();
+				program.displayMenuMessage();
 
-			try {
 				switch(program.state) {
 					case MENU:
 					program.menuInput();
@@ -290,15 +295,10 @@ class hotelView {
 				if(program.possibleMenuCommand) {
 					program.navigationInput();
 				}
-
 			}
-			catch (SQLException e)
-    	{
-        e.printStackTrace();
-				break;
+		}catch (SQLException e) {
+        	e.printStackTrace();
     	}
-
-		}
 
 		/*
 		stdInput.close();

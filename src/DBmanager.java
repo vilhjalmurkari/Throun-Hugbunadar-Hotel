@@ -46,23 +46,23 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	public static Hotel getHotel(String hotelName, String hotelZip) throws SQLException {
-		String query ="SELECT * FROM Hotels WHERE name= \"" + hotelName + "\" AND zipcode = " + hotelZip;
+	public static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
+		String query ="SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND zipcode = " + hotel_zipcode;
 		ResultSet rset = sqlStatement.executeQuery(query);
 		Hotel hotel = null;
 
 		while(rset.next()) {
 
-			String hotel_name = rset.getString("name");
-			int hotel_zipcode = rset.getInt("zipcode");
+			String name = rset.getString("name");
+			int zipcode = rset.getInt("zipcode");
 
 		 	hotel = new Hotel(
-				hotel_name,
+				name,
 				rset.getInt("rating"),
 				rset.getString("description"),
-				hotel_zipcode,
-				getHotelTags(hotel_name, hotel_zipcode),
-				getRoomsFromHotel(hotel_name, hotel_zipcode)
+				zipcode,
+				getHotelTags(name, zipcode),
+				getRoomsFromHotel(name, zipcode)
 			);
 		}
 		return hotel;
@@ -88,27 +88,30 @@ public class DBmanager {
 		return result;
 	}
 
-	// Notkun: getRoomsFromHotel( hotelname, zip)
+	// Notkun: getRoomsFromHotel( hotel_name, hotel_zipcode)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	//         Ath. hotelname, zip er lykill.
+	//         Ath. hotel_name, hotel_zipcode er lykill.
 	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name + "\" AND hotel_zipcode = " + hotel_zipcode + ";";
 
 		ResultSet rset = sqlStatement.executeQuery(query);
-		int room_id = rset.getInt("id");
 
 		while(rset.next()) {
+			int room_id = rset.getInt("id");
+
 			Room room = new Room(
 				room_id,
 				rset.getInt("size"),
 				rset.getInt("bed_count"),
 				rset.getInt("price"),
-				getRoomTags(room_id)
+				null
 			);
-
+			
 			listOfRooms.add(room);
 		}
+
+		for(Room r : listOfRooms) r.tags = getRoomTags(r.id);
 
 		return listOfRooms;
 	}
@@ -120,18 +123,17 @@ public class DBmanager {
 		return getRoomsFromHotel(hotel.name, hotel.zipcode);
 	}
 
-	public static void setRoomPrice(double new_price, ArrayList<Room> rooms) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("UPDATE TABLE Rooms SET price = ? WHERE id = ?");
+	//NOTE(þórður): það make-ar ekkert sense fyrir mér að gera þetta fyrir mörg hótel... því þetta er örugglega einhverskonar view aðgerð
+	public static void setRoomPrice(double new_price, int room_id) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
-		for(Room r : rooms) {
-			ps.setInt(1, (int)new_price);
-			ps.setInt(2, r.id);
-			ps.executeUpdate();
-		}
+		ps.setInt(1, (int)new_price);
+		ps.setInt(2, room_id);
+		ps.executeUpdate();
 	}
 
 	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("UPDATE TABLE Rooms SET price = ? WHERE id = ?");
+		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		for(Room r : rooms) {
 			r.price += (int)price_change;
@@ -143,7 +145,7 @@ public class DBmanager {
 	}
 
 	public static void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("UPDATE TABLE Rooms SET price = ? WHERE id = ?");
+		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		for(Room r : rooms) {
 			r.price = (int)(r.price * (1.0 + percent / 100.0));
@@ -165,20 +167,21 @@ public class DBmanager {
 		ps.executeUpdate();
 
 		//tags
-		ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
+		if (hotel.tags != null) {
+			ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
 
-		for(String tag : hotel.tags) {
-			ps.setString(1, hotel.name);
-			ps.setInt(2, hotel.zipcode);
-			ps.setString(3, tag);
+			for(String tag : hotel.tags) {
+				ps.setString(1, hotel.name);
+				ps.setInt(2, hotel.zipcode);
+				ps.setString(3, tag);
 
-			ps.executeUpdate();
+				ps.executeUpdate();
+			}
 		}
 
-		if ( hotel.rooms != null ) {
+		if (hotel.rooms != null) {
 			addRoomsToHotel(hotel.rooms, hotel);
 		}
-
 	}
 
 	public static void addHotels(ArrayList<Hotel> hotels) throws SQLException {
@@ -187,17 +190,27 @@ public class DBmanager {
 		}
 	}
 
-	public static void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_zip, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
+	public static void addRoomToHotel(Room room, String hotel_name, int hotel_zipcode) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_zipcode, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
 
 		ps.setNull(1, java.sql.Types.INTEGER);
-		ps.setString(2, hotel.name);
-		ps.setInt(3, hotel.zipcode);
+		ps.setString(2, hotel_name);
+		ps.setInt(3, hotel_zipcode);
 		ps.setInt(4, room.size);
 		ps.setInt(5, room.price);
 		ps.setInt(4, room.bed_count);
 
 		ps.executeUpdate();
+	}
+
+	public static void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
+		addRoomToHotel(room, hotel.name, hotel.zipcode);
+	}
+
+	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, int hotel_zipcode) throws SQLException {
+		for(Room r : rooms) {
+			addRoomToHotel(r, hotel_name, hotel_zipcode);
+		}
 	}
 
 	public static void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
@@ -342,5 +355,4 @@ public class DBmanager {
 		ps.setInt(1, b.id);
 		ps.executeUpdate();
 	}
-
 }
