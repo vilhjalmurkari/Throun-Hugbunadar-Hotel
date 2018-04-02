@@ -43,7 +43,7 @@ class User {
 	}
 
 	public void makeBooking(Room room, Date start_date, Date end_date) throws SQLException {
-		assert( DBmanager.isRoomFree(room, start_date, end_date ) );
+		assert( DBmanager.isRoomFree(room, start_date.getTime(), end_date.getTime() ) );
 
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.add(booking);
