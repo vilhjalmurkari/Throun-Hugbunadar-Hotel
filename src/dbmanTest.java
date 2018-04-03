@@ -24,17 +24,27 @@ class dbmanTest {
 
 			if(false) DBmanager.setRoomPrice(1234, 2);
 
-			Hotel h = DBmanager.getHotel("my hotel", 105);
-			System.out.println("hotel name: " + h.name + ", hotel zipcode: " + h.zipcode);
-
-			if(false) DBmanager.changeRoomPriceByPercent(-33.333, h.rooms);
-			if(true) DBmanager.changeRoomPriceByAmount(100, h.rooms);
-
-			h = DBmanager.getHotel("my hotel", 105);
-
-			for(Room r : h.rooms) {
-				System.out.println("id: " + r.id + ", size: " + r.size + ", price: " + r.price + ", bed_count: " + r.bed_count);
+			ArrayList<Hotel> hotels = DBmanager.getAllHotels();
+			for(Hotel h : hotels) {
+				System.out.println("hotel name: " + h.name + ", hotel zipcode: " + h.zipcode);
+				for(String tag : h.tags) {
+					System.out.println(tag);
+				}
 			}
+			//assert(h.tags != null);
+
+			/*
+			if(false) DBmanager.changeRoomPriceByPercent(-33.333, h.rooms);
+			if(false) DBmanager.changeRoomPriceByAmount(100, h.rooms);
+
+			if(false) {
+				h = DBmanager.getHotel("my hotel", 105);
+
+				for(Room r : h.rooms) {
+					System.out.println("id: " + r.id + ", size: " + r.size + ", price: " + r.price + ", bed_count: " + r.bed_count);
+				}
+			}
+			*/
 
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
