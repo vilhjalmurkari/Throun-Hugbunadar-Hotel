@@ -45,7 +45,7 @@ public class DBmanager {
 
 		for(Hotel h : listOfHotels) {
 			h.tags = getHotelTags(h.name, h.zipcode);
-			h.room = getRoomsFromHotel(h.name, h.zipcode);
+			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
 		}
 
 		return listOfHotels;
@@ -78,7 +78,7 @@ public class DBmanager {
 
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = " + hotel_name);
+		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = \"" + hotel_name + "\"");
 
 		while(rset.next()) {
 			Hotel h = new Hotel(
@@ -95,7 +95,7 @@ public class DBmanager {
 
 		for(Hotel h : listOfHotels) {
 			h.tags = getHotelTags(h.name, h.zipcode);
-			h.room = getRoomsFromHotel(h.name, h.zipcode);
+			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
 		}
 
 		return listOfHotels;
@@ -181,7 +181,7 @@ public class DBmanager {
 
 		ps.setInt(1, room.price);
 		ps.setInt(2, room.id);
-		
+
 		ps.executeUpdate();
 	}
 
