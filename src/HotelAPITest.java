@@ -9,13 +9,11 @@ import java.sql.*;
 class HotelAPITest {
 	
 	@Test
-	void test() {
+	void getAllHotelsTest() {
 		try {
 			HotelAPI test = new HotelAPI();
-			ArrayList<Hotel> hotels = test.getAllHotels();
-			System.out.println("nyet");
-			int results = hotels.size();
-			assertEquals(1, results);
+			int results = test.getAllHotels().size();
+			assertEquals(3, results);
 			
 			
 		} 
@@ -31,8 +29,32 @@ class HotelAPITest {
 		try {
 			HotelAPI test = new HotelAPI();
 			Hotel hotelHolt = test.getHotel("Holt", 100);
-			System.out.println("flott");
 			assertEquals(4, hotelHolt.getHotelRating());
+			
+		/*	
+		  	Hotel hNull = null;
+			Hotel hotel = test.getHotel(null, 100);
+			assertEquals(hNull, hotel);
+			*/
+			
+		} 
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }	
+	}
+	
+	void getRoomsFromHotelTest() {
+		try {
+			HotelAPI test = new HotelAPI();
+			Hotel hotelHolt = test.getHotel("Holt", 100);
+			assertEquals(4, hotelHolt.getHotelRating());
+			
+		/*	
+		  	Hotel hNull = null;
+			Hotel hotel = test.getHotel(null, 100);
+			assertEquals(hNull, hotel);
+			*/
 			
 		} 
 		catch(SQLException e)

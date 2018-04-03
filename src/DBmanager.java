@@ -37,12 +37,22 @@ public class DBmanager {
 				rset.getInt("rating"),
 				rset.getString("description"),
 				hotel_zipcode,
-				getHotelTags(hotel_name, hotel_zipcode),
-				getRoomsFromHotel(hotel_name, hotel_zipcode)
+				null,
+				null
 			);
 
 			listOfHotels.add(h);
 		}
+
+		for(Hotel h : listOfHotels) {
+			h.tags = new ArrayList<String>();
+			h.tags.add("virkarþetta?");
+			/*
+			h.tags = getHotelTags(h.name, h.zipcode);
+			h.room = getRoomsFromHotel(h.name, h.zipcode);
+			*/
+		}
+
 		return listOfHotels;
 	}
 
@@ -222,6 +232,14 @@ public class DBmanager {
 		}
 	}
 
+	public static void addTagToHotel(Hotel hotel, String tag) {
+		hotel.tags.add(tag);
+	}
+
+	public static void addTagToHotel(String hotel_name, String hotel_zipcode, String tag) {
+		//hotel.tags.add(tag);
+	}
+
 	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
@@ -340,11 +358,11 @@ public class DBmanager {
 	// Notkun: isRoomFree(r,s,e)
 	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
-	protected static boolean isRoomFree( Room r, long start_date, long end_date ) throws SQLException {
+	protected static boolean isRoomFree( Room r, int start_date, int end_date ) throws SQLException {
 
-		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
-		ps.setLong(1, start_date); // Opna bilið ]s;e[
-		ps.setLong(2, start_date);
+		PreparedStatement ps = connection.prepareStatement("SELECT COOUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
+		ps.setInt(1, start_date); // Opna bilið ]s;e[
+		ps.setInt(2, start_date);
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
 		return rs.getInt(0) == 0;
