@@ -31,27 +31,7 @@ class HotelAPITest {
 			Hotel hotelHolt = test.getHotel("Holt", 100);
 			assertEquals(4, hotelHolt.getHotelRating());
 			
-		/*	
-		  	Hotel hNull = null;
-			Hotel hotel = test.getHotel(null, 100);
-			assertEquals(hNull, hotel);
-			*/
-			
-		} 
-		catch(SQLException e)
-	    {
-	        System.err.println(e.getMessage());
-	    }	
-	}
-	
-	void getRoomsFromHotelTest() {
-		try {
-			HotelAPI test = new HotelAPI();
-			Hotel hotelHolt = test.getHotel("Holt", 100);
-			assertEquals(4, hotelHolt.getHotelRating());
-			
-		/*	
-		  	Hotel hNull = null;
+		/*	Hotel hNull = null;
 			Hotel hotel = test.getHotel(null, 100);
 			assertEquals(hNull, hotel);
 			*/
