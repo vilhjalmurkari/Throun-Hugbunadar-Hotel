@@ -45,7 +45,7 @@ public class DBmanager {
 
 		for(Hotel h : listOfHotels) {
 			h.tags = getHotelTags(h.name, h.zipcode);
-			h.room = getRoomsFromHotel(h.name, h.zipcode);
+			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
 		}
 
 		return listOfHotels;
@@ -78,7 +78,7 @@ public class DBmanager {
 
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = " + hotel_name);
+		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = \"" + hotel_name + "\"");
 
 		while(rset.next()) {
 			Hotel h = new Hotel(
@@ -95,7 +95,7 @@ public class DBmanager {
 
 		for(Hotel h : listOfHotels) {
 			h.tags = getHotelTags(h.name, h.zipcode);
-			h.room = getRoomsFromHotel(h.name, h.zipcode);
+			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
 		}
 
 		return listOfHotels;
@@ -181,7 +181,7 @@ public class DBmanager {
 
 		ps.setInt(1, room.price);
 		ps.setInt(2, room.id);
-		
+
 		ps.executeUpdate();
 	}
 
@@ -208,7 +208,7 @@ public class DBmanager {
 			}
 		}
 
-		if (hotel.rooms != null) {
+		if (hotel.rooms != null) {	
 			addRoomsToHotel(hotel.rooms, hotel);
 		}
 	}
@@ -232,19 +232,9 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-	public static void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
-		addRoomToHotel(room, hotel.name, hotel.zipcode);
-	}
-
 	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, int hotel_zipcode) throws SQLException {
 		for(Room r : rooms) {
 			addRoomToHotel(r, hotel_name, hotel_zipcode);
-		}
-	}
-
-	public static void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
-		for(Room r : rooms) {
-			addRoomToHotel(r, hotel);
 		}
 	}
 
@@ -376,7 +366,7 @@ public class DBmanager {
 	// Notkun: isRoomFree(r,s,e)
 	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
-	protected static boolean isRoomFree( Room r, int start_date, int end_date ) throws SQLException {
+	public static boolean isRoomFree(Room r, int start_date, int end_date) throws SQLException {
 
 		PreparedStatement ps = connection.prepareStatement("SELECT COOUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
 		ps.setInt(1, start_date); // Opna bilið ]s;e[
@@ -389,7 +379,7 @@ public class DBmanager {
 	// Notkun: confirmBooking(b)
 	// Fyrir:  b er bókun.
 	// Eftir:  b hefur verið staðfest í gagnagrunni.
-	protected static void confirmBooking(Booking b) throws SQLException {
+	public static void confirmBooking(Booking b) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Bookings SET confirmed = T WHERE id = ?");
 		ps.setInt(1, b.id);
 		ps.executeUpdate();

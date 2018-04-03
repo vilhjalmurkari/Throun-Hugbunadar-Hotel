@@ -11,8 +11,8 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public ArrayList<Hotel> getHotelsByName(String hotel_name) {
-		return DBmanager.getHotelsByName(hotel.name);
+	public ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
+		return DBmanager.getHotelsByName(hotel_name);
 	}
 
 	public ArrayList<String> getHotelTags(Hotel hotel) {
@@ -32,39 +32,32 @@ class HotelAPI {
 		DBmanager.setRoomPrice(new_price, room.id);
 	}
 
-	public void setRoomPrice(double new_price, ArrayList<Room> rooms) {
-		for(Room r : rooms) {
-			setRoomPrice(new_price, r);
-		}
+	public void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
+		DBmanager.changeRoomPriceByAmount(price_change, room);
 	}
 
-	public void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) throws SQLException {
-		DBmanager.changeRoomPriceByAmount(price_change, rooms);
-	}
-
-	public void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) throws SQLException {
+	public void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
 		DBmanager.changeRoomPriceByPercent(percent, rooms);
 	}
 
-	public void addHotel(Hotel hotel) throws SQLException {
-		DBmanager.addHotel(hotel);
-	}
+	public Hotel addHotel(String name, int rating, String description, int zipcode) throws SQLException {
+		Hotel result = new Hotel(name, rating, description, zipcode, null, null);
 
-	public void addHotels(ArrayList<Hotel> hotels) throws SQLException {
-		DBmanager.addHotels(hotels);
+		DBmanager.addHotel(result);
+
+		return result;
 	}
 
 	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
+		hotel.rooms.add(room);
 		DBmanager.addRoomToHotel(room, hotel.name, hotel.zipcode);
 	}
 
-	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
-		DBmanager.addRoomToHotel(room, hotel);
-	}
-
+	/*
 	public void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
 		DBmanager.addRoomsToHotel(rooms, hotel.name, hotel.zipcode);
 	}
+	*/
 
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		DBmanager.bookRoom(room.id, user.id, start_date, end_date);
