@@ -11,20 +11,24 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
-		return DBmanager.getHotel(hotel_name, hotel_zipcode);
+	public Hotel getHotel(Hotel hotel) {
+		return DBmanager.getHotel(hotel.name, hotel.zipcode);
 	}
 
-	public ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) throws SQLException {
-		return DBmanager.getRoomsFromHotel(hotel_name, hotel_zipcode);
+	public ArrayList<String> getHotelTags(Hotel hotel) {
+		return DBmanager.getHotelTags(hotel.name, hotel.zipcode);
 	}
 
-	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
-		return DBmanager.getRoomsFromHotel(hotel);
+	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) {
+		return DBmanager.getRoomsFromHotel(hotel.name, hotel.zipcode);
 	}
 
-	public void setRoomPrice(double new_price, int room_id) throws SQLException {
-		DBmanager.setRoomPrice(new_price, room_id);
+	public ArrayList<String> getRoomTags(Room room) {
+		return DBmanager.getRoomTags(room.id);
+	}
+
+	public void setRoomPrice(double new_price, Room room) {
+		return DBmanager.setRoomPrice(new_price, room.id);
 	}
 
 	public void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) throws SQLException {
@@ -43,24 +47,24 @@ class HotelAPI {
 		DBmanager.addHotels(hotels);
 	}
 
-	public void addRoomToHotel(Room room, String hotel_name, int hotel_zipcode) throws SQLException {
-		DBmanager.addRoomToHotel(room, hotel_name, hotel_zipcode);
+	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
+		DBmanager.addRoomToHotel(room, hotel.name, hotel.zipcode);
 	}
 
 	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
 		DBmanager.addRoomToHotel(room, hotel);
 	}
 
-	public void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, int hotel_zipcode) throws SQLException {
-		DBmanager.addRoomsToHotel(rooms, hotel_name, hotel_zipcode);
+	public void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
+		DBmanager.addRoomsToHotel(rooms, hotel.name, hotel.zipcode);
 	}
 
 	public void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
 		DBmanager.addRoomsToHotel(rooms, hotel);
 	}
 
-	public void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
-		DBmanager.bookRoom(room_id, user_id, start_date, end_date);
+	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
+		DBmanager.bookRoom(room.id, user.id, start_date, end_date);
 	}
 
 	public ArrayList<Hotel> search(SearchQuery query) throws SQLException {
@@ -71,7 +75,7 @@ class HotelAPI {
 		return DBmanager.getHotelsWithQuery(hotelQuery, roomQuery);
 	}
 
-	public ArrayList<Room> getRoomsWithQuery(String hotel_name, int hotel_zipcode, String roomQuery) throws SQLException {
-		return DBmanager.getRoomsWithQuery(hotel_name, hotel_zipcode, roomQuery);
+	public ArrayList<Room> getRoomsWithQuery(Hotel hotel, String roomQuery) throws SQLException {
+		return DBmanager.getRoomsWithQuery(hotel.name, hotel.zipcode, roomQuery);
 	}
 }

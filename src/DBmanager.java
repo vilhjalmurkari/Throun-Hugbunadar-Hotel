@@ -17,7 +17,7 @@ public class DBmanager {
 			sqlStatement = connection.createStatement();
 
 		} catch( ClassNotFoundException e ) {
-			System.out.println("Couldn't find jdbc file.");
+			System.out.println("Couldn't find jdbc jar file.");
 		}
 	}
 
@@ -45,12 +45,8 @@ public class DBmanager {
 		}
 
 		for(Hotel h : listOfHotels) {
-			h.tags = new ArrayList<String>();
-			h.tags.add("virkarþetta?");
-			/*
 			h.tags = getHotelTags(h.name, h.zipcode);
 			h.room = getRoomsFromHotel(h.name, h.zipcode);
-			*/
 		}
 
 		return listOfHotels;
@@ -232,12 +228,14 @@ public class DBmanager {
 		}
 	}
 
-	public static void addTagToHotel(Hotel hotel, String tag) {
-		hotel.tags.add(tag);
-	}
-
 	public static void addTagToHotel(String hotel_name, String hotel_zipcode, String tag) {
-		//hotel.tags.add(tag);
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
+
+		ps.setString(1, hotel_name);
+		ps.setInt(2, hotel_zipcode);
+		ps.setString(3, tag);
+
+		ps.executeUpdate();
 	}
 
 	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
