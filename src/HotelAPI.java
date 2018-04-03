@@ -11,7 +11,7 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public Hotel getHotelsByName(String hotel_name) {
+	public ArrayList<Hotel> getHotelsByName(String hotel_name) {
 		return DBmanager.getHotel(hotel.name);
 	}
 
