@@ -16,7 +16,7 @@ public class DBmanager {
 			connection = DriverManager.getConnection("jdbc:sqlite:testdb.db");
 			sqlStatement = connection.createStatement();
 
-		} catch( ClassNotFoundException e ) {
+		} catch(ClassNotFoundException e) {
 			System.out.println("Couldn't find jdbc jar file.");
 		}
 	}
@@ -28,7 +28,6 @@ public class DBmanager {
 		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels");
 
 		while(rset.next()) {
-
 			String hotel_name = rset.getString("name");
 			int hotel_zipcode = rset.getInt("zipcode");
 
@@ -52,10 +51,9 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	public static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
-		String query ="SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND zipcode = " + hotel_zipcode;
-		ResultSet rset = sqlStatement.executeQuery(query);
+	private static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
 		Hotel hotel = null;
+		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND zipcode = " + hotel_zipcode);
 
 		while(rset.next()) {
 
@@ -74,10 +72,34 @@ public class DBmanager {
 		if (hotel == null) {
 			System.out.println("Ekkert fannst");
 		}
+
 		return hotel;
 	}
 
+	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
+		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
+		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = " + hotel_name);
 
+		while(rset.next()) {
+			Hotel h = new Hotel(
+				rset.getString("name"),
+				rset.getInt("rating"),
+				rset.getString("description"),
+				rset.getInt("zipcode"),
+				null,
+				null
+			);
+
+			listOfHotels.add(h);
+		}
+
+		for(Hotel h : listOfHotels) {
+			h.tags = getHotelTags(h.name, h.zipcode);
+			h.room = getRoomsFromHotel(h.name, h.zipcode);
+		}
+
+		return listOfHotels;
+	}
 
 	private static ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
@@ -132,37 +154,35 @@ public class DBmanager {
 		return getRoomsFromHotel(hotel.name, hotel.zipcode);
 	}
 
-	//NOTE(þórður): það make-ar ekkert sense fyrir mér að gera þetta fyrir mörg hótel... því þetta er örugglega einhverskonar view aðgerð
-	public static void setRoomPrice(double new_price, int room_id) throws SQLException {
+	public static void setRoomPrice(double new_price, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		ps.setInt(1, (int)new_price);
-		ps.setInt(2, room_id);
+		ps.setInt(2, room.id);
+
 		ps.executeUpdate();
 	}
 
-	public static void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) throws SQLException {
+	public static void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
-		for(Room r : rooms) {
-			r.price += (int)price_change;
+		room.price += (int)price_change;
 
-			ps.setInt(1, r.price);
-			ps.setInt(2, r.id);
-			ps.executeUpdate();
-		}
+		ps.setInt(1, room.price);
+		ps.setInt(2, room.id);
+
+		ps.executeUpdate();
 	}
 
-	public static void changeRoomPriceByPercent(double percent, ArrayList<Room> rooms) throws SQLException {
+	public static void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
-		for(Room r : rooms) {
-			r.price = (int)(r.price * (1.0 + percent / 100.0));
+		room.price = (int)(room.price * (1.0 + percent / 100.0));
 
-			ps.setInt(1, r.price);
-			ps.setInt(2, r.id);
-			ps.executeUpdate();
-		}
+		ps.setInt(1, room.price);
+		ps.setInt(2, room.id);
+		
+		ps.executeUpdate();
 	}
 
 	public static void addHotel(Hotel hotel) throws SQLException {
