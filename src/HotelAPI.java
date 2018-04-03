@@ -8,16 +8,16 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public Hotel getHotel(String hotel_name, int hotel_zipcode) {
-		return DBmanager.getHotel(hotel_name, hotel_zipcode);
+	public Hotel getHotel(Hotel hotel) {
+		return DBmanager.getHotel(hotel.name, hotel.zipcode);
 	}
 
 	public ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) {
 		return DBmanager.getHotelTags(hotel_name, hotel_zipcode);
 	}
 
-	public ArrayList<String> getRoomTags(int room_id) {
-		return DBmanager.getRoomTags(room_id);
+	public ArrayList<String> getRoomTags(Room room) {
+		return DBmanager.getRoomTags(room.id);
 	}
 
 	public ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) {
@@ -28,8 +28,8 @@ class HotelAPI {
 		return DBmanager.getRoomsFromHotel(hotel);
 	}
 
-	public void setRoomPrice(double new_price, int room_id) {
-		return DBmanager.setRoomPrice(new_price, room_id);
+	public void setRoomPrice(double new_price, Room room) {
+		return DBmanager.setRoomPrice(new_price, room.id);
 	}
 
 	public void changeRoomPriceByAmount(double price_change, ArrayList<Room> rooms) {
