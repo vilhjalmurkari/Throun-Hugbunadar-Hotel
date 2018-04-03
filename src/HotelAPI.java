@@ -12,7 +12,7 @@ class HotelAPI {
 	}
 
 	public ArrayList<Hotel> getHotelsByName(String hotel_name) {
-		return DBmanager.getHotel(hotel.name);
+		return DBmanager.getHotelsByName(hotel.name);
 	}
 
 	public ArrayList<String> getHotelTags(Hotel hotel) {
