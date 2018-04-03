@@ -65,6 +65,9 @@ public class DBmanager {
 				getRoomsFromHotel(name, zipcode)
 			);
 		}
+		if (hotel == null) {
+			System.out.println("Ekkert fannst");
+		}
 		return hotel;
 	}
 
