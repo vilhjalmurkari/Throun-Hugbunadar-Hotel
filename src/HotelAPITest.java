@@ -7,11 +7,21 @@ import java.util.ArrayList;
 import java.sql.*;
 
 class HotelAPITest {
-	
+	HotelAPI test;
+
+	@Before
+	void setUp() {
+		test = new HotelAPI();
+	}
+
+	@After
+	void tearDown() {
+		test = null;	
+	}
+
 	@Test
 	void getAllHotelsTest() {
 		try {
-			HotelAPI test = new HotelAPI();
 			int results = test.getAllHotels().size();
 			assertEquals(3, results);
 			
@@ -25,7 +35,6 @@ class HotelAPITest {
 	@Test
 	void getHotelTest() {
 		try {
-			HotelAPI test = new HotelAPI();
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			assertEquals(2, hotels.size());
 			assertEquals(5, hotels.get(0).getHotelRating());
@@ -47,15 +56,12 @@ class HotelAPITest {
 	@Test
 	void getHotelTagsTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-			
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			ArrayList<String> listOfStrings = test.getHotelTags(hotels.get(0));
 			assertEquals(5, listOfStrings.size());
 			
 			listOfStrings = test.getHotelTags(hotels.get(1));
 			assertEquals(0, listOfStrings.size());
-			
 		} 
 		catch(SQLException e)
 	    {
@@ -66,8 +72,6 @@ class HotelAPITest {
 	@Test
 	void getRoomsFromHotelTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-			
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			
 			ArrayList<Room> listOfRooms = test.getRoomsFromHotel(hotels.get(0));
@@ -86,8 +90,6 @@ class HotelAPITest {
 	@Test
 	void getRoomTagsTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-			
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			ArrayList<Room> rooms = test.getRoomsFromHotel(hotels.get(0));
 			ArrayList<String> room_tags = test.getRoomTags(rooms.get(0));
@@ -106,8 +108,6 @@ class HotelAPITest {
 	@Test
 	void setRoomPriceTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-
 			Room test_room = test.getRoomsFromHotel(test.getAllHotels().get(0)).get(0);
 			int new_value = 1234;
 
@@ -124,8 +124,6 @@ class HotelAPITest {
 	@Test
 	void changeRoomPriceByAmountTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-			
 			Room test_room = test.getRoomsFromHotel(test.getAllHotels().get(0)).get(0);
 			int original_price = test_room.price;
 
@@ -142,8 +140,6 @@ class HotelAPITest {
 	@Test
 	void changeRoomPriceByPercentTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-
 			Room test_room = test.getRoomsFromHotel(test.getAllHotels().get(0)).get(0);
 			int original_price = test_room.price;
 
@@ -160,11 +156,9 @@ class HotelAPITest {
 	@Test
 	void addHotelTest() {
 		try {
-			HotelAPI test = new HotelAPI();
-			
 			Hotel newHotel = test.addHotel("bla", 4, "hello my dude", 111);
 
-			AssertNotNull(newHotel);
+			assertTrue("þetta er í lagi", newHotel != null);
 		} 
 		catch(SQLException e)
 	    {
@@ -175,7 +169,6 @@ class HotelAPITest {
 	@Test
 	void addRoomToHotelTest() {
 		try {
-			HotelAPI test = new HotelAPI();
 			Hotel ht = test.getAllHotels().get(0);
 			int old_room_count = ht.rooms.size(); 
 
@@ -188,18 +181,4 @@ class HotelAPITest {
 	        System.err.println(e.getMessage());
 	    }	
 	}
-	/*
-	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
-
-		ps.setInt(1, user_id);
-		ps.setInt(2, room_id);
-		ps.setLong(3, start_date);
-		ps.setLong(4, end_date);
-		ps.setBoolean(5, false); // Bókanir eru alltaf fyrst óstaðfestar.
-
-		ps.executeUpdate();
-	}
-	*/
-
 }
