@@ -78,7 +78,9 @@ public class DBmanager {
 
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name = \"" + hotel_name + "\"");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name = ?");
+		ps.setString(1,hotel_name);
+		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {
 			Hotel h = new Hotel(
@@ -103,7 +105,12 @@ public class DBmanager {
 
 	private static ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
-		ResultSet rset = sqlStatement.executeQuery("SELECT tag_name FROM Hotel_tags WHERE hotel_name = \"" + hotel_name + "\" and hotel_zipcode = " + hotel_zipcode);
+		PreparedStatement ps = connection.prepareStatement("SELECT tag_name FROM Hotel_tags WHERE hotel_name = ? AND hotel_zipcode = ?");
+		ps.setString(1,hotel_name);
+		ps.setInt(2,hotel_zipcode);
+		ps.executeQuery();
+		ResultSet rset = ps.executeQuery();
+
 
 		while(rset.next()) result.add(rset.getString("tag_name"));
 
@@ -112,7 +119,9 @@ public class DBmanager {
 
 	private static ArrayList<String> getRoomTags(int room_id) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
-		ResultSet rset = sqlStatement.executeQuery("SELECT tag_name FROM Room_tags WHERE room_id = " + room_id);
+		PreparedStatement ps = connection.prepareStatement("SELECT tag_name FROM Room_tags WHERE room_id = ?");
+		ps.setInt(1,room_id);
+		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) result.add(rset.getString("tag_name"));
 
@@ -124,20 +133,22 @@ public class DBmanager {
 	//         Ath. hotel_name, hotel_zipcode er lykill.
 	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
-		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name + "\" AND hotel_zipcode = " + hotel_zipcode + ";";
-
-		ResultSet rset = sqlStatement.executeQuery(query);
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?;");
+		ps.setString(1,hotel_name);
+		ps.setInt(2,hotel_zipcode);
+		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {
 			int room_id = rset.getInt("id");
 
 			Room room = new Room(
-				room_id,
 				rset.getInt("size"),
 				rset.getInt("bed_count"),
 				rset.getInt("price"),
 				null
 			);
+
+			room.id = room_id;
 
 			listOfRooms.add(room);
 		}
@@ -222,7 +233,7 @@ public class DBmanager {
 	public static void addRoomToHotel(Room room, String hotel_name, int hotel_zipcode) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_zipcode, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
 
-		ps.setNull(1, java.sql.Types.INTEGER);
+		ps.setNull(1, room.id);
 		ps.setString(2, hotel_name);
 		ps.setInt(3, hotel_zipcode);
 		ps.setInt(4, room.size);
@@ -349,7 +360,6 @@ public class DBmanager {
 
 		while(rset.next()) {
 			Room room = new Room(
-				room_id,
 				rset.getInt("size"),
 				rset.getInt("bed_count"),
 				rset.getInt("price"),
@@ -384,4 +394,29 @@ public class DBmanager {
 		ps.setInt(1, b.id);
 		ps.executeUpdate();
 	}
+
+	public static void deleteHotel( Hotel h ) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM Hotels WHERE name = ? AND zipcode = ?");
+		ps.setString(1, h.name);
+		ps.setInt(2, h.zipcode);
+
+		ps.executeUpdate();
+	}
+
+	public static void deleteRoom( Room r ) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM Rooms WHERE id = ?");
+		ps.setInt(1, r.id);
+
+		ps.executeUpdate();
+	}
+
+	public static int getRoomCount() throws SQLException {
+			int result = 0;
+
+			ResultSet rset = sqlStatement.executeQuery("select count(*) from Rooms;");
+			result = rset.getInt(1);
+
+			return result;
+		}
+
 }

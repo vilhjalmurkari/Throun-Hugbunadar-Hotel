@@ -9,8 +9,8 @@ class Room {
 	public int bed_count;
 	public ArrayList<String> tags;
 
-	public Room(int id, int size, int bed_count, int price, ArrayList<String> tags) {
-		this.id = id;
+	public Room(int size, int bed_count, int price, ArrayList<String> tags) {
+		this.id = (int) (Math.random()*Integer.MAX_VALUE);
 		this.size = size;
 		this.bed_count = bed_count;
 		//this.shower = shower;
@@ -24,14 +24,6 @@ class Room {
 	er nytsamlegt að hafa annan constructor, því við munum ekki stilla id-ið
 	sjálfir þegar við setjum inn.
 	*/
-	public Room(int size, int bed_count, int price, ArrayList<String> tags) {
-		this.id = -1;
-		this.size = size;
-		this.bed_count = bed_count;
-		//this.shower = shower;
-		this.price = price;
-		this.tags = tags;
-	}
 
 	//einhver föll hér
 	public int getRoomSize() {
