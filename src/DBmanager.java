@@ -154,7 +154,7 @@ public class DBmanager {
 		return getRoomsFromHotel(hotel.name, hotel.zipcode);
 	}
 
-	public static void setRoomPrice(double new_price, Room room) throws SQLException {
+	public static void setRoomPrice(int new_price, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		ps.setInt(1, (int)new_price);
@@ -208,8 +208,8 @@ public class DBmanager {
 			}
 		}
 
-		if (hotel.rooms != null) {	
-			addRoomsToHotel(hotel.rooms, hotel);
+		if (hotel.rooms != null) {
+			addRoomsToHotel(hotel.rooms, hotel.name, hotel.zipcode);
 		}
 	}
 
@@ -238,7 +238,7 @@ public class DBmanager {
 		}
 	}
 
-	public static void addTagToHotel(String hotel_name, String hotel_zipcode, String tag) {
+	public static void addTagToHotel(String hotel_name, int hotel_zipcode, String tag) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
 
 		ps.setString(1, hotel_name);

@@ -1,28 +1,47 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.sql.*;
 
+
 class HotelAPITest {
-	HotelAPI test;
+	private HotelAPI test;
 
 	@Before
-	void setUp() {
-		test = new HotelAPI();
+	public void setUp() throws Exception {
+		try {
+			System.out.print("hingað");
+			this.test = new HotelAPI();
+		} 
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }	
 	}
 
 	@After
-	void tearDown() {
-		test = null;	
+	public void tearDown() {
+		System.out.print("hingað");
+		this.test = null;
+			
 	}
 
 	@Test
 	void getAllHotelsTest() {
 		try {
-			int results = test.getAllHotels().size();
+			
+			if(test == null) {
+				
+				System.out.print("fiskur");
+			}
+			
+			int results = this.test.getAllHotels().size();
+			
 			assertEquals(3, results);
 			
 		} 
@@ -34,6 +53,7 @@ class HotelAPITest {
 	
 	@Test
 	void getHotelTest() {
+		//getHotelsByNameTest
 		try {
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			assertEquals(2, hotels.size());
@@ -113,7 +133,7 @@ class HotelAPITest {
 
 			test.setRoomPrice(new_value, test_room);
 			
-			assertEquals(test_room.prince, new_value);
+			assertEquals(test_room.price, new_value);
 		} 
 		catch(SQLException e)
 	    {
@@ -156,8 +176,9 @@ class HotelAPITest {
 	@Test
 	void addHotelTest() {
 		try {
-			Hotel newHotel = test.addHotel("bla", 4, "hello my dude", 111);
-
+			
+			Hotel newHotel = new Hotel("bla", 4, "hello my dude", 111, null,null);
+			test.addHotel(newHotel);
 			assertTrue("Ã¾etta er Ã­ lagi", newHotel != null);
 		} 
 		catch(SQLException e)
