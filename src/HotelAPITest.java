@@ -118,8 +118,6 @@ class HotelAPITest {
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			ArrayList<Room> rooms = test.getRoomsFromHotel(hotels.get(0));
 			ArrayList<String> room_tags = test.getRoomTags(rooms.get(0));
-			System.out.println(rooms.get(0).id);
-			System.out.print(rooms.size());
 			assertEquals(4, room_tags.size());
 
 			rooms = test.getRoomsFromHotel(hotels.get(0));
