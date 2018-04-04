@@ -133,14 +133,13 @@ public class DBmanager {
 	//         Ath. hotel_name, hotel_zipcode er lykill.
 	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?;");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?");
 		ps.setString(1,hotel_name);
 		ps.setInt(2,hotel_zipcode);
 		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {
 			int room_id = rset.getInt("id");
-
 			Room room = new Room(
 				rset.getInt("size"),
 				rset.getInt("bed_count"),
@@ -233,7 +232,7 @@ public class DBmanager {
 	public static void addRoomToHotel(Room room, String hotel_name, int hotel_zipcode) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_zipcode, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
 
-		ps.setNull(1, room.id);
+		ps.setInt(1, room.id);
 		ps.setString(2, hotel_name);
 		ps.setInt(3, hotel_zipcode);
 		ps.setInt(4, room.size);

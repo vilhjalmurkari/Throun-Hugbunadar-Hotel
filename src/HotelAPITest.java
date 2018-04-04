@@ -19,7 +19,7 @@ class HotelAPITest {
 			
 			test = new HotelAPI();
 		} 
-		catch(SQLException e)
+		catch(SQLException e)	
 	    {
 	        System.err.println(e.getMessage());
 	    }	
@@ -30,6 +30,7 @@ class HotelAPITest {
 		
 		try {
 			test.deleteHotel(testHotel);
+			
 			test.deleteRoom(testRoom);
 			test = null;
 		} 
@@ -99,7 +100,7 @@ class HotelAPITest {
 			ArrayList<Hotel> hotels = test.getHotelsByName("my hotel");
 			
 			ArrayList<Room> listOfRooms = test.getRoomsFromHotel(hotels.get(0));
-			assertEquals(17, listOfRooms.size());
+			assertEquals(7, listOfRooms.size());
 			
 			listOfRooms = test.getRoomsFromHotel(hotels.get(1));
 			assertEquals(0, listOfRooms.size());

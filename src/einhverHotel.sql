@@ -9,6 +9,8 @@ insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('H
 insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Leifur Eiríksson', 200, 20, 17500, 4);
 insert into Rooms (hotel_name, hotel_zipcode, size, price, bed_count) values ('Leifur Eiríksson', 200, 40, 19000, 5);
 
+insert into Rooms (id, hotel_name, hotel_zipcode, size, price, bed_count) values (1,'my hotel', 105, 3, 800, 5);
+
 insert into Hotel_tags (hotel_name, hotel_zipcode, tag_name) values ('my hotel', 105, 'Bar');
 insert into Hotel_tags (hotel_name, hotel_zipcode, tag_name) values ('my hotel', 105, 'Sundlaug');
 insert into Hotel_tags (hotel_name, hotel_zipcode, tag_name) values ('my hotel', 105, 'Nálægt strönd');
