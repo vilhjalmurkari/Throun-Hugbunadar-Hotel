@@ -1,4 +1,5 @@
 //keyrsla: java -cp .:sqlite-jdbc....jar hotelView
+//keyrsla: java -cp .;sqlite-jdbc-3.18.0.jar hotelView
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ class hotelView {
 	private void roomRegInput() throws SQLException {
 		ArrayList<Room> roomBuffer = new ArrayList<Room>();
 		String hotelName = "";
-		String hotelZip = "";
+		int hotelZip = 0;
 		clearScreen();
 
 		for( boolean quitLoop = false ; !quitLoop ; ) {
@@ -157,7 +158,8 @@ class hotelView {
 			hotelName = input.next();
 
 			System.out.println("Skráðu póstfang hótelsins sem á að skrá herbergið fyrir:");
-			hotelZip = input.next();
+			hotelZip = Integer.parseInt(input.next());
+
 			System.out.println();
 
 			System.out.println("Skráðu stærð á nýju hótelherbergi:");
@@ -172,7 +174,7 @@ class hotelView {
 			System.out.println("Sláðu inn verð á nýja hótelherberginu:");
 			String newRoomPrice = input.next();
 
-			roomBuffer.add(new Room(-1,
+			roomBuffer.add(new Room(
 				 					Integer.parseInt(newRoomSize),
 				 					Integer.parseInt(newRoomBedCount),
 				 					Integer.parseInt(newRoomPrice),
@@ -191,7 +193,7 @@ class hotelView {
 		}
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		DBmanager.addRoomsToHotel(roomBuffer, hotel);
+		DBmanager.addRoomsToHotel(roomBuffer, hotelName, hotelZip);
 		this.state = programState.MENU;
 	}
 
@@ -200,7 +202,8 @@ class hotelView {
 		String hotelName = input.next();
 
 		System.out.println("Skráðu póstfang hótelsins:");
-		String hotelZip = input.next();
+		String hotelZipString = input.next();
+		int hotelZip = Integer.parseInt(hotelZipString);
 		System.out.println();
 
 		//TODO: prósenta o.fl.
@@ -208,7 +211,7 @@ class hotelView {
 		String priceChange = input.next();
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomsFromHotel(hotel));
+		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel(hotel));
 
 		this.state = programState.MENU;
 	}
@@ -266,7 +269,7 @@ class hotelView {
 	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
 		hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
-		
+
 		try {
 			DBmanager.init();
 

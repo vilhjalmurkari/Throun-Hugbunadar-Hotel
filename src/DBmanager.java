@@ -51,7 +51,7 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	private static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
+	public static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
 		Hotel hotel = null;
 		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND zipcode = " + hotel_zipcode);
 
@@ -162,6 +162,41 @@ public class DBmanager {
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og zipcode
 	public static ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
 		return getRoomsFromHotel(hotel.name, hotel.zipcode);
+	}
+
+	// Notkun: getRoomFromHotel( room_id, hotel_name, hotel_zipcode)
+	// Skilar:  Skilar hótelherbergi með ákveðið id.
+	//         Ath. hotel_name, hotel_zipcode er lykill.
+	public static Room getRoomFromHotel( int room_id, String hotel_name, int hotel_zipcode) throws SQLException {
+		Room room = null;
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?");
+		ps.setInt(1, room_id);
+		ps.setString(2,hotel_name);
+		ps.setInt(3,hotel_zipcode);
+		ResultSet rset = ps.executeQuery();
+
+		while(rset.next()) {
+			int id = rset.getInt("id");
+		 	room = new Room(
+				rset.getInt("size"),
+				rset.getInt("bed_count"),
+				rset.getInt("price"),
+				getRoomTags(id)
+			);
+		}
+
+		if (room == null) {
+			System.out.println("Ekkert fannst");
+		}
+
+		return room;
+	}
+
+	// Notkun: getRoomFromHotel(room_id, hotel)
+	// Skilar: Skilar herbergi með ákveðið room_id.
+	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og zipcode
+	public static Room getRoomsFromHotel( int room_id, Hotel hotel) throws SQLException {
+		return getRoomFromHotel( room_id, hotel.name, hotel.zipcode);
 	}
 
 	public static void setRoomPrice(int new_price, Room room) throws SQLException {
