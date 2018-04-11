@@ -195,7 +195,7 @@ public class DBmanager {
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og zipcode
-	public static Room getRoomsFromHotel( int room_id, Hotel hotel) throws SQLException {
+	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
 		return getRoomFromHotel( room_id, hotel.name, hotel.zipcode);
 	}
 

@@ -206,12 +206,17 @@ class hotelView {
 		int hotelZip = Integer.parseInt(hotelZipString);
 		System.out.println();
 
+		System.out.println("Skráðu inn ID herbergisins sem á að breyta:");
+		String room_idString = input.next();
+		int room_id = Integer.parseInt(room_idString);
+		System.out.println();
+
 		//TODO: prósenta o.fl.
 		System.out.println("Skráðu inn verðbreytingu:");
 		String priceChange = input.next();
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel(hotel));
+		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel( room_id, hotel));
 
 		this.state = programState.MENU;
 	}
