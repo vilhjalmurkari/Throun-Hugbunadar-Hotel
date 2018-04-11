@@ -11,8 +11,12 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
-		return DBmanager.getHotelsByName(hotel_name);
+	public Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
+		return DBmanager.getHotel(hotel_name, hotel_zipcode);
+	}
+
+	public ArrayList<Hotel> getHotelsByName(String search_string) throws SQLException {
+		return DBmanager.getHotelsByName(search_string);
 	}
 
 	private ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {
@@ -25,6 +29,10 @@ class HotelAPI {
 
 	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
 		return hotel.rooms;
+	}
+
+	public Room getRoomFromHotel(int room_id, Hotel hotel) throws SQLException {
+		return DBmanager.getRoomFromHotel(room_id, hotel);
 	}
 
 	public void setRoomPrice(int new_price, Room room) throws SQLException {

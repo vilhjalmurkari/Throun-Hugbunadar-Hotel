@@ -19,7 +19,7 @@ class User {
 
 	public void cancelUnconfirmed() {
 		for( int i=0; i<bookings.size(); i++ ) {
-			if( bookings[i].confirmed )
+			if( bookings.get(i).confirmed )
 				bookings.remove(i);
 		}
 		System.out.println("All unconfirmed bookings have been canceled.");
@@ -27,11 +27,11 @@ class User {
 
 	public void cancelBooking(int key) {
 		for( int i=0; i<bookings.size(); i++ ) {
-			if( bookings[i].confirmed ) {
+			if( bookings.get(i).confirmed ) {
 				System.out.println("Sorry, this booking has already been confirmed.");
 				break;
 			}
-			if( bookings[i].id==key ) {
+			if( bookings.get(i).id==key ) {
 				bookings.remove(i);
 				break;
 			}
@@ -43,7 +43,7 @@ class User {
 	}
 
 	public void makeBooking(Room room, Date start_date, Date end_date) throws SQLException {
-		assert( DBmanager.isRoomFree(room, start_date.getTime(), end_date.getTime() ) );
+		assert( DBmanager.isRoomFree(room, (int)start_date.getTime(), (int)end_date.getTime() ) );
 
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.add(booking);
