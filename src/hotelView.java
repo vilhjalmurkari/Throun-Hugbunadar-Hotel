@@ -126,9 +126,9 @@ class hotelView {
 			System.out.println();
 
 			hotelBuffer.add(new Hotel(newHotelName,
-										Integer.parseInt(newHotelRating),
+									  (int)parseNumber(newHotelRating),
 									  newHotelDesription,
-									  Integer.parseInt(newHotelZip),
+									  (int)parseNumber(newHotelZip),
 									  null,
 									  null));
 
@@ -158,7 +158,7 @@ class hotelView {
 			hotelName = input.next();
 
 			System.out.println("Skráðu póstfang hótelsins sem á að skrá herbergið fyrir:");
-			hotelZip = Integer.parseInt(input.next());
+			hotelZip = (int)parseNumber(input.next());
 
 			System.out.println();
 
@@ -174,13 +174,11 @@ class hotelView {
 			System.out.println("Sláðu inn verð á nýja hótelherberginu:");
 			String newRoomPrice = input.next();
 
-			roomBuffer.add(new Room(
-				 					Integer.parseInt(newRoomSize),
-				 					Integer.parseInt(newRoomBedCount),
-				 					Integer.parseInt(newRoomPrice),
+			roomBuffer.add(new Room((int)parseNumber(newRoomSize),
+				 					(int)parseNumber(newRoomBedCount),
+				 					(int)parseNumber(newRoomPrice),
 									null
-									)
-									);
+									));
 
 			System.out.println();
 			System.out.println("Vilt þú bæta við fleiri hótelherbergjum? (Y/N)");
@@ -203,7 +201,7 @@ class hotelView {
 
 		System.out.println("Skráðu póstfang hótelsins:");
 		String hotelZipString = input.next();
-		int hotelZip = Integer.parseInt(hotelZipString);
+		int hotelZip = (int)parseNumber(hotelZipString);
 		System.out.println();
 
 		System.out.println("Skráðu inn ID herbergisins sem á að breyta:");
@@ -216,7 +214,11 @@ class hotelView {
 		String priceChange = input.next();
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
+<<<<<<< HEAD
 		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel( room_id, hotel));
+=======
+		//DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel(hotel));
+>>>>>>> 72e6c8c16fdfa3ca0dfcb94fda6ed1da58e5e376
 
 		this.state = programState.MENU;
 	}
