@@ -78,8 +78,8 @@ public class DBmanager {
 
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name like %?%");
-		ps.setString(1,hotel_name);
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name like ?");
+		ps.setString(1, "%" + hotel_name + "%");
 		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {

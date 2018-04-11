@@ -128,8 +128,10 @@ class hotelView {
 
 				ArrayList<Hotel> hotels = api.getHotelsByName(this.inputString);
 
-				for(Hotel h : hotels) {
-					System.out.println(h.name);
+				for(int i = 0; i < hotels.size(); i++) {
+					System.out.println("---------" + (i+1) + "---------");
+					hotels.get(i).printHotel();
+					System.out.println("-------------------");
 				}
 
 				this.inputString = input.next();
