@@ -214,11 +214,7 @@ class hotelView {
 		String priceChange = input.next();
 
 		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-<<<<<<< HEAD
-		DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel( room_id, hotel));
-=======
 		//DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel(hotel));
->>>>>>> 72e6c8c16fdfa3ca0dfcb94fda6ed1da58e5e376
 
 		this.state = programState.MENU;
 	}
