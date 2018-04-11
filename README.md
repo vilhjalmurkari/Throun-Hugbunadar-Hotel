@@ -1,7 +1,8 @@
 # Throun-Hugbunadar-Hotel
-Verkefni í Þróun Hugbúnaðar!
+Verkefni í Þróun Hugbúnaðar.
 
-### Athugasemdir
-1.   
-Um hvernig má gera HTTPS Java Servlet síðu:
-https://www.codeproject.com/Tips/1043003/Create-a-Simple-Web-Server-in-Java-HTTPS-Server
+
+UML rit fyrir Hótelleitina okkar er að finna í UML.
+API fyrir kóðann má finna undir HotelAPI.md en þar er API fyrir Hótelleit (*HotelAPI*), Hótel (*Hotel*), Herbergi (*Room*), Notendur (*User*), og Bókanir (*Booking*).
+
+Til að keyra notendaviðmót keyrið ```java -cp .:sqlite-jdbc-3.18.0.jar hotelView``` á Unix en ```java -cp .;sqlite-jdbc-3.18.0.jar hotelView``` á Windows.

@@ -62,24 +62,13 @@ class HotelAPI {
 		DBmanager.addHotels(hotels);
 	}
 
-		// Add room to hotel object?
 	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
 		hotel.rooms.add(room);
 		DBmanager.addRoomToHotel(room, hotel.name, hotel.zipcode);
 	}
 
-		// Add room to hotel object?
-		//FIXIT
-	public void addRoomsToHotel(ArrayList<Room> rooms, Hotel hotel) throws SQLException {
-		DBmanager.addRoomsToHotel(rooms, hotel.name, hotel.zipcode);
-	}
-
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		DBmanager.bookRoom(room.id, user.id, start_date, end_date);
-	}
-
-	public ArrayList<Hotel> search(SearchQuery query) throws SQLException {
-		return DBmanager.search(query);
 	}
 
 	public ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
@@ -98,8 +87,12 @@ class HotelAPI {
 		DBmanager.deleteRoom(room);
 	}
 
-	public int getRoomCount() throws SQLException {
+	private int getRoomCount() throws SQLException {
 		return DBmanager.getRoomCount();
+	}
+
+	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
+		return DBmanager.search(query);
 	}
 
 }
