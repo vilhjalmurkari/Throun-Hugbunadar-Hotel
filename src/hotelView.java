@@ -1,5 +1,6 @@
 //keyrsla: java -cp .:sqlite-jdbc....jar hotelView
 //keyrsla: java -cp .;sqlite-jdbc-3.18.0.jar hotelView
+//keyrsla(mac): java -cp .:sqlite-jdbc-3.18.0.jar hotelView
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
@@ -8,21 +9,24 @@ import java.util.Scanner;
 class hotelView {
 	enum programState {
 		MENU,
+		SEARCH,
 		HOTEL_REG,
 		ROOM_REG,
 		CHANGE_ROOM_PRICE
 	}
 
+	private HotelAPI api;
 	private programState state;
 	private Scanner input;
 	private String inputString;
 	private boolean possibleMenuCommand;
 
-	public hotelView(programState startState, Scanner inputStream) {
+	public hotelView(programState startState, Scanner inputStream) throws SQLException {
 		state = startState;
 		input = inputStream;
 		inputString = "";
 		possibleMenuCommand = false;
+		api = new HotelAPI();
 	}
 
 	public static long parseNumber(String s) {
@@ -58,9 +62,18 @@ class hotelView {
 				System.out.println("Velkomin í hótelleitarforrit 7H");
 				System.out.println("vinsamlegast sláðu inn tölu sem samsvarast eftirfarandi valmöguleikum:");
 				System.out.println();
-				System.out.println("1): Skrá hótel");
-				System.out.println("2): Skrá herbergi fyrir hótel");
-				System.out.println("3): Breyta verði hótelherbergja");
+				System.out.println("1): Leita að hótelum");
+				System.out.println("2): Skrá hótel");
+				System.out.println("3): Skrá herbergi fyrir hótel");
+				System.out.println("4): Breyta verði hótelherbergja");
+			break;
+
+			case SEARCH:
+				System.out.println("Hótel leit:");
+				System.out.println();
+				System.out.println("1): eftir nafni");
+				System.out.println("2): eftir póstfangi");
+				System.out.println("3): eftir stjörnufjölda");
 			break;
 
 			case HOTEL_REG:
@@ -100,6 +113,35 @@ class hotelView {
 			default:
 				System.out.println("túlkað sem nei");
 				return false;
+		}
+	}
+
+	private void searchInput() throws SQLException {
+		this.inputString = input.next();
+
+		clearScreen();
+
+		switch(this.inputString.charAt(0)) {
+			case '1':
+				System.out.println("Sláðu inn nafn á hóteli:");
+				this.inputString = input.next();
+
+				ArrayList<Hotel> hotels = api.getHotelsByName(this.inputString);
+			break;
+
+			case '2':
+				System.out.println("Sláðu inn póstfang:");
+				this.inputString = input.next();
+			break;
+
+			case '3':
+				System.out.println("Sláðu inn lágmarks stjörnufjölda:");
+				this.inputString = input.next();
+			break;
+
+			default:
+ 				this.possibleMenuCommand = true;
+			break;
 		}
 	}
 
@@ -226,14 +268,18 @@ class hotelView {
 
 		switch(this.inputString.charAt(0)) {
 			case '1':
-				this.state = programState.HOTEL_REG;
+				this.state = programState.SEARCH;
 			break;
 
 			case '2':
-				this.state = programState.ROOM_REG;
+				this.state = programState.HOTEL_REG;
 			break;
 
 			case '3':
+				this.state = programState.ROOM_REG;
+			break;
+
+			case '4':
 				this.state = programState.CHANGE_ROOM_PRICE;
 			break;
 
@@ -271,10 +317,8 @@ class hotelView {
 	//þetta gerir ekkert sérstakt eins og er.
 	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
-		hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
-
 		try {
-			DBmanager.init();
+			hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
 
 			while(true) {
 				program.clearScreen();
@@ -283,6 +327,10 @@ class hotelView {
 				switch(program.state) {
 					case MENU:
 					program.menuInput();
+					break;
+
+					case SEARCH:
+					program.searchInput();
 					break;
 
 					case HOTEL_REG:
