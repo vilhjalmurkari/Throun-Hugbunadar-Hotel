@@ -11,8 +11,8 @@ class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
-		return DBmanager.getHotelsByName(hotel_name);
+	public ArrayList<Hotel> getHotelsByName(String search_string) throws SQLException {
+		return DBmanager.getHotelsByName(search_string);
 	}
 
 	public ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {

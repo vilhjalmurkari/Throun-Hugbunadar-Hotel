@@ -127,6 +127,12 @@ class hotelView {
 				this.inputString = input.next();
 
 				ArrayList<Hotel> hotels = api.getHotelsByName(this.inputString);
+
+				for(Hotel h : hotels) {
+					System.out.println(h.name);
+				}
+
+				this.inputString = input.next();
 			break;
 
 			case '2':
