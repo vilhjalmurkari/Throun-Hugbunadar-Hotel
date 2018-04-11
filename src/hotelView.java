@@ -184,7 +184,7 @@ class hotelView {
 			quitLoop = !affirm(this.inputString);
 		}
 
-		DBmanager.addHotels(hotelBuffer);
+		api.addHotels(hotelBuffer);
 		this.state = programState.MENU;
 	}
 
@@ -232,8 +232,8 @@ class hotelView {
 			quitLoop = affirm(this.inputString);
 		}
 
-		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		DBmanager.addRoomsToHotel(roomBuffer, hotelName, hotelZip);
+		Hotel hotel = api.getHotel(hotelName, hotelZip);
+		api.addRoomsToHotel(roomBuffer, hotel);
 		this.state = programState.MENU;
 	}
 
@@ -255,8 +255,8 @@ class hotelView {
 		System.out.println("Skráðu inn verðbreytingu:");
 		String priceChange = input.next();
 
-		Hotel hotel = DBmanager.getHotel(hotelName, hotelZip);
-		//DBmanager.changeRoomPriceByAmount(Double.parseDouble(priceChange), DBmanager.getRoomFromHotel( room_id, hotel));
+		Hotel hotel = api.getHotel(hotelName, hotelZip);
+		//api.changeRoomPriceByAmount(Double.parseDouble(priceChange), api.getRoomFromHotel( room_id, hotel));
 
 		this.state = programState.MENU;
 	}
