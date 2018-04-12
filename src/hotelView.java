@@ -1,12 +1,12 @@
-//keyrsla: java -cp .:sqlite-jdbc....jar hotelView
-//keyrsla: java -cp .;sqlite-jdbc-3.18.0.jar hotelView
-//keyrsla(mac): java -cp .:sqlite-jdbc-3.18.0.jar hotelView
+//keyrsla: java -cp .:sqlite-jdbc....jar HotelView
+//keyrsla: java -cp .;sqlite-jdbc-3.18.0.jar HotelView
+//keyrsla(mac): java -cp .:sqlite-jdbc-3.18.0.jar HotelView
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class hotelView {
+class HotelView {
 	enum programState {
 		MENU,
 		SEARCH,
@@ -21,7 +21,7 @@ class hotelView {
 	private String inputString;
 	private boolean possibleMenuCommand;
 
-	public hotelView(programState startState, Scanner inputStream) throws SQLException {
+	public HotelView(programState startState, Scanner inputStream) throws SQLException {
 		state = startState;
 		input = inputStream;
 		inputString = "";
@@ -29,7 +29,7 @@ class hotelView {
 		api = new HotelAPI();
 	}
 
-	public static long parseNumber(String s) {
+	private static long parseNumber(String s) {
 		long result = 0;
 		boolean minus = false;
 
@@ -241,7 +241,11 @@ class hotelView {
 		}
 
 		Hotel hotel = api.getHotel(hotelName, hotelZip);
-		api.addRoomsToHotel(roomBuffer, hotel);
+
+		for(Room r : roomBuffer) {
+			api.addRoomToHotel(r, hotel);
+		}
+
 		this.state = programState.MENU;
 	}
 
@@ -322,11 +326,9 @@ class hotelView {
 		}
 	}
 
-	//þetta gerir ekkert sérstakt eins og er.
-	// Ekki satt.
 	public static void main(String[] args) throws ClassNotFoundException {
 		try {
-			hotelView program = new hotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
+			HotelView program = new HotelView(programState.MENU, new Scanner(System.in).useDelimiter("\n"));
 
 			while(true) {
 				program.clearScreen();
@@ -361,34 +363,5 @@ class hotelView {
 		}catch (SQLException e) {
         	e.printStackTrace();
     	}
-
-		/*
-		stdInput.close();
-
-		Class.forName("org.sqlite.JDBC");
-		Connection connection = null;
-
-		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:testdb.db");
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select name from Hotels");
-
-			while(rs.next()) {
-				System.out.println(rs.getString(1));
-			}
-		}
-		catch(SQLException e) {
-		sqli
-			System.err.println(e.getMessage());
-		}finally {
-			try {
-				if(connection != null) {
-					connection.close();
-				}
-			}catch(SQLException e) {
-				System.err.println(e);
-			}
-		}
-		*/
 	}
 }
