@@ -37,16 +37,12 @@ class View extends JPanel {
 		JButton search_button = new JButton("Search");
 		
 		result_list_model = new DefaultListModel();
-		for(int i = 0; i < 20; i++) result_list_model.addElement(""+(i+1));
 
 		JList result_list = new JList(result_list_model);
 		result_list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		result_list.setLayoutOrientation(JList.VERTICAL);
-		//result_list.setModel(result_list_model);
 
 		JScrollPane result_pane = new JScrollPane(result_list);
-
-		//result_pane.add(result_list);
 
 		input_panel.add(search_field, BorderLayout.CENTER);
 		input_panel.add(search_button, BorderLayout.EAST);
@@ -63,7 +59,7 @@ class View extends JPanel {
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent){
-				System.out.println("what");
+				System.out.println("exiting...");
 				System.exit(0);
 			}
 		});
@@ -73,6 +69,7 @@ class View extends JPanel {
 				result_list_model.removeAllElements();
 
 				String text = search_field.getText();
+
 				try {
 					ArrayList<Hotel> hotels = api.getHotelsByName(text);
 
