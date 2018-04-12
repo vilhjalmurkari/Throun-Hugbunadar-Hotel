@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import HotelAPI;
+import HotelAPI.*;
 
 class View extends JPanel {
 	public static void main(String[] args) {

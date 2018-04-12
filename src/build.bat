@@ -1,9 +1,13 @@
 @echo off
 
-javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java HotelView.java
+pushd HotelAPI
+javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
+popd
+javac View.java
 
 if ERRORLEVEL == 0 (
 	if %1 == "run" (
-		java -cp .;sqlite-jdbc-3.18.0.jar HotelView
+		::java -cp .;sqlite-jdbc-3.18.0.jar HotelView
+		java View
 	)
 )
