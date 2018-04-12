@@ -4,6 +4,6 @@ javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.jav
 
 if [[ "$?" == "0" ]]; then
 	if [[ "$1" == "run" ]]; then
-		java HotelView
+		java -cp .:sqlite-jdbc-3.18.0.jar HotelView
 	fi
 fi

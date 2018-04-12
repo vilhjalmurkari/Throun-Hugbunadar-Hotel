@@ -4,6 +4,6 @@ javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.jav
 
 if ERRORLEVEL == 0 (
 	if %1 == "run" (
-		java HotelView
+		java -cp .;sqlite-jdbc-3.18.0.jar HotelView
 	)
 )

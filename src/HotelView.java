@@ -1,6 +1,5 @@
-//keyrsla: java -cp .:sqlite-jdbc....jar HotelView
-//keyrsla: java -cp .;sqlite-jdbc-3.18.0.jar HotelView
-//keyrsla(mac): java -cp .:sqlite-jdbc-3.18.0.jar HotelView
+//keyrsla(unix): java -cp .:sqlite-jdbc-3.18.0.jar HotelView
+//keyrsla(windows): java -cp .;sqlite-jdbc-3.18.0.jar HotelView
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
