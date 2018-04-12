@@ -9,7 +9,7 @@ javac View.java
 
 if [[ "$?" == "0" ]]; then
 	if [[ "$1" == "run" ]]; then
-		#java -cp .:sqlite-jdbc-3.18.0.jar View
-		java View
+		java -cp .:sqlite-jdbc-3.18.0.jar View
+		#java View
 	fi
 fi

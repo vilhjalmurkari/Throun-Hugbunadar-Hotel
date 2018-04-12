@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
 
-class User {
+public class User {
 	public int id;
 	public String name;
 	public String email;

@@ -3,7 +3,7 @@ package HotelAPI;
 import java.util.Date;
 import java.util.ArrayList;
 
-class Hotel {
+public class Hotel {
 	public String name;
 	public int rating;
 	public String description;

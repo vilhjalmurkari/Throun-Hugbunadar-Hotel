@@ -3,7 +3,7 @@ package HotelAPI;
 import java.util.ArrayList;
 import java.sql.*;
 
-class HotelAPI {
+public class HotelAPI {
 
 	public HotelAPI() throws SQLException {
 		DBmanager.init();

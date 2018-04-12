@@ -1,10 +1,18 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Date;
+import java.util.ArrayList;
+import java.sql.*;
 import HotelAPI.*;
 
 class View extends JPanel {
-	public static void main(String[] args) {
+	private static HotelAPI api;
+	private static DefaultListModel result_list_model;
+
+	public static void main(String[] args) throws SQLException {
+		api = new HotelAPI();		
+
 		JFrame frame = new JFrame();
 		frame.setSize(400, 400);
 
@@ -25,10 +33,10 @@ class View extends JPanel {
 		JPanel bottom_panel =  new JPanel();
 		bottom_panel.setLayout(new GridLayout());
 
-		JTextField search_field = new JTextField("Sláðu inn leitar streng...");
+		JTextField search_field = new JTextField("Sláðu inn nafn á hóteli...");
 		JButton search_button = new JButton("Search");
 		
-		DefaultListModel result_list_model = new DefaultListModel();
+		result_list_model = new DefaultListModel();
 		for(int i = 0; i < 20; i++) result_list_model.addElement(""+(i+1));
 
 		JList result_list = new JList(result_list_model);
@@ -62,8 +70,18 @@ class View extends JPanel {
 
 		search_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				result_list_model.removeAllElements();
+
 				String text = search_field.getText();
-				System.out.println(text);
+				try {
+					ArrayList<Hotel> hotels = api.getHotelsByName(text);
+
+					for(Hotel h : hotels) {
+						result_list_model.addElement(h.name);
+					}
+				}catch(SQLException sql_e) {
+					System.out.println(sql_e.getMessage());
+				}
 			}
 		});
 	}

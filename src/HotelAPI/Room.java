@@ -3,7 +3,7 @@ package HotelAPI;
 import java.util.Date;
 import java.util.ArrayList;
 
-class Room {
+public class Room {
 	public int id;
 	public int size;
 	//public boolean shower;
