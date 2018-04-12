@@ -8,8 +8,8 @@ zip -r HotelAPI.zip HotelAPI
 
 javac View.java
 
-if ERRORLEVEL == 0 (
-	if %1 == "run" (
+if %errorlevel% == 0 (
+	if "%1" == "run" (
 		::java -cp .;sqlite-jdbc-3.18.0.jar HotelView
 		java View
 	)
