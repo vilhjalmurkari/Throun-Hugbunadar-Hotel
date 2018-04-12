@@ -3,6 +3,8 @@ cd HotelAPI
 javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
 cd ..
 
+zip -r HotelAPI.zip HotelAPI
+
 javac View.java
 
 if [[ "$?" == "0" ]]; then

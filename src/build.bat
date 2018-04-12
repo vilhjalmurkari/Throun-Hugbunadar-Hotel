@@ -3,6 +3,9 @@
 pushd HotelAPI
 javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
 popd
+
+zip -r HotelAPI.zip HotelAPI
+
 javac View.java
 
 if ERRORLEVEL == 0 (
