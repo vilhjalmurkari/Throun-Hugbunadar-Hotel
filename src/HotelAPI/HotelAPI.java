@@ -1,3 +1,5 @@
+package HotelAPI;
+
 import java.util.ArrayList;
 import java.sql.*;
 
