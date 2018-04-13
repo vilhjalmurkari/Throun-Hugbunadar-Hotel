@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
-import HotelAPI.*;
+import hotelAPI.*;
 
 class View extends JPanel {
 	private static HotelAPI api;
