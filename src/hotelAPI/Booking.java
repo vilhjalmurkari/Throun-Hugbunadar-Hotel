@@ -1,13 +1,12 @@
 package hotelAPI;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 public class Booking {
 	public int id;
 	public Room room;
-	public Date start_date;
-	public Date end_date;
+	public long start_date;
+	public long end_date;
 	public boolean confirmed;
 
 	// Usage:  Booking(r,s,e)
@@ -15,7 +14,7 @@ public class Booking {
 	//         s og e eru byrjunar og enda dagsetningar
 	//         á þessari bókun sem heiltölur.
 	// After:  Bókun hefur verið gerð.
-	public Booking(Room room, Date start_date, Date end_date) {
+	public Booking(Room room, long start_date, long end_date) {
 		this.room = room;
 		this.start_date = start_date;
 		this.end_date = end_date;

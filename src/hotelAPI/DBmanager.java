@@ -415,11 +415,11 @@ public class DBmanager {
 	// Notkun: isRoomFree(r,s,e)
 	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
-	public static boolean isRoomFree(Room r, int start_date, int end_date) throws SQLException {
+	public static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
 
 		PreparedStatement ps = connection.prepareStatement("SELECT COOUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
-		ps.setInt(1, start_date); // Opna bilið ]s;e[
-		ps.setInt(2, start_date);
+		ps.setLong(1, start_date); // Opna bilið ]s;e[
+		ps.setLong(2, start_date);
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
 		return rs.getInt(0) == 0;

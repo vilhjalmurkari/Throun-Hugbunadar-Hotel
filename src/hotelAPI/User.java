@@ -44,12 +44,12 @@ public class User {
 		this.email = newEmail;
 	}
 
-	public void makeBooking(Room room, Date start_date, Date end_date) throws SQLException {
-		assert( DBmanager.isRoomFree(room, (int)start_date.getTime(), (int)end_date.getTime() ) );
+	public void makeBooking(Room room, long start_date, long end_date) throws SQLException {
+		assert( DBmanager.isRoomFree(room, start_date, end_date ) );
 
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.add(booking);
-		DBmanager.bookRoom(this.id, room.id, start_date.getTime(), end_date.getTime());
+		DBmanager.bookRoom( room, this, start_date, end_date);
 	}
 
 }
