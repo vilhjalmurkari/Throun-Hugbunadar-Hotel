@@ -11,5 +11,5 @@ javac View.java
 
 if %errorlevel% == 0 (
 	if "%1" == "run" java -cp .;sqlite-jdbc-3.18.0.jar HotelView
-	if "%1" == "run" java -cp .;sqlite-jdbc-3.18.0.jar HotelView
+	if "%2" == "run" java -cp .;sqlite-jdbc-3.18.0.jar HotelView
 )
