@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
-import HotelAPI.*;
+import hotelAPI.*;
 
 class View extends JPanel {
 	private static HotelAPI api;
 	private static DefaultListModel result_list_model;
 
 	public static void main(String[] args) throws SQLException {
-		api = new HotelAPI();		
+		api = new HotelAPI();
 
 		JFrame frame = new JFrame();
 		frame.setSize(400, 400);
@@ -33,9 +33,9 @@ class View extends JPanel {
 		JPanel bottom_panel =  new JPanel();
 		bottom_panel.setLayout(new GridLayout());
 
-		JTextField search_field = new JTextField("Sláðu inn nafn á hóteli...");
+		JTextField search_field = new JTextField("Sláðu inn nafn á Þórði...");
 		JButton search_button = new JButton("Search");
-		
+
 		result_list_model = new DefaultListModel();
 
 		JList result_list = new JList(result_list_model);
@@ -46,7 +46,7 @@ class View extends JPanel {
 
 		input_panel.add(search_field, BorderLayout.CENTER);
 		input_panel.add(search_button, BorderLayout.EAST);
-		
+
 		for(int i = 0; i < 4; i++) bottom_panel.add(new JButton("Ok"));
 
 		main_panel.add(input_panel, BorderLayout.NORTH);

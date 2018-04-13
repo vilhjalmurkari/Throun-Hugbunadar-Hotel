@@ -1,4 +1,4 @@
-package HotelAPI;
+package hotelAPI;
 
 import java.util.ArrayList;
 import java.sql.*;

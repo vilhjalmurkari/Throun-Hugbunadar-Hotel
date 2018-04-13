@@ -1,4 +1,4 @@
-import HotelAPI.*;
+import hotelAPI.*;
 import java.sql.*;
 
 class testing {

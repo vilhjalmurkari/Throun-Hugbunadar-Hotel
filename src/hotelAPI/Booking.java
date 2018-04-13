@@ -1,4 +1,4 @@
-package HotelAPI;
+package hotelAPI;
 
 import java.util.Date;
 import java.util.ArrayList;
