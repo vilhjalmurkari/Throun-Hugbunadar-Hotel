@@ -7,29 +7,29 @@ public class Hotel {
 	public String name;
 	public int rating;
 	public String description;
-	public int zipcode;
+	public String city;
 	public ArrayList<String> tags;
 	public ArrayList<Room> rooms;
 
-	public Hotel(String name, int rating, String description, int zipcode, ArrayList<String> tags, ArrayList<Room> rooms) {
+	public Hotel(String name, int rating, String description, String city, ArrayList<String> tags, ArrayList<Room> rooms) {
 		this.name = name;
 		this.rating = rating;
 		this.description = description;
-		this.zipcode = zipcode;
+		this.city = city;
 		this.tags = tags;
 		this.rooms = rooms;
 	}
 
 	public void printHotel() {
 		System.out.println("Name: " + name);
-		System.out.println("Zipcode: " + zipcode);
+		System.out.println("City: " + city);
 		System.out.println("Rating: " + rating);
 		System.out.print("description: ");
 
 		char[] description_array = description.toCharArray();
 		int max_len = 32;
 
-		for(int i = 0; 
+		for(int i = 0;
 			i < ((description_array.length > max_len) ? max_len : description_array.length);
 			i++) {
 			System.out.print(description_array[i]);

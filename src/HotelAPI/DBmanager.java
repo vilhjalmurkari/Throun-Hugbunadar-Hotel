@@ -31,13 +31,13 @@ public class DBmanager {
 
 		while(rset.next()) {
 			String hotel_name = rset.getString("name");
-			int hotel_zipcode = rset.getInt("zipcode");
+			String hotel_city = rset.getString("city");
 
 			Hotel h = new Hotel(
 				hotel_name,
 				rset.getInt("rating"),
 				rset.getString("description"),
-				hotel_zipcode,
+				hotel_city,
 				null,
 				null
 			);
@@ -46,29 +46,29 @@ public class DBmanager {
 		}
 
 		for(Hotel h : listOfHotels) {
-			h.tags = getHotelTags(h.name, h.zipcode);
-			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
+			h.tags = getHotelTags(h.name, h.city);
+			h.rooms = getRoomsFromHotel(h.name, h.city);
 		}
 
 		return listOfHotels;
 	}
 
-	public static Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
+	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
 		Hotel hotel = null;
-		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND zipcode = " + hotel_zipcode);
+		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND city = " + hotel_city);
 
 		while(rset.next()) {
 
 			String name = rset.getString("name");
-			int zipcode = rset.getInt("zipcode");
+			String city = rset.getString("city");
 
 		 	hotel = new Hotel(
 				name,
 				rset.getInt("rating"),
 				rset.getString("description"),
-				zipcode,
-				getHotelTags(name, zipcode),
-				getRoomsFromHotel(name, zipcode)
+				city,
+				getHotelTags(name, city),
+				getRoomsFromHotel(name, city)
 			);
 		}
 		if (hotel == null) {
@@ -89,7 +89,7 @@ public class DBmanager {
 				rset.getString("name"),
 				rset.getInt("rating"),
 				rset.getString("description"),
-				rset.getInt("zipcode"),
+				rset.getString("city"),
 				null,
 				null
 			);
@@ -98,18 +98,18 @@ public class DBmanager {
 		}
 
 		for(Hotel h : listOfHotels) {
-			h.tags = getHotelTags(h.name, h.zipcode);
-			h.rooms = getRoomsFromHotel(h.name, h.zipcode);
+			h.tags = getHotelTags(h.name, h.city);
+			h.rooms = getRoomsFromHotel(h.name, h.city);
 		}
 
 		return listOfHotels;
 	}
 
-	private static ArrayList<String> getHotelTags(String hotel_name, int hotel_zipcode) throws SQLException {
+	private static ArrayList<String> getHotelTags(String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
-		PreparedStatement ps = connection.prepareStatement("SELECT tag_name FROM Hotel_tags WHERE hotel_name = ? AND hotel_zipcode = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT tag_name FROM Hotel_tags WHERE hotel_name = ? AND hotel_city = ?");
 		ps.setString(1,hotel_name);
-		ps.setInt(2,hotel_zipcode);
+		ps.setString(2,hotel_city);
 		ps.executeQuery();
 		ResultSet rset = ps.executeQuery();
 
@@ -130,14 +130,14 @@ public class DBmanager {
 		return result;
 	}
 
-	// Notkun: getRoomsFromHotel( hotel_name, hotel_zipcode)
+	// Notkun: getRoomsFromHotel( hotel_name, hotel_city)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	//         Ath. hotel_name, hotel_zipcode er lykill.
-	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, int hotel_zipcode) throws SQLException {
+	//         Ath. hotel_name, hotel_city er lykill.
+	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_city = ?");
 		ps.setString(1,hotel_name);
-		ps.setInt(2,hotel_zipcode);
+		ps.setString(2,hotel_city);
 		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {
@@ -161,20 +161,20 @@ public class DBmanager {
 
 	// Notkun: getRoomsFromHotel(hotel)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og zipcode
+	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
 	public static ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
-		return getRoomsFromHotel(hotel.name, hotel.zipcode);
+		return getRoomsFromHotel(hotel.name, hotel.city);
 	}
 
-	// Notkun: getRoomFromHotel( room_id, hotel_name, hotel_zipcode)
+	// Notkun: getRoomFromHotel( room_id, hotel_name, hotel_city)
 	// Skilar:  Skilar hótelherbergi með ákveðið id.
-	//         Ath. hotel_name, hotel_zipcode er lykill.
-	public static Room getRoomFromHotel( int room_id, String hotel_name, int hotel_zipcode) throws SQLException {
+	//         Ath. hotel_name, hotel_city er lykill.
+	public static Room getRoomFromHotel( int room_id, String hotel_name, String hotel_city) throws SQLException {
 		Room room = null;
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_zipcode = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ? AND hotel_name= ? AND hotel_city = ?");
 		ps.setInt(1, room_id);
 		ps.setString(2,hotel_name);
-		ps.setInt(3,hotel_zipcode);
+		ps.setString(3,hotel_city);
 		ResultSet rset = ps.executeQuery();
 
 		while(rset.next()) {
@@ -196,9 +196,9 @@ public class DBmanager {
 
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
-	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og zipcode
+	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
 	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
-		return getRoomFromHotel( room_id, hotel.name, hotel.zipcode);
+		return getRoomFromHotel( room_id, hotel.name, hotel.city);
 	}
 
 	public static void setRoomPrice(int new_price, Room room) throws SQLException {
@@ -233,22 +233,22 @@ public class DBmanager {
 	}
 
 	public static void addHotel(Hotel hotel) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotels(name, rating, description, zipcode) VALUES(?, ?, ?, ?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotels(name, rating, description, city) VALUES(?, ?, ?, ?)");
 
 		ps.setString(1, hotel.name);
 		ps.setInt(2, hotel.rating);
 		ps.setString(3, hotel.description);
-		ps.setInt(4, hotel.zipcode);
+		ps.setString(4, hotel.city);
 
 		ps.executeUpdate();
 
 		//tags
 		if (hotel.tags != null) {
-			ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
+			ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_city, tag_name) VALUES(?, ?, ?)");
 
 			for(String tag : hotel.tags) {
 				ps.setString(1, hotel.name);
-				ps.setInt(2, hotel.zipcode);
+				ps.setString(2, hotel.city);
 				ps.setString(3, tag);
 
 				ps.executeUpdate();
@@ -256,7 +256,7 @@ public class DBmanager {
 		}
 
 		if (hotel.rooms != null) {
-			addRoomsToHotel(hotel.rooms, hotel.name, hotel.zipcode);
+			addRoomsToHotel(hotel.rooms, hotel.name, hotel.city);
 		}
 	}
 
@@ -266,12 +266,12 @@ public class DBmanager {
 		}
 	}
 
-	public static void addRoomToHotel(Room room, String hotel_name, int hotel_zipcode) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_zipcode, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
+	public static void addRoomToHotel(Room room, String hotel_name, String hotel_city) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_city, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
 
 		ps.setInt(1, room.id);
 		ps.setString(2, hotel_name);
-		ps.setInt(3, hotel_zipcode);
+		ps.setString(3, hotel_city);
 		ps.setInt(4, room.size);
 		ps.setInt(5, room.price);
 		ps.setInt(4, room.bed_count);
@@ -279,17 +279,17 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, int hotel_zipcode) throws SQLException {
+	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, String hotel_city) throws SQLException {
 		for(Room r : rooms) {
-			addRoomToHotel(r, hotel_name, hotel_zipcode);
+			addRoomToHotel(r, hotel_name, hotel_city);
 		}
 	}
 
-	public static void addTagToHotel(String hotel_name, int hotel_zipcode, String tag) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_zipcode, tag_name) VALUES(?, ?, ?)");
+	public static void addTagToHotel(String hotel_name, String hotel_city, String tag) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_city, tag_name) VALUES(?, ?, ?)");
 
 		ps.setString(1, hotel_name);
-		ps.setInt(2, hotel_zipcode);
+		ps.setString(2, hotel_city);
 		ps.setString(3, tag);
 
 		ps.executeUpdate();
@@ -312,10 +312,10 @@ public class DBmanager {
 
 		int tala = 0;
 		String hotelString = "SELECT * FROM Hotels WHERE ";
-		for( Integer i: query.zipcodes) {
+		for( String c: query.cities) {
 			if (tala > 0) hotelString += "OR ";
 
-			hotelString += "zipcode = " + i + " ";
+			hotelString += "city LIKE \"%" + c + "%\" ";
 			tala++;
 		}
 
@@ -368,15 +368,15 @@ public class DBmanager {
 		while(rset.next()) {
 
 			String hotel_name = rset.getString("name");
-			int hotel_zipcode = rset.getInt("zipcode");
+			String hotel_city = rset.getString("city");
 
 		 	Hotel hotel = new Hotel(
 				hotel_name,
 				rset.getInt("rating"),
 				rset.getString("description"),
-				hotel_zipcode,
-				getHotelTags(hotel_name, hotel_zipcode),
-				getRoomsWithQuery(hotel_name, hotel_zipcode, roomQuery)
+				hotel_city,
+				getHotelTags(hotel_name, hotel_city),
+				getRoomsWithQuery(hotel_name, hotel_city, roomQuery)
 			);
 
 			listOfHotels.add(hotel);
@@ -385,10 +385,10 @@ public class DBmanager {
 
 	}
 
-	public static ArrayList<Room> getRoomsWithQuery(String hotel_name, int hotel_zipcode, String roomQuery) throws SQLException {
+	public static ArrayList<Room> getRoomsWithQuery(String hotel_name, String hotel_city, String roomQuery) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 
-		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name + "\" AND hotel_zipcode = " + hotel_zipcode + " ";
+		String query = "SELECT * FROM Rooms WHERE hotel_name= \"" + hotel_name + "\" AND hotel_city = " + hotel_city + " ";
 		roomQuery = query + roomQuery;
 
 		ResultSet rset = sqlStatement.executeQuery(roomQuery);
@@ -432,9 +432,9 @@ public class DBmanager {
 	}
 
 	public static void deleteHotel( Hotel h ) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("DELETE FROM Hotels WHERE name = ? AND zipcode = ?");
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM Hotels WHERE name = ? AND city = ?");
 		ps.setString(1, h.name);
-		ps.setInt(2, h.zipcode);
+		ps.setString(2, h.city);
 
 		ps.executeUpdate();
 	}

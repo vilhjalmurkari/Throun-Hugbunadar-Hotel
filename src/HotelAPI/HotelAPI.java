@@ -13,8 +13,8 @@ public class HotelAPI {
 		return DBmanager.getAllHotels();
 	}
 
-	public Hotel getHotel(String hotel_name, int hotel_zipcode) throws SQLException {
-		return DBmanager.getHotel(hotel_name, hotel_zipcode);
+	public Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
+		return DBmanager.getHotel(hotel_name, hotel_city);
 	}
 
 	public ArrayList<Hotel> getHotelsByName(String search_string) throws SQLException {
@@ -66,7 +66,7 @@ public class HotelAPI {
 
 	public void addRoomToHotel(Room room, Hotel hotel) throws SQLException {
 		hotel.rooms.add(room);
-		DBmanager.addRoomToHotel(room, hotel.name, hotel.zipcode);
+		DBmanager.addRoomToHotel(room, hotel.name, hotel.city);
 	}
 
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
@@ -78,7 +78,7 @@ public class HotelAPI {
 	}
 
 	public ArrayList<Room> getRoomsWithQuery(Hotel hotel, String roomQuery) throws SQLException {
-		return DBmanager.getRoomsWithQuery(hotel.name, hotel.zipcode, roomQuery);
+		return DBmanager.getRoomsWithQuery(hotel.name, hotel.city, roomQuery);
 	}
 
 	public void deleteHotel(Hotel hotel) throws SQLException {
