@@ -60,7 +60,7 @@ public class HotelAPI {
 		hotel.rooms.add(room);
 		DBmanager.addRoomToHotel(room, hotel.name, hotel.city);
 	}
-	
+
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		DBmanager.bookRoom(room, user, start_date, end_date);
 	}
