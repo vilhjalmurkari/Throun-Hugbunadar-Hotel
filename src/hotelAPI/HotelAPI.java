@@ -21,6 +21,10 @@ public class HotelAPI {
 		return DBmanager.getHotelsByName(search_string);
 	}
 
+	public static ArrayList<Hotel> getHotelsByCityAndRating(String city, int rating) throws SQLException {
+		return DBmanager.getHotelsByCityAndRating(city, rating);
+	}
+
 	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
 		return hotel.rooms;
 	}

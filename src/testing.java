@@ -1,6 +1,8 @@
 import hotelAPI.*;
 import java.sql.*;
 
+import java.util.ArrayList;
+
 class testing {
 	private static long parseNumber(String s) {
 		System.out.println("strengur sem kom inn: " + s);
@@ -25,7 +27,18 @@ class testing {
 	}
 
 	public static void main(String[] args) {
-		int n = (int)parseNumber(args[0]);
-		System.out.println(n);
+		//int n = (int)parseNumber(args[0]);
+		//System.out.println(n);
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+
+			HotelAPI api = new HotelAPI();
+			ArrayList<Hotel> hotels = api.getAllHotels();
+
+		} catch(ClassNotFoundException e) {
+			System.out.println("Couldn't find jdbc jar file.");
+		}
 	}
+
 }

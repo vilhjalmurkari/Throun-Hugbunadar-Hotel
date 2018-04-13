@@ -458,4 +458,34 @@ public class DBmanager {
 			return result;
 		}
 
+		public static ArrayList<Hotel> getHotelsByCityAndRating(String hotel_city, int hotel_rating) throws SQLException {
+			ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
+			PreparedStatement ps = connection.prepareStatement("select * from Hotels where city like ? AND rating >= ?");
+			ps.setString(1, "%" + hotel_city + "%");
+			ps.setInt(2, hotel_rating);
+			ResultSet rset = ps.executeQuery();
+
+			while(rset.next()) {
+				Hotel h = new Hotel(
+					rset.getString("name"),
+					rset.getInt("rating"),
+					rset.getString("description"),
+					rset.getString("city"),
+					null,
+					null
+				);
+
+				listOfHotels.add(h);
+			}
+
+			for(Hotel h : listOfHotels) {
+				h.tags = getHotelTags(h.name, h.city);
+				h.rooms = getRoomsFromHotel(h.name, h.city);
+			}
+
+			return listOfHotels;
+		}
+
+
+
 }

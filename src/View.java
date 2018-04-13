@@ -33,7 +33,8 @@ class View extends JPanel {
 		JPanel bottom_panel =  new JPanel();
 		bottom_panel.setLayout(new GridLayout());
 
-		JTextField search_field = new JTextField("Sláðu inn nafn á Þórði...");
+		JTextField search_field_city = new JTextField("Sladu inn nafn a borg");
+		JTextField search_field_rating = new JTextField("Sladu inn lagmarksfjolda stjarna");
 		JButton search_button = new JButton("Search");
 
 		result_list_model = new DefaultListModel();
@@ -44,7 +45,8 @@ class View extends JPanel {
 
 		JScrollPane result_pane = new JScrollPane(result_list);
 
-		input_panel.add(search_field, BorderLayout.CENTER);
+		input_panel.add(search_field_city, BorderLayout.LINE_START);
+		input_panel.add(search_field_rating, BorderLayout.CENTER);
 		input_panel.add(search_button, BorderLayout.EAST);
 
 		for(int i = 0; i < 4; i++) bottom_panel.add(new JButton("Ok"));
@@ -68,14 +70,19 @@ class View extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				result_list_model.removeAllElements();
 
-				String text = search_field.getText();
+				String city = search_field_city.getText();
+				String rating = search_field_rating.getText();
+
 
 				try {
-					ArrayList<Hotel> hotels = api.getHotelsByName(text);
+					//ArrayList<Hotel> hotels = api.getHotelsByName(text);
+					ArrayList<Hotel> hotels = api.getHotelsByCityAndRating(city, Integer.parseInt(rating));
 
 					for(Hotel h : hotels) {
-						result_list_model.addElement(h.name);
+						result_list_model.addElement(h.name + h.rating);
 					}
+
+
 				}catch(SQLException sql_e) {
 					System.out.println(sql_e.getMessage());
 				}
