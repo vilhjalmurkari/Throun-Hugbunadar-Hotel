@@ -1,10 +1,10 @@
 #!/bin/bash
-cd HotelAPI
+cd hotelAPI
 javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
 cd ..
 
 if [ "$1" == "zip" ] || [ "$2" == "zip" ]; then
-	zip -r HotelAPI.zip HotelAPI
+	zip -r hotelAPI.zip hotelAPI
 fi
 
 javac View.java
