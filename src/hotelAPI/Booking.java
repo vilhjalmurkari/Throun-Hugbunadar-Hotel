@@ -15,6 +15,7 @@ public class Booking {
 	//         á þessari bókun sem heiltölur.
 	// After:  Bókun hefur verið gerð.
 	public Booking(Room room, long start_date, long end_date) {
+		this.id = (int)(Math.random()*Integer.MAX_VALUE);
 		this.room = room;
 		this.start_date = start_date;
 		this.end_date = end_date;

@@ -54,15 +54,19 @@ public class DBmanager {
 	}
 
 	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
-		Hotel hotel = null;
-		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels WHERE name= \"" + hotel_name + "\" AND city = " + hotel_city);
+
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name= ? AND city = ?");
+		ps.setString(1,hotel_name);
+		ps.setString(2,hotel_city);
+		ResultSet rset = ps.executeQuery();
+
 
 		while(rset.next()) {
 
 			String name = rset.getString("name");
 			String city = rset.getString("city");
 
-		 	hotel = new Hotel(
+		 	Hotel hotel = new Hotel(
 				name,
 				rset.getInt("rating"),
 				rset.getString("description"),
@@ -70,17 +74,17 @@ public class DBmanager {
 				getHotelTags(name, city),
 				getRoomsFromHotel(name, city)
 			);
-		}
-		if (hotel == null) {
-			System.out.println("Ekkert fannst");
+			return hotel;
 		}
 
-		return hotel;
+		System.out.println("Ekkert fannst");
+
+		return null;
 	}
 
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name like ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name LIKE ?");
 		ps.setString(1, "%" + hotel_name + "%");
 		ResultSet rset = ps.executeQuery();
 
@@ -159,6 +163,13 @@ public class DBmanager {
 		return listOfRooms;
 	}
 
+	// Notkun: getRoomFromHotel(room_id, hotel)
+	// Skilar: Skilar herbergi með ákveðið room_id.
+	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
+	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
+		return getRoomFromHotel( room_id, hotel.name, hotel.city);
+	}
+
 	// Notkun: getRoomsFromHotel(hotel)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
@@ -192,13 +203,6 @@ public class DBmanager {
 		}
 
 		return room;
-	}
-
-	// Notkun: getRoomFromHotel(room_id, hotel)
-	// Skilar: Skilar herbergi með ákveðið room_id.
-	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
-		return getRoomFromHotel( room_id, hotel.name, hotel.city);
 	}
 
 	public static void setRoomPrice(int new_price, Room room) throws SQLException {
@@ -296,7 +300,7 @@ public class DBmanager {
 	}
 
 	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
-		assert( isRoomFree( room, start_date, end_date ) );
+		assert( isRoomFree(room, start_date, end_date) );
 
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
