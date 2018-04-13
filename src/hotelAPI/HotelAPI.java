@@ -65,7 +65,6 @@ public class HotelAPI {
 		DBmanager.addRoomToHotel(room, hotel.name, hotel.city);
 	}
 
-	// Unimplemented
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		DBmanager.bookRoom(room, user, start_date, end_date);
 	}
@@ -100,6 +99,5 @@ public class HotelAPI {
 
 	private ArrayList<String> getRoomTags(Room room) throws SQLException {
 		return room.tags;
-	}
-
+	} 
 }
