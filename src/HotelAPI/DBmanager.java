@@ -295,16 +295,19 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-	public static void bookRoom(int room_id, int user_id, long start_date, long end_date) throws SQLException {
+	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
+		assert( isRoomFree( room, start_date, end_date ) );
+
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
-		ps.setInt(1, user_id);
-		ps.setInt(2, room_id);
+		ps.setInt(1, user.id);
+		ps.setInt(2, room.id);
 		ps.setLong(3, start_date);
 		ps.setLong(4, end_date);
 		ps.setBoolean(5, false); // Bókanir eru alltaf fyrst óstaðfestar.
 
 		ps.executeUpdate();
+		return true;
 	}
 
 
