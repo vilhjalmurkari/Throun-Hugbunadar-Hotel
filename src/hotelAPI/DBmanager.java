@@ -166,23 +166,15 @@ public class DBmanager {
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
+	private static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
 		return getRoomFromHotel( room_id, hotel.name, hotel.city);
-	}
-
-	// Notkun: getRoomsFromHotel(hotel)
-	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	public static ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
-		return getRoomsFromHotel(hotel.name, hotel.city);
 	}
 
 	// Notkun: getRoomFromHotel( room_id, hotel_name, hotel_city)
 	// Skilar:  Skilar hótelherbergi með ákveðið id.
 	//         Ath. hotel_name, hotel_city er lykill.
 	public static Room getRoomFromHotel( int room_id, String hotel_name, String hotel_city) throws SQLException {
-		Room room = null;
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ? AND hotel_name= ? AND hotel_city = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ? AND hotel_name = ? AND hotel_city = ?");
 		ps.setInt(1, room_id);
 		ps.setString(2,hotel_name);
 		ps.setString(3,hotel_city);
@@ -190,28 +182,29 @@ public class DBmanager {
 
 		while(rset.next()) {
 			int id = rset.getInt("id");
-		 	room = new Room(
+		 	Room room = new Room(
 				rset.getInt("size"),
 				rset.getInt("bed_count"),
 				rset.getInt("price"),
 				getRoomTags(id)
 			);
+			return room;
 		}
 
-		if (room == null) {
-			System.out.println("Ekkert fannst");
-		}
+		System.out.println("Ekkert fannst");
 
-		return room;
+		return null;
 	}
 
-	public static void setRoomPrice(int new_price, Room room) throws SQLException {
+	public static void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
-		ps.setInt(1, (int)new_price);
-		ps.setInt(2, room.id);
+		ps.setInt(1, new_price);
+		for( r : rooms ) {
+			ps.setInt(2, r.id);
+			ps.executeUpdate();
+		}
 
-		ps.executeUpdate();
 	}
 
 	public static void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
@@ -464,7 +457,7 @@ public class DBmanager {
 
 		public static ArrayList<Hotel> getHotelsByCityAndRating(String hotel_city, int hotel_rating) throws SQLException {
 			ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-			PreparedStatement ps = connection.prepareStatement("select * from Hotels where city like ? AND rating >= ?");
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE city LIKE ? AND rating >= ?");
 			ps.setString(1, "%" + hotel_city + "%");
 			ps.setInt(2, hotel_rating);
 			ResultSet rset = ps.executeQuery();
