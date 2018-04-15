@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 
 import java.util.ArrayList;
+import hotelAPI.*;
 
 // Notkun: java -cp .;sqlite-jdbc-3.18.0.jar testSaekjaUrDB
 // Eftir:  Búið er að skila hótelum úr gagnagrunninum
@@ -17,12 +18,14 @@ public class testSaekjaUrDB
     Connection conn = null;
     try
     {
+        HotelAPI api = new HotelAPI();
         conn = DriverManager.getConnection("jdbc:sqlite:testdb.db");
         Statement stmt = conn.createStatement();
         ResultSet rset = stmt.executeQuery("SELECT * FROM Hotels");
 
+
+
         while(rset.next()) {
-          ArrayList<Room> roomsInAHotel = getRoomFromHotel(rset.getString("name"), rset.getInt("zipcode"));
 
           Hotel h = new Hotel(
           rset.getString("name"),
@@ -30,7 +33,7 @@ public class testSaekjaUrDB
           rset.getString("description"),
           rset.getInt("zipcode"),
           null,
-          roomsInAHotel
+          null
           );
 
           listOfHotels.add(h);

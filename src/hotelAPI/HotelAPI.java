@@ -21,6 +21,10 @@ public class HotelAPI {
 		return DBmanager.getHotelsByName(search_string);
 	}
 
+	public static ArrayList<Hotel> getHotelsByCityAndRating(String city, int rating) throws SQLException {
+		return DBmanager.getHotelsByCityAndRating(city, rating);
+	}
+
 	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
 		return hotel.rooms;
 	}
@@ -61,7 +65,6 @@ public class HotelAPI {
 		DBmanager.addRoomToHotel(room, hotel.name, hotel.city);
 	}
 
-	// Unimplemented
 	public void bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		DBmanager.bookRoom(room, user, start_date, end_date);
 	}
@@ -87,7 +90,8 @@ public class HotelAPI {
 	}
 
 	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
-		return DBmanager.search(query);
+		return new ArrayList<Hotel>();
+		//return DBmanager.search(query);
 	}
 
 	private ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {
@@ -96,6 +100,5 @@ public class HotelAPI {
 
 	private ArrayList<String> getRoomTags(Room room) throws SQLException {
 		return room.tags;
-	}
-
+	} 
 }
