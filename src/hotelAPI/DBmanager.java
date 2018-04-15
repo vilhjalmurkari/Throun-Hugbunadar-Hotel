@@ -55,7 +55,7 @@ public class DBmanager {
 
 	public static ArrayList<Hotel> search(String hotel_name) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
-		
+
 
 		return result;
 	}
@@ -173,7 +173,7 @@ public class DBmanager {
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	private static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
+	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
 		return getRoomFromHotel( room_id, hotel.name, hotel.city);
 	}
 
@@ -207,7 +207,7 @@ public class DBmanager {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		ps.setInt(1, new_price);
-		for( r : rooms ) {
+		for( Room r : rooms ) {
 			ps.setInt(2, r.id);
 			ps.executeUpdate();
 		}

@@ -45,9 +45,9 @@ public class HotelAPI {
 
 	public void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
 		for(Room r : rooms) {
-			r.price = new_price
+			r.price = new_price;
 		}
-		DBmanager.setRoomPrice(new_price, room);
+		DBmanager.setRoomPrice(new_price, rooms);
 	}
 
 	public void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
@@ -106,5 +106,5 @@ public class HotelAPI {
 
 	private ArrayList<String> getRoomTags(Room room) throws SQLException {
 		return room.tags;
-	} 
+	}
 }
