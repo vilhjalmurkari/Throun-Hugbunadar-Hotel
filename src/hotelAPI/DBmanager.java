@@ -53,6 +53,13 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
+	public static ArrayList<Hotel> search(String hotel_name) throws SQLException {
+		ArrayList<Hotel> result = new ArrayList<Hotel>();
+
+
+		return result;
+	}
+
 	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
 
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name= ? AND city = ?");
@@ -166,7 +173,7 @@ public class DBmanager {
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	private static Room getRoomFromHotelObject( int room_id, Hotel hotel) throws SQLException {
+	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
 		return getRoomFromHotel( room_id, hotel.name, hotel.city);
 	}
 
@@ -310,7 +317,7 @@ public class DBmanager {
 
 
 	// Delete?
-	protected static ArrayList<Hotel> search(SearchQuery query) throws SQLException {
+	public static ArrayList<Hotel> search_old(SearchQuery query) throws SQLException {
 
 		int tala = 0;
 		String hotelString = "SELECT * FROM Hotels WHERE ";

@@ -99,7 +99,8 @@ public class HotelAPI {
 	}
 
 	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
-		return DBmanager.search(query);
+		return new ArrayList<Hotel>();
+		//return DBmanager.search(query);
 	}
 
 	private ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {
@@ -108,5 +109,5 @@ public class HotelAPI {
 
 	private ArrayList<String> getRoomTags(Room room) throws SQLException {
 		return room.tags;
-	} 
+	}
 }
