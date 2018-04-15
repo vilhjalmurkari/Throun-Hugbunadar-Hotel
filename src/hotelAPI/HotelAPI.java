@@ -21,20 +21,8 @@ public class HotelAPI {
 		return DBmanager.getHotelsByName(search_string);
 	}
 
-	public static ArrayList<Hotel> getHotelsByCityAndRating(String city, int rating) throws SQLException {
+	public ArrayList<Hotel> getHotelsByCityAndRating(String city, int rating) throws SQLException {
 		return DBmanager.getHotelsByCityAndRating(city, rating);
-	}
-
-	// Þetta er frekar skrítið að hafa; væri ekki meira vit að sækja hótel eftir
-	// nafni og síðan plokka út hótelin? Þannig fengi maður öll hótel sem passa,
-	// auk hvað þessi leit er bókstafleg og leyfir ekki hliðrun á leitastreng.
-	private ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
-		return DBmanager.getRoomsFromHotel(hotel_name, hotel_city);
-	}
-
-	// Sama comment hér og að ofan; þetta fall er óþarfi.
-	private Room getRoomFromHotel(int room_id, Hotel hotel) throws SQLException {
-		return DBmanager.getRoomFromHotel(room_id, hotel);
 	}
 
 	public void setRoomPrice(int new_price, Room room) throws SQLException {
@@ -45,17 +33,19 @@ public class HotelAPI {
 
 	public void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
 		for(Room r : rooms) {
-			r.price = new_price
+			r.price = new_price;
 		}
-		DBmanager.setRoomPrice(new_price, room);
+		DBmanager.setRoomPrice(new_price, rooms);
 	}
 
-	public void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
+	public void changeRoomPriceByAmount(int price_change, Room room) throws SQLException {
 		DBmanager.changeRoomPriceByAmount(price_change, room);
+		room.price += price_change;
 	}
 
 	public void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
 		DBmanager.changeRoomPriceByPercent(percent, room);
+		room.price = (int)((1+percent) * room.price);
 	}
 
 	public void addHotel(Hotel hotel) throws SQLException {
@@ -89,6 +79,19 @@ public class HotelAPI {
 
 	public void deleteRoom(Room room) throws SQLException {
 		DBmanager.deleteRoom(room);
+	}
+
+	// Þetta er frekar skrítið að hafa; væri ekki meira vit að sækja hótel eftir
+	// nafni og síðan plokka út hótelin? Þannig fengi maður öll hótel sem passa,
+	// auk hvað þessi leit er bókstafleg og leyfir ekki hliðrun á leitastreng.
+	private ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
+		return DBmanager.getRoomsFromHotel(hotel_name, hotel_city);
+	}
+
+	// Sama comment hér og að ofan; þetta fall er óþarfi.
+	private Room getRoomFromHotel(int room_id, Hotel hotel) throws SQLException {
+		//return DBmanager.getRoomFromHotel(room_id, hotel);
+		return null;
 	}
 
 	private int getRoomCount() throws SQLException {

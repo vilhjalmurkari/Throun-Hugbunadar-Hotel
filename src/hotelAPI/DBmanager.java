@@ -166,7 +166,7 @@ public class DBmanager {
 	// Notkun: getRoomFromHotel(room_id, hotel)
 	// Skilar: Skilar herbergi með ákveðið room_id.
 	//         Ath. þetta mun nota hótel hlut til að kalla á fallið með name og city
-	private static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
+	private static Room getRoomFromHotelObject( int room_id, Hotel hotel) throws SQLException {
 		return getRoomFromHotel( room_id, hotel.name, hotel.city);
 	}
 
@@ -200,17 +200,17 @@ public class DBmanager {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		ps.setInt(1, new_price);
-		for( r : rooms ) {
+		for( Room r : rooms ) {
 			ps.setInt(2, r.id);
 			ps.executeUpdate();
 		}
 
 	}
 
-	public static void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
+	public static void changeRoomPriceByAmount(int price_change, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
-		room.price += (int)price_change;
+		room.price += price_change;
 
 		ps.setInt(1, room.price);
 		ps.setInt(2, room.id);
@@ -219,14 +219,8 @@ public class DBmanager {
 	}
 
 	public static void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
-
-		room.price = (int)(room.price * (1.0 + percent / 100.0));
-
-		ps.setInt(1, room.price);
-		ps.setInt(2, room.id);
-
-		ps.executeUpdate();
+		int delta = (int)(room.price * percent);
+		changeRoomPriceByAmount(delta, room);
 	}
 
 	public static void addHotel(Hotel hotel) throws SQLException {
@@ -253,6 +247,7 @@ public class DBmanager {
 		}
 
 		if (hotel.rooms != null) {
+			
 			addRoomsToHotel(hotel.rooms, hotel.name, hotel.city);
 		}
 	}
@@ -264,25 +259,31 @@ public class DBmanager {
 	}
 
 	public static void addRoomToHotel(Room room, String hotel_name, String hotel_city) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_city, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
-
-		ps.setInt(1, room.id);
-		ps.setString(2, hotel_name);
-		ps.setString(3, hotel_city);
-		ps.setInt(4, room.size);
-		ps.setInt(5, room.price);
-		ps.setInt(4, room.bed_count);
-
-		ps.executeUpdate();
+		ArrayList<Room> al = new ArrayList<Room>();
+		al.add(room);
+		addRoomsToHotel(al, hotel_name, hotel_city);
 	}
 
 	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, String hotel_city) throws SQLException {
-		for(Room r : rooms) {
-			addRoomToHotel(r, hotel_name, hotel_city);
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_city, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
+
+		ps.setString(2, hotel_name);
+		ps.setString(3, hotel_city);
+
+		for(Room room : rooms) {
+			ps.setInt(1, room.id);
+			ps.setInt(4, room.size);
+			ps.setInt(5, room.price);
+			ps.setInt(4, room.bed_count);
+			ps.executeUpdate();
 		}
 	}
+	
+	public static void addTagToHotel(Hotel hotel, String tag) throws SQLException {
+		addTagToHotel(hotel.name, hotel.city, tag);
+	}
 
-	public static void addTagToHotel(String hotel_name, String hotel_city, String tag) throws SQLException {
+	protected static void addTagToHotel(String hotel_name, String hotel_city, String tag) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotel_tags(hotel_name, hotel_city, tag_name) VALUES(?, ?, ?)");
 
 		ps.setString(1, hotel_name);
@@ -308,7 +309,8 @@ public class DBmanager {
 	}
 
 
-	public static ArrayList<Hotel> search(SearchQuery query) throws SQLException {
+	// Delete?
+	protected static ArrayList<Hotel> search(SearchQuery query) throws SQLException {
 
 		int tala = 0;
 		String hotelString = "SELECT * FROM Hotels WHERE ";
@@ -361,9 +363,10 @@ public class DBmanager {
 		return hotels;
 	}
 
-	public static ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
+	// Delete?
+	protected static ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
-	  ResultSet rset = sqlStatement.executeQuery(hotelQuery);
+		ResultSet rset = sqlStatement.executeQuery(hotelQuery);
 
 		while(rset.next()) {
 
@@ -384,7 +387,9 @@ public class DBmanager {
 		return listOfHotels;
 
 	}
-
+	
+	// Hvað er þetta fyrir? Er þetta nytsamlegt?
+	// Delete?
 	public static ArrayList<Room> getRoomsWithQuery(String hotel_name, String hotel_city, String roomQuery) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 
