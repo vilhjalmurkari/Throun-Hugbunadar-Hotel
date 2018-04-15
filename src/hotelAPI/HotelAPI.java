@@ -25,23 +25,29 @@ public class HotelAPI {
 		return DBmanager.getHotelsByCityAndRating(city, rating);
 	}
 
-	public ArrayList<Room> getRoomsFromHotel(Hotel hotel) throws SQLException {
-		return hotel.rooms;
+	// Þetta er frekar skrítið að hafa; væri ekki meira vit að sækja hótel eftir
+	// nafni og síðan plokka út hótelin? Þannig fengi maður öll hótel sem passa,
+	// auk hvað þessi leit er bókstafleg og leyfir ekki hliðrun á leitastreng.
+	private ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
+		return DBmanager.getRoomsFromHotel(hotel_name, hotel_city);
 	}
 
-	public Room getRoomFromHotel(int room_id, Hotel hotel) throws SQLException {
+	// Sama comment hér og að ofan; þetta fall er óþarfi.
+	private Room getRoomFromHotel(int room_id, Hotel hotel) throws SQLException {
 		return DBmanager.getRoomFromHotel(room_id, hotel);
 	}
 
 	public void setRoomPrice(int new_price, Room room) throws SQLException {
-		room.price = new_price;
-		DBmanager.setRoomPrice(new_price, room);
+		ArrayList<Room> al = new ArrayList<Room>();
+		al.add(room);
+		setRoomPrice(new_price, al);
 	}
 
 	public void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
 		for(Room r : rooms) {
-			setRoomPrice(new_price, r);
+			r.price = new_price
 		}
+		DBmanager.setRoomPrice(new_price, room);
 	}
 
 	public void changeRoomPriceByAmount(double price_change, Room room) throws SQLException {
