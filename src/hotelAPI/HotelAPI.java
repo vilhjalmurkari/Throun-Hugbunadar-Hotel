@@ -25,6 +25,14 @@ public class HotelAPI {
 		return DBmanager.getHotelsByCityAndRating(city, rating);
 	}
 
+	public ArrayList<Hotel> search(String hotel_city, int min_rating, int max_rating) throws SQLException {
+		if(hotel_city == null) hotel_city = "";
+		if(min_rating == -1) min_rating = 0;
+		if(max_rating == -1) max_rating = 5;
+		
+		return DBmanager.search(hotel_city, min_rating, max_rating);
+	}
+
 	public void setRoomPrice(int new_price, Room room) throws SQLException {
 		ArrayList<Room> al = new ArrayList<Room>();
 		al.add(room);
@@ -102,10 +110,12 @@ public class HotelAPI {
 	}
 	*/
 
+	/*
 	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
 		return new ArrayList<Hotel>();
 		//return DBmanager.search(query);
 	}
+	*/
 
 	private ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {
 		return hotel.tags;

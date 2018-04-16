@@ -59,9 +59,34 @@ public class DBmanager {
 	//
 	// ???????????
 	//
-	public static ArrayList<Hotel> search(String hotel_name) throws SQLException {
+	//hotel_name og hotel_city mega vera null, annaðhvort eða bæði. Ef strengirnir er null breytast þeir eiginlega í wildcard(*)
+	public static ArrayList<Hotel> search(String hotel_city, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
+		sqlStatement.execute("PRAGMA case_sensitive_like = true");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE city LIKE ? AND rating >= ? AND rating <= ?");
+		ps.setString(1, "%" + hotel_city + "%");
+		ps.setInt(2, min_rating);
+		ps.setInt(3, max_rating);
 
+		ResultSet rset = ps.executeQuery();
+
+		while(rset.next()) {
+			Hotel h = new Hotel(
+				rset.getString("name"),
+				rset.getInt("rating"),
+				rset.getString("description"),
+				rset.getString("city"),
+				null,
+				null
+			);
+
+			result.add(h);
+		}
+		
+		for(Hotel h : result) {
+			h.tags = getHotelTags(h.name, h.city);
+			h.rooms = getRoomsFromHotel(h.name, h.city);
+		}
 
 		return result;
 	}
@@ -70,7 +95,6 @@ public class DBmanager {
 	// Fyrir:  name og city eru nákvæmir strengir til að leita eftir.
 	// Eftir:  hotel er fyrsta hótelið sem finnst.
 	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
-
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name= ? AND city = ?");
 		ps.setString(1,hotel_name);
 		ps.setString(2,hotel_city);
@@ -90,6 +114,7 @@ public class DBmanager {
 				getHotelTags(name, city),
 				getRoomsFromHotel(name, city)
 			);
+
 			return hotel;
 		}
 
