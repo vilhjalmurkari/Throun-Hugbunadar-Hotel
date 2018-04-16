@@ -62,7 +62,9 @@ public class DBmanager {
 	//hotel_name og hotel_city mega vera null, annaðhvort eða bæði. Ef strengirnir er null breytast þeir eiginlega í wildcard(*)
 	public static ArrayList<Hotel> search(String hotel_city, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
+
 		sqlStatement.execute("PRAGMA case_sensitive_like = true");
+
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE city LIKE ? AND rating >= ? AND rating <= ?");
 		ps.setString(1, "%" + hotel_city + "%");
 		ps.setInt(2, min_rating);
@@ -126,6 +128,7 @@ public class DBmanager {
 	// Notkun: hotels = getHotelsByName(leit);
 	// Fyrir:  leit er einhver leitarstrengur.
 	// Eftir:  hotels er ArrayList af Hótelum sem innihalda "leit".
+	/*
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name LIKE ?");
@@ -153,6 +156,7 @@ public class DBmanager {
 
 		return listOfHotels;
 	}
+	*/
 
 	private static ArrayList<String> getHotelTags(String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<String> result = new ArrayList<String>();
@@ -411,6 +415,7 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+	/*
 	public static ArrayList<Hotel> getHotelsByCityAndRating(String hotel_city, int hotel_rating) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE city LIKE ? AND rating >= ?");
@@ -438,7 +443,8 @@ public class DBmanager {
 
 		return listOfHotels;
 	}
-	
+	*/
+
 	/*
 	Delete?
 
