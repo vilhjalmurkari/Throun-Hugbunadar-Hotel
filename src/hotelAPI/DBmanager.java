@@ -414,7 +414,9 @@ public class DBmanager {
 		return listOfHotels;
 	}
 	
-	// Delete?
+	/*
+	Delete?
+
 	private static ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		ResultSet rset = sqlStatement.executeQuery(hotelQuery);
@@ -438,9 +440,12 @@ public class DBmanager {
 		return listOfHotels;
 
 	}
+	*/
+	
+	/*
+	Hvað er þetta fyrir? Er þetta nytsamlegt?
+	Delete?
 
-	// Hvað er þetta fyrir? Er þetta nytsamlegt?
-	// Delete?
 	private static ArrayList<Room> getRoomsWithQuery(String hotel_name, String hotel_city, String roomQuery) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 
@@ -463,9 +468,11 @@ public class DBmanager {
 
 		return listOfRooms;
 	}
+	*/
 
+	/*
+	Óþarfi þetta fall
 
-	// Óþarfi þetta fall
 	private static int getRoomCount() throws SQLException {
 		int result = 0;
 
@@ -474,13 +481,19 @@ public class DBmanager {
 
 		return result;
 	}
+	*/
 
-	// Er þetta fall nauðsynlegt? Mætti ekki alveg sleppa þessu í API?
+	/* 
+	Er þetta fall nauðsynlegt? Mætti ekki alveg sleppa þessu í API?
+
 	public static void addTagToHotel(Hotel hotel, String tag) throws SQLException {
 		addTagToHotel(hotel.name, hotel.city, tag);
 	}
+	*/
 
-	// Delete?
+	/*
+	Delete?
+
 	public static ArrayList<Hotel> search_old(SearchQuery query) throws SQLException {
 
 		int tala = 0;
@@ -533,6 +546,6 @@ public class DBmanager {
 		ArrayList<Hotel> hotels = getHotelsWithQuery(hotelString, roomString);
 		return hotels;
 	}
-
+	*/
 
 }

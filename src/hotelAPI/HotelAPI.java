@@ -65,6 +65,7 @@ public class HotelAPI {
 		DBmanager.bookRoom(room, user, start_date, end_date);
 	}
 
+	/*
 	public ArrayList<Hotel> getHotelsWithQuery(String hotelQuery, String roomQuery) throws SQLException {
 		return DBmanager.getHotelsWithQuery(hotelQuery, roomQuery);
 	}
@@ -72,6 +73,7 @@ public class HotelAPI {
 	public ArrayList<Room> getRoomsWithQuery(Hotel hotel, String roomQuery) throws SQLException {
 		return DBmanager.getRoomsWithQuery(hotel.name, hotel.city, roomQuery);
 	}
+	*/
 
 	public void deleteHotel(Hotel hotel) throws SQLException {
 		DBmanager.deleteHotel(hotel);
@@ -94,9 +96,11 @@ public class HotelAPI {
 		return null;
 	}
 
+	/*
 	private int getRoomCount() throws SQLException {
 		return DBmanager.getRoomCount();
 	}
+	*/
 
 	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
 		return new ArrayList<Hotel>();

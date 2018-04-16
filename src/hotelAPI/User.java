@@ -48,7 +48,7 @@ public class User {
 		}
 	}
 	
-	public void confirmBooking(int id) {
+	public void confirmBooking(int id) throws SQLException {
 		Booking b = bookings.get(id);
 		if(b != null) {
 			b.confirmBooking();

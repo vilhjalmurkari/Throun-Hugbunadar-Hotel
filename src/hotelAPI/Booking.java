@@ -1,6 +1,7 @@
 package hotelAPI;
 
 import java.util.ArrayList;
+import java.sql.*;
 
 public class Booking {
 	public int id;
@@ -26,7 +27,7 @@ public class Booking {
 	// Fyrir:  Ekkert.
 	// Eftir:  Þessi bókun hefur verið staðfest
 	//         en ekki færð í gagnagrunn.
-	public void confirmBooking(){
+	public void confirmBooking() throws SQLException {
 		this.confirmed = true;
 		DBmanager.confirmBooking(this);
 	}

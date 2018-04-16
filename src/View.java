@@ -17,11 +17,12 @@ class View extends JPanel {
 	private static JPanel main_panel;
 	private static JPanel search_panel;
 	private static JPanel input_panel;
-	//private static JPanel bottom_panel;
+	private static JPanel button_panel;
 	private static JTextField hotel_field;
 	private static JTextField city_field;
 	private static JComboBox rating_combo;
 	private static JButton search_button;
+	private static JButton reset_button;
 	private static JTable result_table;
 	private static DefaultTableModel result_table_model;
 	private static int result_table_index = -1;
@@ -30,7 +31,7 @@ class View extends JPanel {
 		api = new HotelAPI();
 
 		JFrame frame = new JFrame();
-		frame.setSize(400, 400);
+		frame.setSize(500, 500);
 
 		/*
 		|   input   |
@@ -46,6 +47,9 @@ class View extends JPanel {
 		search_panel =  new JPanel();
 		search_panel.setLayout(new BorderLayout());
 
+		button_panel = new JPanel();
+		button_panel.setLayout(new GridLayout(0, 1));
+
 		input_panel =  new JPanel();
 		input_panel.setLayout(new GridLayout(2, 3));
 
@@ -58,9 +62,10 @@ class View extends JPanel {
 		city_field = new JTextField();
 		rating_combo = new JComboBox(new String[] {"---", "5", "4", "3", "2", "1"});
 		search_button = new JButton("Search");
+		reset_button = new JButton("Reset");
 
 
-		String[] label_names = new String[] {"hótel nafn", "borgar nafn", "stjörnu fjöldi"};
+		String[] label_names = new String[] {"Nafn hótels", "Nafn borgar", "stjörnu fjöldi"};
 		for(String s : label_names) {
 			JLabel label = new JLabel(s);
 			label.setBorder(new EmptyBorder(0, 5, 0, 0));
@@ -70,6 +75,9 @@ class View extends JPanel {
 		input_panel.add(hotel_field);
 		input_panel.add(city_field);
 		input_panel.add(rating_combo);
+
+		button_panel.add(search_button);
+		button_panel.add(reset_button);
 
 		result_table_model = new DefaultTableModel(new String[]{"nafn", "borg", "stjörnur", "herbergi"}, 0) {
 			@Override
@@ -85,7 +93,7 @@ class View extends JPanel {
     	result_table.setGridColor(Color.BLACK);
 
 		search_panel.add(input_panel, BorderLayout.CENTER);
-		search_panel.add(search_button, BorderLayout.EAST);
+		search_panel.add(button_panel, BorderLayout.EAST);
 		search_panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 
 		//for(int i = 0; i < 4; i++) bottom_panel.add(new JButton("Ok"));
@@ -102,6 +110,14 @@ class View extends JPanel {
 			public void windowClosing(WindowEvent event){
 				System.out.println("exiting...");
 				System.exit(0);
+			}
+		});
+
+		reset_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				hotel_field.setText("");
+				city_field.setText("");
+				rating_combo.setSelectedIndex(0);
 			}
 		});
 
