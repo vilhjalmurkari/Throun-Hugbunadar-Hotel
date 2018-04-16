@@ -18,9 +18,9 @@ class View extends JPanel {
 	private static JPanel search_panel;
 	private static JPanel input_panel;
 	private static JPanel button_panel;
-	private static JTextField hotel_field;
 	private static JTextField city_field;
-	private static JComboBox rating_combo;
+	private static JComboBox min_rating_combo;
+	private static JComboBox max_rating_combo;
 	private static JButton search_button;
 	private static JButton reset_button;
 	private static JTable result_table;
@@ -58,23 +58,24 @@ class View extends JPanel {
 		bottom_panel.setLayout(new GridLayout());
 		*/
 
-		hotel_field = new JTextField();
 		city_field = new JTextField();
-		rating_combo = new JComboBox(new String[] {"---", "5", "4", "3", "2", "1"});
+		String[] rating_string = {"---", "5", "4", "3", "2", "1"};
+		min_rating_combo = new JComboBox(rating_string);
+		max_rating_combo = new JComboBox(rating_string);
 		search_button = new JButton("Search");
 		reset_button = new JButton("Reset");
 
 
-		String[] label_names = new String[] {"Nafn hótels", "Nafn borgar", "stjörnu fjöldi"};
+		String[] label_names = new String[] {"Nafn borgar", "Lágmark stjarna", "Hámark stjarna"};
 		for(String s : label_names) {
 			JLabel label = new JLabel(s);
 			label.setBorder(new EmptyBorder(0, 5, 0, 0));
 			input_panel.add(label);
 		}
 		
-		input_panel.add(hotel_field);
 		input_panel.add(city_field);
-		input_panel.add(rating_combo);
+		input_panel.add(min_rating_combo);
+		input_panel.add(max_rating_combo);
 
 		button_panel.add(search_button);
 		button_panel.add(reset_button);
@@ -115,9 +116,9 @@ class View extends JPanel {
 
 		reset_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				hotel_field.setText("");
 				city_field.setText("");
-				rating_combo.setSelectedIndex(0);
+				min_rating_combo.setSelectedIndex(0);
+				max_rating_combo.setSelectedIndex(0);
 			}
 		});
 
@@ -129,14 +130,15 @@ class View extends JPanel {
 					result_table_model.removeRow(0);
 				}
 
-				String hotel = hotel_field.getText();
-				String city = city_field.getText();
-				String rating_string = (String)rating_combo.getItemAt(rating_combo.getSelectedIndex());
-				int rating = (rating_string.equals("---") ? -1 : Integer.parseInt(rating_string));
+				String city_name = city_field.getText();
+				String string_rating_min = (String)min_rating_combo.getItemAt(min_rating_combo.getSelectedIndex());
+				String string_rating_max = (String)max_rating_combo.getItemAt(max_rating_combo.getSelectedIndex());
+				int min_rating = (string_rating_min.equals("---") ? -1 : Integer.parseInt(string_rating_min));
+				int max_rating = (string_rating_max.equals("---") ? -1 : Integer.parseInt(string_rating_max));
 
 				try {
-					ArrayList<Hotel> hotels = api.getHotelsByName(hotel);
-					//ArrayList<Hotel> hotels = api.getHotelsByCityAndRating(city, Integer.parseInt(rating));
+					ArrayList<Hotel> hotels = api.hotelSearch(city_name, min_rating, max_rating);
+	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
 						return;
@@ -144,10 +146,6 @@ class View extends JPanel {
 
 					for(Hotel h : hotels) {
 						result_table_model.addRow(new Object[] {h.name, h.city, h.rating, h.rooms.size()});
-					}
-
-					for(int i = 0; i < 30; i++) {
-						result_table_model.addRow(new Object[] {"bla", "bla", "bla", "bla"});
 					}
 
 				}catch(SQLException sql_e) {

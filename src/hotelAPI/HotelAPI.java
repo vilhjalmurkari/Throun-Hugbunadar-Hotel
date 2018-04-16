@@ -17,12 +17,19 @@ public class HotelAPI {
 		return DBmanager.getHotel(hotel_name, hotel_city);
 	}
 
-	public ArrayList<Hotel> getHotelsByName(String search_string) throws SQLException {
-		return DBmanager.getHotelsByName(search_string);
+
+	//Ef leita á einungis eftir tilteknum gildum eru hin gildin stillt sem null eða -1, eftir því hvort stilla á streng eða tölu.
+	//Ef öll gildin eru null eða -1 skilar fallið öllum hótelum í gagnagrunninum
+	public ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
+		if(hotel_city == null) hotel_city = "";
+		if(min_rating == -1) min_rating = 0;
+		if(max_rating == -1) max_rating = 5;
+
+		return DBmanager.hotelSearch(hotel_city, min_rating, max_rating);
 	}
 
-	public ArrayList<Hotel> getHotelsByCityAndRating(String city, int rating) throws SQLException {
-		return DBmanager.getHotelsByCityAndRating(city, rating);
+	public ArrayList<Hotel> getHotelsByName(String search_string) throws SQLException {
+		return DBmanager.getHotelsByName(search_string);
 	}
 
 	public void setRoomPrice(int new_price, Room room) throws SQLException {
@@ -102,10 +109,12 @@ public class HotelAPI {
 	}
 	*/
 
+	/*
 	private ArrayList<Hotel> search(SearchQuery query) throws SQLException {
 		return new ArrayList<Hotel>();
 		//return DBmanager.search(query);
 	}
+	*/
 
 	private ArrayList<String> getHotelTags(Hotel hotel) throws SQLException {
 		return hotel.tags;
