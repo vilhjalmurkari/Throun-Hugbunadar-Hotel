@@ -137,7 +137,7 @@ class View extends JPanel {
 				int max_rating = (string_rating_max.equals("---") ? -1 : Integer.parseInt(string_rating_max));
 
 				try {
-					ArrayList<Hotel> hotels = api.search(city_name, min_rating, max_rating);
+					ArrayList<Hotel> hotels = api.hotelSearch(city_name, min_rating, max_rating);
 	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
