@@ -3,8 +3,8 @@ cd hotelAPI
 javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
 cd ..
 
-if [ "$1" == "zip" ] || [ "$2" == "zip" ]; then
-	zip -r hotelAPI.zip hotelAPI
+if [ "$1" == "jar" ] || [ "$2" == "jar" ]; then
+	jar cf hotelAPI.jar hotelAPI/*
 fi
 
 javac View.java
