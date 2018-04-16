@@ -15,7 +15,7 @@ public class DBmanager {
 	public static void init() throws SQLException {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:testdb.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
 			sqlStatement = connection.createStatement();
 
 		} catch(ClassNotFoundException e) {

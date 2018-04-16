@@ -4,8 +4,8 @@ pushd hotelAPI
 javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
 popd
 
-if "%1" == "zip" zip -r hotelAPI.zip hotelAPI
-if "%2" == "zip" zip -r hotelAPI.zip hotelAPI
+if "%1" == "jar" jar cf hotelAPI.jar hotelAPI/*.class hotels.db
+if "%2" == "jar" jar cf hotelAPI.jar hotelAPI/*.class hotels.db
 
 javac View.java
 
