@@ -28,6 +28,6 @@ public class Booking {
 	//         en ekki færð í gagnagrunn.
 	public void confirmBooking(){
 		this.confirmed = true;
-//		DBmanager.confirmBooking(this);
+		DBmanager.confirmBooking(this);
 	}
 }
