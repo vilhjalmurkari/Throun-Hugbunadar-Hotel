@@ -65,8 +65,10 @@ public class DBmanager {
 	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
-		if(hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
+		if(!hotel_city_or_name.equals("") && hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
 			sqlStatement.execute("PRAGMA case_sensitive_like = true");
+		}else {
+			sqlStatement.execute("PRAGMA case_sensitive_like = false");
 		}
 
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ?");
