@@ -11,6 +11,10 @@ import hotelAPI.*;
 
 /*
 TODO:
+	- láta tooltip hafa fleiri upplýsingar um hótel, svo sem tag, 
+	- reset á enter
+	- esc clear
+	- case sensitive þegar fyrsti stafur er upper 
 */
 class View extends JPanel {
 	private static HotelAPI api;
@@ -38,6 +42,9 @@ class View extends JPanel {
 	private static int table_selected_index = -1;
 
 	private static JButton room_button;
+	private static JTextField hotel_name_field;
+	private static JTextField hotel_city_field;
+	private static JTextField hotel_rating_field;
 
 
 	public static void createMainFrame() {
@@ -67,7 +74,7 @@ class View extends JPanel {
 		reset_button = new JButton("Reset");
 
 
-		String[] label_names = new String[] {"Nafn borgar", "Lágmark stjarna", "Hámark stjarna"};
+		String[] label_names = new String[] {"Nafn borgar/hótels", "Lágmark stjarna", "Hámark stjarna"};
 		for(String s : label_names) {
 			JLabel label = new JLabel(s);
 			label.setBorder(new EmptyBorder(0, 5, 0, 0));
@@ -104,12 +111,30 @@ class View extends JPanel {
 
 		main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		main_panel.add(search_panel, BorderLayout.NORTH);
-		main_panel.add(new JScrollPane(result_table), BorderLayout.CENTER);
+
+		JPanel temp_panel = new JPanel();
+		temp_panel.setLayout(new GridLayout());
+		temp_panel.add(new JScrollPane(result_table));
+		temp_panel.setBackground(Color.WHITE);
+
+		main_panel.add(temp_panel, BorderLayout.CENTER);
 		main_panel.add(bottom_panel, BorderLayout.SOUTH);
 
 
 		main_frame.add(main_panel);
 		main_frame.setVisible(true);
+	}
+
+	public static JPanel createInfoPanel(String label, JTextField info_field) {
+		JPanel temp_panel = new JPanel();
+		temp_panel.setLayout(new BorderLayout());
+
+		temp_panel.setBorder(new EmptyBorder(0, 0, 2, 0));
+		temp_panel.add(new JLabel(label), BorderLayout.WEST);
+
+		temp_panel.add(info_field, BorderLayout.CENTER);
+
+		return temp_panel;
 	}
 
 	public static void createHotelFrame() {
@@ -121,17 +146,40 @@ class View extends JPanel {
 		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		hotel_info_panel = new JPanel();
-		hotel_info_panel.setLayout(new GridLayout(0, 1));
+		hotel_info_panel.setLayout(new BorderLayout());
 		hotel_info_panel.setBorder(new EmptyBorder(0, 0, 0, 5));
 
-		hotel_info_panel.add(new JButton("takk"));
-		hotel_info_panel.add(new JButton("takk"));
+		JPanel static_info_panel = new JPanel();
+		static_info_panel.setLayout(new GridLayout(0, 1));
+		static_info_panel.setSize(new Dimension(200, 100));
+
+		hotel_name_field = new JTextField();
+		hotel_city_field = new JTextField();
+		hotel_rating_field = new JTextField();
+		
+		hotel_name_field.setEditable(false);
+		hotel_city_field.setEditable(false);
+		hotel_rating_field.setEditable(false);
+
+		static_info_panel.add(createInfoPanel("Nafn: ", hotel_name_field));
+		static_info_panel.add(createInfoPanel("Borg: ", hotel_city_field));
+		static_info_panel.add(createInfoPanel("Stjörnur: ", hotel_rating_field));
+
+		hotel_info_panel.add(static_info_panel, BorderLayout.NORTH);
+
+		hotel_info_panel.add(new JTextArea());
 
 		room_info_panel = new JPanel();
-		room_info_panel.setLayout(new GridLayout(0, 1));
+		room_info_panel.setLayout(new BorderLayout());
 
-		room_info_panel.add(new JButton("takk"));
-		room_info_panel.add(new JButton("takk"));
+		room_info_panel.add(new JLabel("Herbergi:"), BorderLayout.NORTH);
+		room_info_panel.add(new JList(), BorderLayout.CENTER);
+
+		JPanel temp_panel = new JPanel();
+		temp_panel.setLayout(new BorderLayout());
+		temp_panel.add(new JButton("bóka"), BorderLayout.EAST);
+
+		room_info_panel.add(temp_panel, BorderLayout.SOUTH);
 
 		hotel_main_panel.add(hotel_info_panel);
 		hotel_main_panel.add(room_info_panel);
@@ -163,6 +211,9 @@ class View extends JPanel {
 	public static void updateHotelFrame() {
 		Hotel h = hotels.get(table_selected_index);
 
+		hotel_name_field.setText(h.name);
+		hotel_city_field.setText(h.city);
+		hotel_rating_field.setText(Integer.toString(h.rating));
 		/*
 
 		String[][] label_names = new String[][] {{"Nafn: ", h.name},
@@ -257,14 +308,14 @@ class View extends JPanel {
 					result_table_model.removeRow(0);
 				}
 
-				String city_name = city_field.getText();
+				String hotel_city_or_name = city_field.getText();
 				String string_rating_min = (String)min_rating_combo.getItemAt(min_rating_combo.getSelectedIndex());
 				String string_rating_max = (String)max_rating_combo.getItemAt(max_rating_combo.getSelectedIndex());
 				int min_rating = (string_rating_min.equals("---") ? -1 : Integer.parseInt(string_rating_min));
 				int max_rating = (string_rating_max.equals("---") ? -1 : Integer.parseInt(string_rating_max));
 
 				try {
-					hotels = api.hotelSearch(city_name, min_rating, max_rating);
+					hotels = api.hotelSearch(hotel_city_or_name, min_rating, max_rating);
 	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
@@ -284,7 +335,7 @@ class View extends JPanel {
 
 		result_table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				table_selected_index = result_table.getSelectedRow();
 				System.out.println(table_selected_index);
 			}
