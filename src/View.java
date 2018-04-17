@@ -137,7 +137,7 @@ class View extends JPanel {
 
 	public static void main(String[] args) throws SQLException {
 		api = new HotelAPI();
-		test_user = new User(1);
+		//test_user = new User(1);
 
 		createMainFrame();
 		createHotelFrame();
