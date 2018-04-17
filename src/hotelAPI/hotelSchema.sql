@@ -37,12 +37,12 @@ CREATE TABLE Room_tags(
 );
 
 CREATE TABLE Bookings(
-	user_email INTEGER,
+	user_email VARCHAR(255),
 	room_id INTEGER,
 	start_date INTEGER,
 	end_date INTEGER,
 	confirmed BOOLEAN,
-	FOREIGN KEY(user_id) REFERENCES Users(id),
+	FOREIGN KEY(email) REFERENCES Users(email),
 	FOREIGN KEY(room_id) REFERENCES Rooms(id)
 );
 
