@@ -88,7 +88,7 @@ class View extends JPanel {
 		};
 
 		result_table = new JTable(result_table_model);
-		result_table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		result_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		result_table.setShowGrid(false);
     	result_table.setShowVerticalLines(true);
     	result_table.setGridColor(Color.BLACK);
@@ -154,20 +154,11 @@ class View extends JPanel {
 			}
 		});
 
-		/*
-		result_table.addMouseMotionListener(new MouseAdapter() {
-			public void mouseMoved(MouseEvent event) {
-				int index = result_table.locationToIndex(new Point(event.getX(),
-																  event.getY())
-														);
-
-				if (index != result_table_index) {
-					result_table_index = index;
-					System.out.println(index);
-					result_table.repaint();
-				}
+		result_table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println(result_table.getSelectedRow());
 			}
 		});
-		*/
 	}
 }
