@@ -14,6 +14,8 @@ TODO:
 */
 class View extends JPanel {
 	private static HotelAPI api;
+	private static User test_user;
+
 	private static JPanel main_panel;
 	private static JPanel search_panel;
 	private static JPanel input_panel;
@@ -29,6 +31,7 @@ class View extends JPanel {
 
 	public static void main(String[] args) throws SQLException {
 		api = new HotelAPI();
+		test_user = new User();
 
 		JFrame frame = new JFrame();
 		frame.setSize(500, 500);
