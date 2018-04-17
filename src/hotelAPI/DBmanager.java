@@ -61,15 +61,16 @@ public class DBmanager {
 	// ???????????
 	//
 	//hotel_name og hotel_city mega vera null, annaðhvort eða bæði. Ef strengirnir er null breytast þeir eiginlega í wildcard(*)
-	public static ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
-		sqlStatement.execute("PRAGMA case_sensitive_like = true");
+		//sqlStatement.execute("PRAGMA case_sensitive_like = true");
 
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE city LIKE ? AND rating >= ? AND rating <= ?");
-		ps.setString(1, "%" + hotel_city + "%");
-		ps.setInt(2, min_rating);
-		ps.setInt(3, max_rating);
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ?");
+		ps.setString(1, "%" + hotel_city_or_name + "%");
+		ps.setString(2, "%" + hotel_city_or_name + "%");
+		ps.setInt(3, min_rating);
+		ps.setInt(4, max_rating);
 
 		ResultSet rset = ps.executeQuery();
 

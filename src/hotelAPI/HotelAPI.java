@@ -26,12 +26,12 @@ public class HotelAPI {
 	// Fyrir:  c er leitarstrengur fyrir einhverja borg, null ef hann skiptir ekki máli.
 	//         min og max eru lægstu og 
 	// Eftir:  
-	public ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
-		if(hotel_city == null) hotel_city = "";
+	public ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+		if(hotel_city_or_name == null) hotel_city_or_name = "";
 		if(min_rating == -1) min_rating = 0;
 		if(max_rating == -1) max_rating = 5;
 
-		return DBmanager.hotelSearch(hotel_city, min_rating, max_rating);
+		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating);
 	}
 
 	// Notkun: 
