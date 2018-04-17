@@ -1,7 +1,7 @@
 @echo off
 
 pushd hotelAPI
-javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
+javac Booking.java Hotel.java Room.java User.java DBmanager.java HotelAPI.java
 popd
 
 if "%1" == "jar" jar cf hotelAPI.jar hotelAPI/*.class hotels.db
