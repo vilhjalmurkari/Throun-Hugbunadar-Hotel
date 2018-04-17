@@ -19,11 +19,14 @@ class View extends JPanel {
 
 	private static JFrame main_frame;
 	private static JFrame hotel_frame;
+	private static JPanel hotel_main_panel;
+	private static JPanel hotel_info_panel;
 
 	private static JPanel main_panel;
 	private static JPanel search_panel;
 	private static JPanel input_panel;
 	private static JPanel button_panel;
+	private static JPanel bottom_panel;
 	private static JTextField city_field;
 	private static JComboBox min_rating_combo;
 	private static JComboBox max_rating_combo;
@@ -31,12 +34,14 @@ class View extends JPanel {
 	private static JButton reset_button;
 	private static JTable result_table;
 	private static DefaultTableModel result_table_model;
-	private static int table_selected_index;
+	private static int table_selected_index = -1;
+
+	private static JButton room_button;
 
 
 	public static void createMainFrame() {
 		main_frame = new JFrame();
-		main_frame.setSize(500, 500);
+		main_frame.setSize(550, 500);
 
 		main_panel = new JPanel();
 		main_panel.setLayout(new BorderLayout());
@@ -50,10 +55,8 @@ class View extends JPanel {
 		input_panel =  new JPanel();
 		input_panel.setLayout(new GridLayout(2, 3));
 
-		/*
-		JPanel bottom_panel =  new JPanel();
-		bottom_panel.setLayout(new GridLayout());
-		*/
+		bottom_panel =  new JPanel();
+		bottom_panel.setLayout(new BorderLayout());
 
 		city_field = new JTextField();
 		String[] rating_string = {"---", "5", "4", "3", "2", "1"};
@@ -94,11 +97,14 @@ class View extends JPanel {
 		search_panel.add(button_panel, BorderLayout.EAST);
 		search_panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 
-		//for(int i = 0; i < 4; i++) bottom_panel.add(new JButton("Ok"));
+		room_button = new JButton("Skoða herbergi");
+
+		bottom_panel.add(room_button, BorderLayout.EAST);
+
 		main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		main_panel.add(search_panel, BorderLayout.NORTH);
 		main_panel.add(new JScrollPane(result_table), BorderLayout.CENTER);
-		//main_panel.add(bottom_panel, BorderLayout.SOUTH);
+		main_panel.add(bottom_panel, BorderLayout.SOUTH);
 
 
 		main_frame.add(main_panel);
@@ -109,13 +115,17 @@ class View extends JPanel {
 		hotel_frame = new JFrame();
 		hotel_frame.setSize(500, 500);
 
-		JPanel hotel_main_panel = new JPanel();
+		hotel_main_panel = new JPanel();
 		hotel_main_panel.setLayout(new GridLayout(1, 0));
+		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		JPanel hotel_info_panel = new JPanel();
+		hotel_info_panel = new JPanel();
 		hotel_info_panel.setLayout(new GridLayout(0, 1));
 
-		/*
+		hotel_frame.add(hotel_main_panel);
+	}
+
+	public static void updateHotelFrame() {
 		Hotel h = hotels.get(table_selected_index);
 
 		String[][] label_names = new String[][] {{"Nafn: ", h.name},
@@ -127,12 +137,42 @@ class View extends JPanel {
 			JPanel temp_panel = new JPanel();
 			temp_panel.setLayout(new BorderLayout());
 
-			temp_panel.add(new JLabel(s[0]), BorderLayout.WEST);
-			temp_panel.add(new JLabel(s[1]), BorderLayout.CENTER);
+			JPanel label_panel = new JPanel(new BorderLayout());
+			label_panel.setBorder(new EmptyBorder(0, 0, 2, 0));
+			label_panel.add(new JLabel(s[0]), BorderLayout.WEST);
+
+			temp_panel.add(label_panel, BorderLayout.NORTH);
+			JTextArea temp_text_area = new JTextArea(s[1]);
+			temp_text_area.setEditable(false);
+			temp_panel.add(temp_text_area, BorderLayout.CENTER);
+
+			temp_panel.setBorder(new EmptyBorder(5, 0, 0, 0));
 
 			hotel_info_panel.add(temp_panel);
 		}
-		*/
+
+		hotel_info_panel.add(new JList());
+
+		hotel_main_panel.add(hotel_info_panel);
+
+		DefaultTableModel room_table_model = new DefaultTableModel(new String[]{"Stærð", "rúm", "verð"}, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+
+		JTable room_table = new JTable(room_table_model);
+		room_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		room_table.setShowGrid(false);
+    	room_table.setShowVerticalLines(true);
+    	room_table.setGridColor(Color.BLACK);
+
+    	JPanel room_panel = new JPanel();
+		room_panel.setBorder(new EmptyBorder(0, 5, 0, 0));
+
+    	room_panel.add(new JScrollPane(room_table), BorderLayout.CENTER);
+    	hotel_main_panel.add(room_panel);
 	}
 
 	public static void main(String[] args) throws SQLException {
@@ -157,6 +197,18 @@ class View extends JPanel {
 			}
 		});
 
+		room_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if(table_selected_index > -1) {
+					hotel_main_panel.removeAll();
+					updateHotelFrame();
+					hotel_frame.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
+				}
+			}
+		});
+
 		search_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				int row_count = result_table_model.getRowCount();
@@ -176,6 +228,7 @@ class View extends JPanel {
 	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
+						table_selected_index = -1;
 						return;
 					}
 
@@ -194,7 +247,6 @@ class View extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				table_selected_index = result_table.getSelectedRow();
 				System.out.println(table_selected_index);
-				hotel_frame.setVisible(true);
 			}
 		});		
 	}
