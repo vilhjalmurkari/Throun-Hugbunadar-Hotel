@@ -27,7 +27,7 @@ public class User {
 	}
 
 
-	public void cancelBooking(int key) {
+	public void cancelBooking(int key) throws SQLException {
 		if( bookings.containsKey(key) ) {
 			bookings.get(key).cancelBooking();
 			bookings.remove(key);

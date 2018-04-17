@@ -21,6 +21,7 @@ class View extends JPanel {
 	private static JFrame hotel_frame;
 	private static JPanel hotel_main_panel;
 	private static JPanel hotel_info_panel;
+	private static JPanel room_info_panel;
 
 	private static JPanel main_panel;
 	private static JPanel search_panel;
@@ -116,22 +117,60 @@ class View extends JPanel {
 		hotel_frame.setSize(500, 500);
 
 		hotel_main_panel = new JPanel();
-		hotel_main_panel.setLayout(new GridLayout(1, 0));
+		hotel_main_panel.setLayout(new GridLayout(1, 2));
 		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		hotel_info_panel = new JPanel();
 		hotel_info_panel.setLayout(new GridLayout(0, 1));
+		hotel_info_panel.setBorder(new EmptyBorder(0, 0, 0, 5));
+
+		hotel_info_panel.add(new JButton("takk"));
+		hotel_info_panel.add(new JButton("takk"));
+
+		room_info_panel = new JPanel();
+		room_info_panel.setLayout(new GridLayout(0, 1));
+
+		room_info_panel.add(new JButton("takk"));
+		room_info_panel.add(new JButton("takk"));
+
+		hotel_main_panel.add(hotel_info_panel);
+		hotel_main_panel.add(room_info_panel);
 
 		hotel_frame.add(hotel_main_panel);
+
+		/*
+		hotel_main_panel = new JPanel();
+		hotel_main_panel.setLayout(new GridLayout(5, 5));
+		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		hotel_info_panel = new JPanel();
+		hotel_info_panel.setLayout(new GridLayout(1, 0));
+
+		room_info_panel = new JPanel();
+		room_info_panel.setLayout(new GridLayout(1, 0));
+
+		hotel_info_panel.add(new JTextArea());
+		room_info_panel.add(new JTextArea());
+
+		hotel_main_panel.add(new JTextArea());
+		hotel_main_panel.add(new JTextArea());
+
+		hotel_frame.add(hotel_main_panel);
+		*/
 	}
+
 
 	public static void updateHotelFrame() {
 		Hotel h = hotels.get(table_selected_index);
+
+		/*
 
 		String[][] label_names = new String[][] {{"Nafn: ", h.name},
 											   	 {"Borg: ", h.city},
 											   	 {"Stjörnur: ", Integer.toString(h.rating)},
 											   	 {"Lýsing: ", h.description}};
+
+		
 
 		for(String[] s : label_names) {
 			JPanel temp_panel = new JPanel();
@@ -173,6 +212,7 @@ class View extends JPanel {
 
     	room_panel.add(new JScrollPane(room_table), BorderLayout.CENTER);
     	hotel_main_panel.add(room_panel);
+    	*/
 	}
 
 	public static void main(String[] args) throws SQLException {
@@ -200,7 +240,7 @@ class View extends JPanel {
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
-					hotel_main_panel.removeAll();
+					//hotel_main_panel.removeAll();
 					updateHotelFrame();
 					hotel_frame.setVisible(true);
 				}else {

@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "compiling hotelAPI"
 cd hotelAPI
-javac Booking.java Hotel.java Room.java User.java SearchQuery.java DBmanager.java HotelAPI.java
+javac Booking.java Hotel.java Room.java User.java DBmanager.java HotelAPI.java
 cd ..
 
 if [ "$1" == "jar" ] || [ "$2" == "jar" ]; then
