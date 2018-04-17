@@ -1,5 +1,6 @@
 package hotelAPI;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -392,7 +393,7 @@ public class DBmanager {
 	// Notkun: bookings = getBookings(u)
 	// Fyrir:  u er notandi.
 	// Eftir:  bookings er HashMap<Integer,Booking> af bókunum með bókunarnúmer.
-	public static void getBookings(User user) throws SQLException {
+	public static HashMap<Integer,Booking> getBookings(User user) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Bookings WHERE user_email = ?");
 		ps.setString(1,user.email);
 
@@ -413,7 +414,8 @@ public class DBmanager {
 		return bookings;
 	}
 	
-	private Room getRoomById(int id) throws SQLException {
+	private static Room getRoomById(int id) throws SQLException {
+		//PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ?");
 		return null;
 	}
 
