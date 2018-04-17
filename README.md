@@ -7,6 +7,22 @@ Verkefni í Þróun Hugbúnaðar.
 
 
 ### Að keyra hótelleit
-Byrjaðu að sækja src möppuna og keyra svo ```java -cp .:sqlite-jdbc-3.18.0.jar hotelView``` á Unix en ```java -cp .;sqlite-jdbc-3.18.0.jar hotelView``` á Windows.
+Sæktu /src/ og keyrðu ```build.sh run``` eða ```build.bat run``` eftir því hvort þú sért á Unix eða Windows.   
+Það ætti að birtast notendaviðmót sem leyfir þér að velja hótel og síðan herbergi.
 
-Þá ætti að birtast *Command Line* viðmót sem leiðir þig í gegnum að gera hótel. Nema Þórður hafi klárað Netbeans viðmót.
+
+
+## HotelAPI
+Skilagildi | Fallakall | Um notkun
+:---|:---|:---
+void | HotelAPI() | Initialiser
+Hotel | getHotel(name,city) | Sækir eina hótelið sem uppfyllir tvenndina (nafn,borg)
+
+
+o.fl. þ.e. allt í HotelAPI
+
+
+Líka fyrir AdminAPI
+
+
+Kannski líka hvernig User, Hotel, Room, og Booking eru notuð.
