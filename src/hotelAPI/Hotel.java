@@ -11,6 +11,14 @@ public class Hotel {
 	public ArrayList<String> tags;
 	public ArrayList<Room> rooms;
 
+	// Notkun: Hotel(n,r,d,c,t,r)
+	// Fyrir:  n er nafn hótels,
+	//         r er stjörnufjöldi hótels,
+	//         d er lýsing hótels,
+	//         c er borg hótels,
+	//         t er listi taga yfir hótelið,
+	//         r er listi herbergja í hótelinu.
+	// Eftir:  Hotel hlutur hefur verið búinn til og upphafsstilltur.
 	public Hotel(String name, int rating, String description, String city, ArrayList<String> tags, ArrayList<Room> rooms) {
 		this.name = name;
 		this.rating = rating;
@@ -20,6 +28,9 @@ public class Hotel {
 		this.rooms = rooms;
 	}
 
+	// Notkun: printHotel()
+	// Fyrir:  Ekkert.
+	// Eftir:  Upplýsingar um hótelið hefur verið prentað á staðalúttak.
 	public void printHotel() {
 		System.out.println("Name: " + name);
 		System.out.println("City: " + city);

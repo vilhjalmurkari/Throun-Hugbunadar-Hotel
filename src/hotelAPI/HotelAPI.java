@@ -20,12 +20,12 @@ public class HotelAPI {
 	}
 
 
-	//Ef leita á einungis eftir tilteknum gildum eru hin gildin stillt sem null eða -1, eftir því hvort stilla á streng eða tölu.
-	//Ef öll gildin eru null eða -1 skilar fallið öllum hótelum í gagnagrunninum
-	// Notkun: x = hotelSearch(c,min,max)
-	// Fyrir:  c er leitarstrengur fyrir einhverja borg, null ef hann skiptir ekki máli.
-	//         min og max eru lægstu og 
-	// Eftir:  
+	// Notkun: hotelSearch(c,min,max)
+	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg), 
+	//           en null ef hann skiptir ekki máli.
+	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
+	//           en er -1 ef ekki skiptir máli.
+	// Skilar:  lista af hótelum sem uppfylla leitarskilyrði.
 	public ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
 		if(hotel_city == null) hotel_city = "";
 		if(min_rating == -1) min_rating = 0;
