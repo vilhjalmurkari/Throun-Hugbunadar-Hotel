@@ -15,6 +15,10 @@ TODO:
 class View extends JPanel {
 	private static HotelAPI api;
 	private static User test_user;
+	private static ArrayList<Hotel> hotels; 
+
+	private static JFrame main_frame;
+	private static JFrame hotel_frame;
 
 	private static JPanel main_panel;
 	private static JPanel search_panel;
@@ -27,23 +31,13 @@ class View extends JPanel {
 	private static JButton reset_button;
 	private static JTable result_table;
 	private static DefaultTableModel result_table_model;
-	private static int result_table_index = -1;
+	private static int table_selected_index;
 
-	public static void main(String[] args) throws SQLException {
-		api = new HotelAPI();
-		test_user = new User();
 
-		JFrame frame = new JFrame();
-		frame.setSize(500, 500);
+	public static void createMainFrame() {
+		main_frame = new JFrame();
+		main_frame.setSize(500, 500);
 
-		/*
-		|   input   |
-		|___________|
-		|           |
-		|search res |
-		|___________|
-		|  takkar   |
-		*/
 		main_panel = new JPanel();
 		main_panel.setLayout(new BorderLayout());
 
@@ -107,10 +101,48 @@ class View extends JPanel {
 		//main_panel.add(bottom_panel, BorderLayout.SOUTH);
 
 
-		frame.add(main_panel);
-		frame.setVisible(true);
+		main_frame.add(main_panel);
+		main_frame.setVisible(true);
+	}
 
-		frame.addWindowListener(new WindowAdapter() {
+	public static void createHotelFrame() {
+		hotel_frame = new JFrame();
+		hotel_frame.setSize(500, 500);
+
+		JPanel hotel_main_panel = new JPanel();
+		hotel_main_panel.setLayout(new GridLayout(1, 0));
+
+		JPanel hotel_info_panel = new JPanel();
+		hotel_info_panel.setLayout(new GridLayout(0, 1));
+
+		/*
+		Hotel h = hotels.get(table_selected_index);
+
+		String[][] label_names = new String[][] {{"Nafn: ", h.name},
+											   	 {"Borg: ", h.city},
+											   	 {"Stjörnur: ", Integer.toString(h.rating)},
+											   	 {"Lýsing: ", h.description}};
+
+		for(String[] s : label_names) {
+			JPanel temp_panel = new JPanel();
+			temp_panel.setLayout(new BorderLayout());
+
+			temp_panel.add(new JLabel(s[0]), BorderLayout.WEST);
+			temp_panel.add(new JLabel(s[1]), BorderLayout.CENTER);
+
+			hotel_info_panel.add(temp_panel);
+		}
+		*/
+	}
+
+	public static void main(String[] args) throws SQLException {
+		api = new HotelAPI();
+		//test_user = new User(1);
+
+		createMainFrame();
+		createHotelFrame();
+
+		main_frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event){
 				System.out.println("exiting...");
 				System.exit(0);
@@ -140,7 +172,7 @@ class View extends JPanel {
 				int max_rating = (string_rating_max.equals("---") ? -1 : Integer.parseInt(string_rating_max));
 
 				try {
-					ArrayList<Hotel> hotels = api.hotelSearch(city_name, min_rating, max_rating);
+					hotels = api.hotelSearch(city_name, min_rating, max_rating);
 	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
@@ -160,8 +192,10 @@ class View extends JPanel {
 		result_table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(result_table.getSelectedRow());
+				table_selected_index = result_table.getSelectedRow();
+				System.out.println(table_selected_index);
+				hotel_frame.setVisible(true);
 			}
-		});
+		});		
 	}
 }

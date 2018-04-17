@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.sql.*;
 
 public class User {
+
 	public String name;
 	public String email;
 	// FIXIT

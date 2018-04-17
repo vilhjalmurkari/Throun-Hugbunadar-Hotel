@@ -367,7 +367,7 @@ public class DBmanager {
 
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
-		ps.setInt(1, user.id);
+		ps.setString(1, user.id);
 		ps.setInt(2, room.id);
 		ps.setLong(3, start_date);
 		ps.setLong(4, end_date);
