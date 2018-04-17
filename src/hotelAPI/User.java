@@ -30,16 +30,14 @@ public class User {
 	// Needs an update to utilise HASHMAP
 	// FIXIT
 	public void cancelBooking(int key) {
-		for( int i=0; i<bookings.size(); i++ ) {
-			if( bookings.get(i).confirmed ) {
-				System.out.println("Sorry, this booking has already been confirmed.");
-				break;
-			}
-			if( bookings.get(i).id==key ) {
-				bookings.remove(i);
-				break;
-			}
+		if( bookings.containsKey(key) ) {
+			bookings.get(key).cancelBooking();
+			bookings.remove(key);
+
+			return;
 		}
+
+		System.out.println("Sorry, this booking has already been confirmed or doesn't exist.");
 	}
 	
 	public void confirmBooking(int id) throws SQLException {
