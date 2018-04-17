@@ -32,6 +32,9 @@ public class Booking {
 		DBmanager.confirmBooking(this);
 	}
 	
+	// Notkun: cancelBooking()
+	// Fyrir:  Þessi bókun er óstaðfest.
+	// Eftir:  Þessi bókun hefur verið fjarlægð úr gagnagrunninum.
 	public void cancelBooking() throws SQLException {
 		DBmanager.cancelBooking(this);
 	}

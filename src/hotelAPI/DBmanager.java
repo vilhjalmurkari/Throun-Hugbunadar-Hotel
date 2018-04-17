@@ -11,16 +11,19 @@ public class DBmanager {
 
 
 	// Notkun: init()
+	//         Verður að vera kallað áður en önnur föll eru notuð.
 	// Eftir:  Connection og Statement hafa verið upphafsstillt
 	//         svo unnt er að framkvæma SQL aðgerðir.
 	public static void init() throws SQLException {
-		try {
-			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
-			sqlStatement = connection.createStatement();
+		if(connection != null) {
+			try {
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
+				sqlStatement = connection.createStatement();
 
-		} catch(ClassNotFoundException e) {
-			System.out.println("Couldn't find jdbc jar file.");
+			} catch(ClassNotFoundException e) {
+				System.out.println("Couldn't find jdbc jar file.");
+			}
 		}
 	}
 
@@ -54,14 +57,11 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
-	// Notkun: hotels = search(leit);
-	// Fyrir:  leit er einhver leitarstrengur.
-	// Eftir:  hotels er ArrayList af Hótelum sem ??????????????????????
-	//
-	// ???????????
-	//
-	//hotel_name og hotel_city mega vera null, annaðhvort eða bæði. Ef strengirnir er null breytast þeir eiginlega í wildcard(*)
-	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+	// Notkun: hotelSearch(c,min,max)
+	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg), 
+	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
+	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
+	public static ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
 		//sqlStatement.execute("PRAGMA case_sensitive_like = true");
@@ -95,9 +95,9 @@ public class DBmanager {
 		return result;
 	}
 
-	// Notkun: hotel = getHotel(name,city);
+	// Notkun: getHotel(name,city);
 	// Fyrir:  name og city eru nákvæmir strengir til að leita eftir.
-	// Eftir:  hotel er fyrsta hótelið sem finnst.
+	// Skilar: fyrsta hótelið sem finnst.
 	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name= ? AND city = ?");
 		ps.setString(1,hotel_name);
@@ -127,9 +127,9 @@ public class DBmanager {
 		return null;
 	}
 
-	// Notkun: hotels = getHotelsByName(leit);
+	// Notkun: getHotelsByName(leit);
 	// Fyrir:  leit er einhver leitarstrengur.
-	// Eftir:  hotels er ArrayList af Hótelum sem innihalda "leit".
+	// Skilar: listi af Hótelum sem innihalda "leit".
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name LIKE ?");
@@ -185,7 +185,6 @@ public class DBmanager {
 
 	// Notkun: getRoomsFromHotel( hotel_name, hotel_city)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	//         Ath. hotel_name, hotel_city er lykill.
 	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_city = ?");
@@ -212,19 +211,10 @@ public class DBmanager {
 		return listOfRooms;
 	}
 
-	// ER þetta fall GAGNLEGT?
-	//
-	// Notkun: getRoomFromHotel(room_id, hotel)
-	// Fyrir:  room_id er auðkenni herbergis. hotel er hótel hlutur.
-	// Skilar: Skilar herbergi með ákveðið room_id.
-	public static Room getRoomFromHotel( int room_id, Hotel hotel) throws SQLException {
-		return getRoomFromHotel( room_id, hotel.name, hotel.city);
-	}
-
 	// Notkun: getRoomFromHotel( room_id, hotel_name, hotel_city)
 	// Fyrir:  room_id er auðkenni herbergis, hotel_name og hotel_city er nákvæmt nafn og borg hótels
 	// Skilar: Skilar hótelherbergi með ákveðið id.
-	public static Room getRoomFromHotel( int room_id, String hotel_name, String hotel_city) throws SQLException {
+	private static Room getRoomFromHotel( int room_id, String hotel_name, String hotel_city) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ? AND hotel_name = ? AND hotel_city = ?");
 		ps.setInt(1, room_id);
 		ps.setString(2,hotel_name);
@@ -363,6 +353,13 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+	// Notkun: bookRoom(r,u,s,h)
+	// Fyrir:  r er herbergi sem á að bóka,
+	//         u er notandi,
+	//         s og h eru byrjunar og lokadagsetningar.
+	// Eftir:  r hefur verið bókað frá s til h í nafni u.
+	//         Skilar satt ef herbergið var bókað,
+	//         ósatt ef herbergið var ekki laust.
 	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		if( !isRoomFree(room, start_date, end_date) ) return false;
 
@@ -391,9 +388,9 @@ public class DBmanager {
 		return rs.getInt(0) == 0;
 	}
 
-	// Notkun: bookings = getBookings(u)
+	// Notkun: getBookings(u)
 	// Fyrir:  u er notandi.
-	// Eftir:  bookings er HashMap<Integer,Booking> af bókunum með bókunarnúmer.
+	// Skilar: HashMap<Integer,Booking> af <bókunarnúmerum,bókunum>.
 	public static HashMap<Integer,Booking> getBookings(User user) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Bookings WHERE user_email = ?");
 		ps.setString(1,user.email);
@@ -415,6 +412,9 @@ public class DBmanager {
 		return bookings;
 	}
 	
+	// Notkun: getRoomById(i)
+	// Fyrir:  i er bókunarnúmer einhverrar bókunnar.
+	// Skilar: Room hlut sem fylgir bókunarnúmerinu i.
 	private static Room getRoomById(int id) throws SQLException {
 		//PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ?");
 		return null;
@@ -459,5 +459,13 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-
+	// Notkun: addUser(u)
+	// Fyrir:  u er notandi.
+	// Eftir:  u hefur verið bætt í gagnagrunn.
+	protected static void addUser(User user) throws SQLException {
+		PreparedStatement ps = connection. prepareStatement("INSERT INTO Users(name,email) VALUES(?,?)");
+		ps.setString(1,user.name);
+		ps.setString(2,user.email);
+		ps.executeUpdate();
+	}
 }

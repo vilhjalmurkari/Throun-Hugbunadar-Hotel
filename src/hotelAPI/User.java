@@ -10,12 +10,13 @@ public class User {
 	public String email;
 	public HashMap<Integer, Booking> bookings;
 
-	public User(String email) throws SQLException {
+	public User(String name, String email) throws SQLException {
+		this.name = name;
 		this.email = email;
 		this.bookings = DBmanager.getBookings(this);
 	}
 
-	public void cancelUnconfirmed() throws SQLException {
+	public void cancelAllUnconfirmed() throws SQLException {
 		Set<Integer> keys = bookings.keySet();
 		for(Integer key : keys) {
 			if(!bookings.get(key).confirmed) {
@@ -55,5 +56,4 @@ public class User {
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.put(booking.id, booking);
 	}
-
 }
