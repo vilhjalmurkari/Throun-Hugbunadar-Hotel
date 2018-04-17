@@ -43,7 +43,7 @@ CREATE TABLE Bookings(
 	start_date INTEGER,
 	end_date INTEGER,
 	confirmed BOOLEAN,
-	FOREIGN KEY(email) REFERENCES Users(email),
+	FOREIGN KEY(user_email) REFERENCES Users(email),
 	FOREIGN KEY(room_id) REFERENCES Rooms(id)
 );
 

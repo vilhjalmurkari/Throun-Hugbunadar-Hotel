@@ -95,7 +95,21 @@ class View extends JPanel {
 			}
 		};
 
-		result_table = new JTable(result_table_model);
+		result_table = new JTable(result_table_model) {
+    
+            public String getToolTipText(MouseEvent event) {
+                String result = "";
+                Point p = event.getPoint();
+
+                int rowIndex = rowAtPoint(p);
+
+                result += "Description: \n";
+                result += hotels.get(rowIndex).description;
+
+                return result;
+            }
+        };
+
 		result_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		result_table.setShowGrid(false);
     	result_table.setShowVerticalLines(true);
