@@ -399,6 +399,18 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+	// Notkun: cancelBooking(b)
+	// Fyrir:  b er bókun.
+	// Eftir:  b hefur verið hætt við í gagnagrunni.
+	public static void cancelBooking(Booking booking) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM Bookings WHERE id = ?");
+		ps.setInt(1, booking.id);
+		ps.executeUpdate();
+	}
+	
+	// Notkun: deleteHotel(h)
+	// Fyrir:  h er hótel.
+	// Eftir:  h hefur verið eytt úr gagnagrunnni.
 	public static void deleteHotel( Hotel h ) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Hotels WHERE name = ? AND city = ?");
 		ps.setString(1, h.name);
@@ -407,6 +419,9 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+	// Notkun: deleteRoom(r)
+	// Fyrir:  r er herbergi.
+	// Eftir:  r hefur verið eytt úr gagnagrunnni.
 	public static void deleteRoom( Room r ) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Rooms WHERE id = ?");
 		ps.setInt(1, r.id);

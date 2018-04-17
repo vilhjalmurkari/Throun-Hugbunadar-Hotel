@@ -61,7 +61,7 @@ public class User {
 		this.email = newEmail;
 		// FIXIT
 		// Vantar að uppdæra email í gagnagrunni.
-		// DBmanager.updateEmail(newEmail);
+		DBmanager.updateEmail(newEmail);
 		// Perhaps add here some form of confirmation email?
 	}
 

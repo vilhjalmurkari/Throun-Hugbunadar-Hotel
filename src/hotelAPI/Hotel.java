@@ -48,9 +48,4 @@ public class Hotel {
 
 		System.out.println("Rooms count: " + rooms.size());
 	}
-
-	//einhver föll hér
-	public int getHotelRating() {
-		return this.rating;
-	}
 }
