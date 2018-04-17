@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.sql.*;
 
 public class User {
-	public String id;
+
 	public String name;
 	public String email;
 	// FIXIT
 	// Bookings are never initialised :o
 	public HashMap<Integer, Booking> bookings;
 
-	public User(String id) {
-		this.id = id;
+	public User(String email) {
+		this.email = email;
 		
 		//this.name = name;
 		//this.email = email;
