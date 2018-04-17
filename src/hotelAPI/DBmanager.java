@@ -128,7 +128,6 @@ public class DBmanager {
 	// Notkun: hotels = getHotelsByName(leit);
 	// Fyrir:  leit er einhver leitarstrengur.
 	// Eftir:  hotels er ArrayList af Hótelum sem innihalda "leit".
-	
 	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name LIKE ?");
@@ -388,6 +387,34 @@ public class DBmanager {
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
 		return rs.getInt(0) == 0;
+	}
+
+	// Notkun: bookings = getBookings(u)
+	// Fyrir:  u er notandi.
+	// Eftir:  bookings er HashMap<Integer,Booking> af bókunum með bókunarnúmer.
+	public static void getBookings(User user) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Bookings WHERE user_email = ?");
+		ps.setString(1,user.email);
+
+		ResultSet rs = ps.executeQuery();
+
+		HashMap<Integer,Booking> bookings = new HashMap<Integer,Booking>();
+		while(rs.next()) {
+			Room r = getRoomById(rs.getInt("room_id"));
+			long s = rs.getLong("start_date");
+			long e = rs.getLong("end_date");
+			Booking b = new Booking(r,s,e);
+
+			int id = rs.getInt("id");
+			
+			bookings.put(id,b);
+		}
+
+		return bookings;
+	}
+	
+	private Room getRoomById(int id) throws SQLException {
+		return null;
 	}
 
 	// Notkun: confirmBooking(b)

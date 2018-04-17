@@ -37,6 +37,7 @@ CREATE TABLE Room_tags(
 );
 
 CREATE TABLE Bookings(
+	id INTEGER PRIMARY KEY,
 	user_email INTEGER,
 	room_id INTEGER,
 	start_date INTEGER,
