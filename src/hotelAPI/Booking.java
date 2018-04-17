@@ -13,7 +13,7 @@ public class Booking {
 	// Usage:  Booking(r,s,e)
 	// Before: r er herbergi,
 	//         s og e eru byrjunar og enda dagsetningar
-	//         á þessari bókun sem heiltölur.
+	//             á þessari bókun sem heiltölur.
 	// After:  Bókun hefur verið gerð.
 	public Booking(Room room, long start_date, long end_date) {
 		this.id = (int)(Math.random()*Integer.MAX_VALUE);
@@ -26,7 +26,7 @@ public class Booking {
 	// Notkun: confirmBooking()
 	// Fyrir:  Ekkert.
 	// Eftir:  Þessi bókun hefur verið staðfest
-	//         en ekki færð í gagnagrunn.
+	//             en ekki færð í gagnagrunn.
 	public void confirmBooking() throws SQLException {
 		this.confirmed = true;
 		DBmanager.confirmBooking(this);

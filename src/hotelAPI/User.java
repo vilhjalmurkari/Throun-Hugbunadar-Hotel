@@ -11,8 +11,9 @@ public class User {
 	// Bookings are never initialised :o
 	public HashMap<Integer, Booking> bookings;
 
-	public User(int id) {
+	public User(String id) {
 		this.id = id;
+		
 		//this.name = name;
 		//this.email = email;
 		//Ættu bookings nokkuð að vera í constructornum?
@@ -58,15 +59,21 @@ public class User {
 
 	private void updateEmail(String newEmail) {
 		this.email = newEmail;
+		// FIXIT
+		// Vantar að uppdæra email í gagnagrunni.
+		// DBmanager.updateEmail(newEmail);
 		// Perhaps add here some form of confirmation email?
 	}
 
 	public void makeBooking(Room room, long start_date, long end_date) throws SQLException {
-		assert( DBmanager.isRoomFree(room, start_date, end_date) );
+		// assert( DBmanager.isRoomFree(room, start_date, end_date) );
+		
+		// returns true iff room was free and booked.
+		if( !DBmanager.bookRoom( room, this, start_date, end_date) )
+			return;
 
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.put(booking.id, booking);
-		DBmanager.bookRoom( room, this, start_date, end_date);
 	}
 
 }
