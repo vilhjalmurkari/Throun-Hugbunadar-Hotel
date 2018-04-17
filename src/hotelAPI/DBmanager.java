@@ -15,13 +15,15 @@ public class DBmanager {
 	// Eftir:  Connection og Statement hafa verið upphafsstillt
 	//         svo unnt er að framkvæma SQL aðgerðir.
 	public static void init() throws SQLException {
-		try {
-			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
-			sqlStatement = connection.createStatement();
+		if(connection != null) {
+			try {
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
+				sqlStatement = connection.createStatement();
 
-		} catch(ClassNotFoundException e) {
-			System.out.println("Couldn't find jdbc jar file.");
+			} catch(ClassNotFoundException e) {
+				System.out.println("Couldn't find jdbc jar file.");
+			}
 		}
 	}
 
@@ -456,5 +458,13 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
-
+	// Notkun: addUser(u)
+	// Fyrir:  u er notandi.
+	// Eftir:  u hefur verið bætt í gagnagrunn.
+	protected static void addUser(User user) throws SQLException {
+		PreparedStatement ps = connection. prepareStatement("INSERT INTO Users(name,email) VALUES(?,?)");
+		ps.setString(1,user.name);
+		ps.setString(2,user.email);
+		ps.executeUpdate();
+	}
 }
