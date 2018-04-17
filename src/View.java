@@ -11,9 +11,10 @@ import hotelAPI.*;
 
 /*
 TODO:
+	- láta tooltip hafa fleiri upplýsingar um hótel, svo sem tag, 
 	- reset á enter
 	- esc clear
-	- non case sensitive, nema þegar fyrsti stafur er upper 
+	- case sensitive þegar fyrsti stafur er upper 
 */
 class View extends JPanel {
 	private static HotelAPI api;
@@ -110,7 +111,13 @@ class View extends JPanel {
 
 		main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		main_panel.add(search_panel, BorderLayout.NORTH);
-		main_panel.add(new JScrollPane(result_table), BorderLayout.CENTER);
+
+		JPanel temp_panel = new JPanel();
+		temp_panel.setLayout(new GridLayout());
+		temp_panel.add(new JScrollPane(result_table));
+		temp_panel.setBackground(Color.WHITE);
+
+		main_panel.add(temp_panel, BorderLayout.CENTER);
 		main_panel.add(bottom_panel, BorderLayout.SOUTH);
 
 
@@ -301,14 +308,14 @@ class View extends JPanel {
 					result_table_model.removeRow(0);
 				}
 
-				String city_name = city_field.getText();
+				String hotel_city_or_name = city_field.getText();
 				String string_rating_min = (String)min_rating_combo.getItemAt(min_rating_combo.getSelectedIndex());
 				String string_rating_max = (String)max_rating_combo.getItemAt(max_rating_combo.getSelectedIndex());
 				int min_rating = (string_rating_min.equals("---") ? -1 : Integer.parseInt(string_rating_min));
 				int max_rating = (string_rating_max.equals("---") ? -1 : Integer.parseInt(string_rating_max));
 
 				try {
-					hotels = api.hotelSearch(city_name, min_rating, max_rating);
+					hotels = api.hotelSearch(hotel_city_or_name, min_rating, max_rating);
 	
 					if(hotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "ekkert fannst!");
@@ -328,7 +335,7 @@ class View extends JPanel {
 
 		result_table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				table_selected_index = result_table.getSelectedRow();
 				System.out.println(table_selected_index);
 			}

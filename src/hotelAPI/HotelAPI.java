@@ -26,7 +26,8 @@ public class HotelAPI {
 	//           en er -1 ef ekki skiptir máli.
 	// Skilar:  lista af hótelum sem uppfylla leitarskilyrði.
 	public ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
-		if(hotel_city == null) hotel_city = "";
+
+		if(hotel_city_or_name == null) hotel_city_or_name = "";
 		if(min_rating == -1) min_rating = 0;
 		if(max_rating == -1) max_rating = 5;
 

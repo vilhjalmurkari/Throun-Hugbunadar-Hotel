@@ -15,7 +15,7 @@ public class DBmanager {
 	// Eftir:  Connection og Statement hafa verið upphafsstillt
 	//         svo unnt er að framkvæma SQL aðgerðir.
 	public static void init() throws SQLException {
-		if(connection != null) {
+		if(connection == null) {
 			try {
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection("jdbc:sqlite:hotels.db");
@@ -57,14 +57,17 @@ public class DBmanager {
 		return listOfHotels;
 	}
 
+
 	// Notkun: hotelSearch(c,min,max)
 	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg), 
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
 	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
-	public static ArrayList<Hotel> hotelSearch(String hotel_city, int min_rating, int max_rating) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
-		//sqlStatement.execute("PRAGMA case_sensitive_like = true");
+		if(hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
+			sqlStatement.execute("PRAGMA case_sensitive_like = true");
+		}
 
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ?");
 		ps.setString(1, "%" + hotel_city_or_name + "%");
