@@ -361,9 +361,9 @@ public class DBmanager {
 
 		ps.executeUpdate();
 	}
-	// Þetta ætti ekki að vera þörf. Ef Bookings er notað á ekki að nota þetta
+
 	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
-		assert( isRoomFree(room, start_date, end_date) );
+		if( !isRoomFree(room, start_date, end_date) ) return false;
 
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
@@ -394,7 +394,7 @@ public class DBmanager {
 	// Fyrir:  b er bókun.
 	// Eftir:  b hefur verið staðfest í gagnagrunni.
 	public static void confirmBooking(Booking b) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("UPDATE Bookings SET confirmed = T WHERE id = ?");
+		PreparedStatement ps = connection.prepareStatement("UPDATE Bookings SET confirmed = TRUE WHERE id = ?");
 		ps.setInt(1, b.id);
 		ps.executeUpdate();
 	}
