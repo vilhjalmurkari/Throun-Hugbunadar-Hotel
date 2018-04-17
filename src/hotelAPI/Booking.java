@@ -31,4 +31,8 @@ public class Booking {
 		this.confirmed = true;
 		DBmanager.confirmBooking(this);
 	}
+	
+	public void cancelBooking() throws SQLException {
+		DBmanager.cancelBooking(this);
+	}
 }

@@ -27,8 +27,6 @@ public class User {
 	}
 
 
-	// Needs an update to utilise HASHMAP
-	// FIXIT
 	public void cancelBooking(int key) {
 		if( bookings.containsKey(key) ) {
 			bookings.get(key).cancelBooking();
