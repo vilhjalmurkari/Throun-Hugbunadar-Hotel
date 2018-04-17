@@ -365,9 +365,9 @@ public class DBmanager {
 	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		if( !isRoomFree(room, start_date, end_date) ) return false;
 
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_id, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_email, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
-		ps.setString(1, user.id);
+		ps.setString(1, user.email);
 		ps.setInt(2, room.id);
 		ps.setLong(3, start_date);
 		ps.setLong(4, end_date);
