@@ -11,6 +11,8 @@ import hotelAPI.*;
 
 /*
 TODO:
+	- er herbergi frátekið?
+	- virkar bókun
 	- ætti sennilega að láta room gluggann uppfærast þegar þú velur eitthvað annað hótel
 	- reset á enter
 	- esc clear
@@ -317,7 +319,12 @@ class View extends JPanel {
 
 		book_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-
+				try {
+					api.bookRoomForUser(api.makeUser("Jón Jónsson", "jon@jon.com"), rooms.get(room_selected_index));
+					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 
