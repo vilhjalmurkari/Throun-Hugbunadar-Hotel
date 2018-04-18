@@ -49,11 +49,20 @@ public class HotelAPI {
 		return DBmanager.getUser(name, email);
 	}
 
-	public void deleteUser(String email) throws SQLException {
-		DBmanager.deleteUser(email);
+	// Notkun: bookRoomFromUser(u,r)
+	// Fyrir:  u er notandi, r er herbergi
+	// Eftir:  herbergi r hefur verið bókað fyrir u í gagnagrunni,
+	//         bókun hefur verið bætt við í u.
+	public void bookRoomForUser(User user, Room room, long start_date, long end_date) throws SQLException {
+		user.makeBooking(room,start_date,end_date);
 	}
 
-	public void bookRoomForUser(User user, Room room) throws SQLException {
-		return;
+	
+	// Notkun: deleteUser(u)
+	// Fyrir:  
+	// Eftir:  
+	public void deleteUser(User user) throws SQLException {
+		DBmanager.deleteUser(user);
 	}
+
 }
