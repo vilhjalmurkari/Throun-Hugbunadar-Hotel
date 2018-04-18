@@ -61,8 +61,8 @@ public class HotelAPI {
 	// Notkun: deleteUser(u)
 	// Fyrir:  
 	// Eftir:  
-	public void deleteUser(User user) throws SQLException {
-		DBmanager.deleteUser(user);
+	public void deleteUser(String email) throws SQLException {
+		DBmanager.deleteUser(email);
 	}
 
 }
