@@ -5,7 +5,7 @@ Sprint|User Story ID|User Story|Priority|Estimated Team Effort|Actual Team Effor
 :----:|------------:|----------|:------:|--------------------:|:-----------------|:---:
 1|# 1|Sem notandi vil ég geta sett skorður á leitina til að henta mínum þörfum|1|2,7|9|Yes
 1|# 2|Sem notandi vil ég geta valið stærð herbergja (í svefplássum) því margir þurfa gista saman|2|1,8||
-1|# 4|Sem notandi vil ég geta séð hvað herbergi kostar því peningarnir eru af skornum skammti|2|0,7||
+1|# 4|Sem notandi vil ég geta séð hvað herbergi kostar því peningarnir eru af skornum skammti|2|0,7|0,3|Yes
 1|# 13|Sem notandi vil ég geta raðað leitarniðurstöðum eftir skilyrðum (s.s. verði/stjörnum) því niðurstöðurnar eru margar|3|2,2||Yes (stjörnur)
 1|# 3|Sem notandi vil ég geta keypt mörg herbergi í einu því ég er að panta fyrir stóran hóp|4|2,7||
 1|# 5|Sem notandi vil ég geta hætt við körfuna á herbergi því ég er bara að window shop-a|4|1,0||
