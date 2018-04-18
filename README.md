@@ -16,10 +16,13 @@ Sæktu /src/ og keyrðu ```build.sh run``` eða ```build.bat run``` eftir því hvort
 Skilagildi | Fallakall | Um notkun
 :---|:---|:---
 void | HotelAPI() | Initialiser
-Hotel | getHotel(name,city) | Sækir eina hótelið sem uppfyllir tvenndina (nafn,borg)
+Hotel | getHotel(String name, String city) | Sækir eina hótelið sem uppfyllir tvenndina (nafn,borg)
+ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rating | Leitar að hótelum með leitarstreng city_or_name en síar skv. fjöldi stjarna sem hótelin hafa [min_rating;max_rating]
+User | makeUster(String name, String email) | Býr til notanda í gagnagrunni m.v. nafn og email, og skilar svo þeim notanda sem hlut
+void | bookRoomForUser(User u, Room r) | Bókar herbergi r fyrir notanda u í gagnagrunni; bókun bætt við notanda hlut
 
 
-o.fl. þ.e. allt í HotelAPI
+
 
 
 Líka fyrir AdminAPI
