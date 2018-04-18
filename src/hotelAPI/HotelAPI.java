@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.sql.*;
 
 public class HotelAPI {
-	
+
 	// Notkun: HotelAPI()
 	// Fyrir:  Ekkert
 	// Eftir:  Controller hefur verið upphafsstilltur.
@@ -20,7 +20,7 @@ public class HotelAPI {
 	}
 
 	// Notkun: hotelSearch(c,min,max)
-	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg), 
+	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg),
 	//           en null ef hann skiptir ekki máli.
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
 	//           en er -1 ef ekki skiptir máli.
@@ -43,6 +43,10 @@ public class HotelAPI {
 		User user = new User(name, email);
 		DBmanager.addUser(user);
 		return user;
+	}
+
+	public void deleteUser(String email) throws SQLException {
+		DBmanager.deleteUser(email);
 	}
 
 	public void bookRoomForUser(User user, Room room) throws SQLException {

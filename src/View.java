@@ -11,21 +11,21 @@ import hotelAPI.*;
 
 /*
 TODO:
-	- láta tooltip hafa fleiri upplýsingar um hótel, svo sem tag, 
+	- er herbergi frátekið?
+	- virkar bókun
+	- ætti sennilega að láta room gluggann uppfærast þegar þú velur eitthvað annað hótel
 	- reset á enter
 	- esc clear
-	- case sensitive þegar fyrsti stafur er upper 
 */
 class View extends JPanel {
 	private static HotelAPI api;
 	private static User test_user;
-	private static ArrayList<Hotel> hotels; 
+	private static ArrayList<Hotel> hotels;
+	private static ArrayList<Room> rooms; 
 
 	private static JFrame main_frame;
-	private static JFrame hotel_frame;
-	private static JPanel hotel_main_panel;
-	private static JPanel hotel_info_panel;
-	private static JPanel room_info_panel;
+	private static JFrame room_frame;
+	private static JPanel room_main_panel;
 
 	private static JPanel main_panel;
 	private static JPanel search_panel;
@@ -42,9 +42,10 @@ class View extends JPanel {
 	private static int table_selected_index = -1;
 
 	private static JButton room_button;
-	private static JTextField hotel_name_field;
-	private static JTextField hotel_city_field;
-	private static JTextField hotel_rating_field;
+	private static JButton book_button;
+	private static JTable room_table;
+	private static DefaultTableModel room_table_model;
+	private static int room_selected_index = -1;
 
 
 	public static void createMainFrame() {
@@ -95,7 +96,38 @@ class View extends JPanel {
 			}
 		};
 
-		result_table = new JTable(result_table_model);
+		result_table = new JTable(result_table_model) {
+
+			public String getToolTipText(MouseEvent event) {
+				String result = "";
+				Point p = event.getPoint();
+
+				int rowIndex = rowAtPoint(p);
+				Hotel hotel = hotels.get(rowIndex);
+
+				result += "<html>";
+				result += "Lýsing:";
+				result += "<br>";
+				result += hotel.description;
+				result += "<br>";
+				result += "--";
+				result += "<br>";
+				result += "Tög:"; 
+				result += "<br>";
+
+				int i = 2;
+				for(String s : hotel.tags) {
+					if(i % 3 == 0) result += "<br>";
+					result += s + ", ";
+					i--;
+				}
+
+				result += "</html>";
+
+				return result;
+			}
+		};
+
 		result_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		result_table.setShowGrid(false);
     	result_table.setShowVerticalLines(true);
@@ -137,133 +169,75 @@ class View extends JPanel {
 		return temp_panel;
 	}
 
-	public static void createHotelFrame() {
-		hotel_frame = new JFrame();
-		hotel_frame.setSize(500, 500);
+	public static void createRoomsFrame() {
+		room_frame = new JFrame();
+		room_frame.setSize(500, 500);
 
-		hotel_main_panel = new JPanel();
-		hotel_main_panel.setLayout(new GridLayout(1, 2));
-		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		hotel_info_panel = new JPanel();
-		hotel_info_panel.setLayout(new BorderLayout());
-		hotel_info_panel.setBorder(new EmptyBorder(0, 0, 0, 5));
-
-		JPanel static_info_panel = new JPanel();
-		static_info_panel.setLayout(new GridLayout(0, 1));
-		static_info_panel.setSize(new Dimension(200, 100));
-
-		hotel_name_field = new JTextField();
-		hotel_city_field = new JTextField();
-		hotel_rating_field = new JTextField();
-		
-		hotel_name_field.setEditable(false);
-		hotel_city_field.setEditable(false);
-		hotel_rating_field.setEditable(false);
-
-		static_info_panel.add(createInfoPanel("Nafn: ", hotel_name_field));
-		static_info_panel.add(createInfoPanel("Borg: ", hotel_city_field));
-		static_info_panel.add(createInfoPanel("Stjörnur: ", hotel_rating_field));
-
-		hotel_info_panel.add(static_info_panel, BorderLayout.NORTH);
-
-		hotel_info_panel.add(new JTextArea());
-
-		room_info_panel = new JPanel();
-		room_info_panel.setLayout(new BorderLayout());
-
-		room_info_panel.add(new JLabel("Herbergi:"), BorderLayout.NORTH);
-		room_info_panel.add(new JList(), BorderLayout.CENTER);
+		room_main_panel = new JPanel();
+		room_main_panel.setLayout(new BorderLayout());
+		room_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new BorderLayout());
-		temp_panel.add(new JButton("bóka"), BorderLayout.EAST);
+		temp_panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 
-		room_info_panel.add(temp_panel, BorderLayout.SOUTH);
+		temp_panel.add(new JLabel("Herbergi:"), BorderLayout.WEST);
 
-		hotel_main_panel.add(hotel_info_panel);
-		hotel_main_panel.add(room_info_panel);
+		room_main_panel.add(temp_panel, BorderLayout.NORTH);
 
-		hotel_frame.add(hotel_main_panel);
-
-		/*
-		hotel_main_panel = new JPanel();
-		hotel_main_panel.setLayout(new GridLayout(5, 5));
-		hotel_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		hotel_info_panel = new JPanel();
-		hotel_info_panel.setLayout(new GridLayout(1, 0));
-
-		room_info_panel = new JPanel();
-		room_info_panel.setLayout(new GridLayout(1, 0));
-
-		hotel_info_panel.add(new JTextArea());
-		room_info_panel.add(new JTextArea());
-
-		hotel_main_panel.add(new JTextArea());
-		hotel_main_panel.add(new JTextArea());
-
-		hotel_frame.add(hotel_main_panel);
-		*/
-	}
-
-
-	public static void updateHotelFrame() {
-		Hotel h = hotels.get(table_selected_index);
-
-		hotel_name_field.setText(h.name);
-		hotel_city_field.setText(h.city);
-		hotel_rating_field.setText(Integer.toString(h.rating));
-		/*
-
-		String[][] label_names = new String[][] {{"Nafn: ", h.name},
-											   	 {"Borg: ", h.city},
-											   	 {"Stjörnur: ", Integer.toString(h.rating)},
-											   	 {"Lýsing: ", h.description}};
-
-		
-
-		for(String[] s : label_names) {
-			JPanel temp_panel = new JPanel();
-			temp_panel.setLayout(new BorderLayout());
-
-			JPanel label_panel = new JPanel(new BorderLayout());
-			label_panel.setBorder(new EmptyBorder(0, 0, 2, 0));
-			label_panel.add(new JLabel(s[0]), BorderLayout.WEST);
-
-			temp_panel.add(label_panel, BorderLayout.NORTH);
-			JTextArea temp_text_area = new JTextArea(s[1]);
-			temp_text_area.setEditable(false);
-			temp_panel.add(temp_text_area, BorderLayout.CENTER);
-
-			temp_panel.setBorder(new EmptyBorder(5, 0, 0, 0));
-
-			hotel_info_panel.add(temp_panel);
-		}
-
-		hotel_info_panel.add(new JList());
-
-		hotel_main_panel.add(hotel_info_panel);
-
-		DefaultTableModel room_table_model = new DefaultTableModel(new String[]{"Stærð", "rúm", "verð"}, 0) {
+		room_table_model = new DefaultTableModel(new String[]{"Stærð", "Fjöldi rúma", "verð"}, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
 
-		JTable room_table = new JTable(room_table_model);
+		room_table = new JTable(room_table_model) {
+
+			public String getToolTipText(MouseEvent event) {
+				String result = "";
+				Point p = event.getPoint();
+
+				int rowIndex = rowAtPoint(p);
+				Hotel hotel = hotels.get(rowIndex);
+
+				result += "<html>";
+				result += "Tög:"; 
+				result += "<br>";
+
+				int i = 2;
+				for(String s : hotel.tags) {
+					if(i % 3 == 0) result += "<br>";
+					result += s + ", ";
+					i--;
+				}
+
+				result += "</html>";
+
+				return result;
+			}
+		};
+
 		room_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		room_table.setShowGrid(false);
     	room_table.setShowVerticalLines(true);
     	room_table.setGridColor(Color.BLACK);
 
-    	JPanel room_panel = new JPanel();
-		room_panel.setBorder(new EmptyBorder(0, 5, 0, 0));
+    	temp_panel = new JPanel();
+		temp_panel.setLayout(new GridLayout());
+		temp_panel.add(new JScrollPane(room_table));
+		temp_panel.setBackground(Color.WHITE);
 
-    	room_panel.add(new JScrollPane(room_table), BorderLayout.CENTER);
-    	hotel_main_panel.add(room_panel);
-    	*/
+		room_main_panel.add(temp_panel, BorderLayout.CENTER);
+
+		temp_panel = new JPanel();
+		temp_panel.setLayout(new BorderLayout());
+		book_button = new JButton("bóka");
+		temp_panel.add(book_button, BorderLayout.EAST);
+
+		room_main_panel.add(temp_panel, BorderLayout.SOUTH);
+
+		room_frame.add(room_main_panel);
 	}
 
 	public static void main(String[] args) throws SQLException {
@@ -271,7 +245,7 @@ class View extends JPanel {
 		//test_user = new User(1);
 
 		createMainFrame();
-		createHotelFrame();
+		createRoomsFrame();
 
 		main_frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event){
@@ -291,9 +265,19 @@ class View extends JPanel {
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
-					//hotel_main_panel.removeAll();
-					updateHotelFrame();
-					hotel_frame.setVisible(true);
+					int row_count = room_table_model.getRowCount();
+
+					for(int i = 0; i < row_count; i++) {
+						room_table_model.removeRow(0);
+					}
+
+					rooms = hotels.get(table_selected_index).rooms;
+
+					for(Room r : rooms) {
+						room_table_model.addRow(new Object[] {r.size, r.bed_count, r.price});
+					}
+
+					room_frame.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
 				}
@@ -333,12 +317,31 @@ class View extends JPanel {
 			}
 		});
 
+		book_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					api.bookRoomForUser(api.makeUser("Jón Jónsson", "jon@jon.com"), rooms.get(room_selected_index));
+					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		});
+
 		result_table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				table_selected_index = result_table.getSelectedRow();
-				System.out.println(table_selected_index);
+				System.out.println("selected hotel: " + table_selected_index);
 			}
-		});		
+		});
+
+		room_table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				room_selected_index = room_table.getSelectedRow();
+				System.out.println("selected room: " + room_selected_index);
+			}
+		});
 	}
 }

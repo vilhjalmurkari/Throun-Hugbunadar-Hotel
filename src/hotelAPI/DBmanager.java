@@ -59,7 +59,7 @@ public class DBmanager {
 
 
 	// Notkun: hotelSearch(c,min,max)
-	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg), 
+	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg),
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
 	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
 	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
@@ -91,7 +91,7 @@ public class DBmanager {
 
 			result.add(h);
 		}
-		
+
 		for(Hotel h : result) {
 			h.tags = getHotelTags(h.name, h.city);
 			h.rooms = getRoomsFromHotel(h.name, h.city);
@@ -153,7 +153,7 @@ public class DBmanager {
 
 			listOfHotels.add(h);
 		}
-		
+
 		// Could be terribly slow.
 		for(Hotel h : listOfHotels) {
 			h.tags = getHotelTags(h.name, h.city);
@@ -306,7 +306,7 @@ public class DBmanager {
 		}
 
 		if (hotel.rooms != null) {
-			
+
 			addRoomsToHotel(hotel.rooms, hotel.name, hotel.city);
 		}
 	}
@@ -410,13 +410,13 @@ public class DBmanager {
 			Booking b = new Booking(r,s,e);
 
 			int id = rs.getInt("id");
-			
+
 			bookings.put(id,b);
 		}
 
 		return bookings;
 	}
-	
+
 	// Notkun: getRoomById(i)
 	// Fyrir:  i er bókunarnúmer einhverrar bókunnar.
 	// Skilar: Room hlut sem fylgir bókunarnúmerinu i.
@@ -442,7 +442,7 @@ public class DBmanager {
 		ps.setInt(1, booking.id);
 		ps.executeUpdate();
 	}
-	
+
 	// Notkun: deleteHotel(h)
 	// Fyrir:  h er hótel.
 	// Eftir:  h hefur verið eytt úr gagnagrunnni.
@@ -468,9 +468,18 @@ public class DBmanager {
 	// Fyrir:  u er notandi.
 	// Eftir:  u hefur verið bætt í gagnagrunn.
 	protected static void addUser(User user) throws SQLException {
-		PreparedStatement ps = connection. prepareStatement("INSERT INTO Users(name,email) VALUES(?,?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Users(name,email) VALUES(?,?)");
 		ps.setString(1,user.name);
 		ps.setString(2,user.email);
+		ps.executeUpdate();
+	}
+
+	// Notkun: deleteUser(u)
+	// Fyrir:  u er netfang notandans.
+	// Eftir:  Notandi u hefur verið eytt úr gagnagrunn.
+	protected static void deleteUser(String email) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM Users WHERE email = ?");
+		ps.setString(1,email);
 		ps.executeUpdate();
 	}
 }
