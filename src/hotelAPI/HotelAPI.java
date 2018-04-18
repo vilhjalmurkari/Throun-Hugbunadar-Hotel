@@ -45,6 +45,10 @@ public class HotelAPI {
 		return user;
 	}
 
+	public User getUser(String name, String email) throws SQLException {
+		return DBmanager.getUser(name, email);
+	}
+
 	// Notkun: bookRoomFromUser(u,r)
 	// Fyrir:  u er notandi, r er herbergi
 	// Eftir:  herbergi r hefur verið bókað fyrir u í gagnagrunni,
