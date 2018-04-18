@@ -45,6 +45,10 @@ public class HotelAPI {
 		return user;
 	}
 
+	public User getUser(String name, String email) throws SQLException {
+		return DBmanager.getUser(name, email);
+	}
+
 	public void deleteUser(String email) throws SQLException {
 		DBmanager.deleteUser(email);
 	}

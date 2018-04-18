@@ -474,12 +474,31 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+
+	protected static User getUser(String name, String email) throws SQLException {
+		User user = null;
+
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Users WHERE name = ? AND email = ?");
+
+		ps.setString(1, name);
+		ps.setString(2, email);
+
+		ResultSet rs = ps.executeQuery();
+
+		if(rs.next()) {
+			user = new User(rs.getString("name"), rs.getString("email"));
+		}
+
+		return user;
+	}
+
 	// Notkun: deleteUser(u)
 	// Fyrir:  u er netfang notandans.
 	// Eftir:  Notandi u hefur verið eytt úr gagnagrunn.
 	protected static void deleteUser(String email) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Users WHERE email = ?");
-		ps.setString(1,email);
+
+		ps.setString(1, email);
 		ps.executeUpdate();
 	}
 }
