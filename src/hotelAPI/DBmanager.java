@@ -385,12 +385,12 @@ public class DBmanager {
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
 	public static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
 
-		PreparedStatement ps = connection.prepareStatement("SELECT COOUNT(*) FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS cunt FROM Bookings WHERE start_date < ? AND ? > end_date AND id = ?");
 		ps.setLong(1, start_date); // Opna bilið ]s;e[
 		ps.setLong(2, start_date);
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
-		return rs.getInt(0) == 0;
+		return rs.getInt("cunt") == 0;
 	}
 
 	// Notkun: getBookings(u)
@@ -474,12 +474,31 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+
+	protected static User getUser(String name, String email) throws SQLException {
+		User user = null;
+
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Users WHERE name = ? AND email = ?");
+
+		ps.setString(1, name);
+		ps.setString(2, email);
+
+		ResultSet rs = ps.executeQuery();
+
+		if(rs.next()) {
+			user = new User(rs.getString("name"), rs.getString("email"));
+		}
+
+		return user;
+	}
+
 	// Notkun: deleteUser(u)
 	// Fyrir:  u er netfang notandans.
 	// Eftir:  Notandi u hefur verið eytt úr gagnagrunn.
 	protected static void deleteUser(String email) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Users WHERE email = ?");
-		ps.setString(1,email);
+
+		ps.setString(1, email);
 		ps.executeUpdate();
 	}
 }

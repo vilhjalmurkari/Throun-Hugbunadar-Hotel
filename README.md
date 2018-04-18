@@ -21,6 +21,7 @@ ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rati
 User | makeUster(String name, String email) | Býr til notanda í gagnagrunni m.v. nafn og email, og skilar svo þeim notanda sem hlut
 void | deleteUser(String email) | Eyðir notanda úr gagnagrunni með netfangið email
 void | bookRoomForUser(User u, Room r) | Bókar herbergi r fyrir notanda u í gagnagrunni; bókun bætt við notanda hlut
+void | 
 
 
 

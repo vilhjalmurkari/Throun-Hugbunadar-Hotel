@@ -11,8 +11,9 @@ import hotelAPI.*;
 
 /*
 TODO:
+	- sýna hvaða notandi er að bóka
+	- geta valið tímabil bókunar
 	- er herbergi frátekið?
-	- virkar bókun
 	- ætti sennilega að láta room gluggann uppfærast þegar þú velur eitthvað annað hótel
 	- reset á enter
 	- esc clear
@@ -23,15 +24,23 @@ class View extends JPanel {
 	private static ArrayList<Hotel> hotels;
 	private static ArrayList<Room> rooms; 
 
+	private static JFrame login_frame;
 	private static JFrame main_frame;
 	private static JFrame room_frame;
 	private static JPanel room_main_panel;
 
+	private static JTextField name_input;
+	private static JTextField email_input;
+	private static JButton user_new_button;
+	private static JButton user_login_button;
+
 	private static JPanel main_panel;
+	private static JPanel hotel_search_panel;
 	private static JPanel search_panel;
 	private static JPanel input_panel;
 	private static JPanel button_panel;
 	private static JPanel bottom_panel;
+	private static JTextField user_logged_in_field;
 	private static JTextField city_field;
 	private static JComboBox min_rating_combo;
 	private static JComboBox max_rating_combo;
@@ -47,13 +56,51 @@ class View extends JPanel {
 	private static DefaultTableModel room_table_model;
 	private static int room_selected_index = -1;
 
+	public static void createLoginFrame() {
+		login_frame = new JFrame("Login");
+		login_frame.setSize(200, 160);
+
+		JPanel login_panel = new JPanel();
+		login_panel.setLayout(new BorderLayout());
+
+		name_input = new JTextField();
+		email_input = new JTextField();
+
+		JPanel temp_panel = new JPanel();
+		temp_panel.setLayout(new GridLayout(0, 1));
+		
+		temp_panel.add(createTextInputPanel("nafn: ", name_input));
+		temp_panel.add(createTextInputPanel("póstur: ", email_input));
+
+		login_panel.add(temp_panel, BorderLayout.NORTH);
+
+		temp_panel = new JPanel();
+		temp_panel.setLayout(new GridLayout(1, 0));
+
+		user_new_button = new JButton("nýskrá");
+		user_login_button = new JButton("innskrá");
+
+		temp_panel.add(user_new_button);
+		temp_panel.add(user_login_button);
+
+		login_panel.add(temp_panel, BorderLayout.SOUTH);
+		login_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		login_frame.add(login_panel);
+
+		login_frame.setVisible(true);
+	}
 
 	public static void createMainFrame() {
-		main_frame = new JFrame();
+		main_frame = new JFrame("Hótel");
 		main_frame.setSize(550, 500);
 
 		main_panel = new JPanel();
 		main_panel.setLayout(new BorderLayout());
+		main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		hotel_search_panel = new JPanel();
+		hotel_search_panel.setLayout(new BorderLayout());
 
 		search_panel =  new JPanel();
 		search_panel.setLayout(new BorderLayout());
@@ -141,36 +188,45 @@ class View extends JPanel {
 
 		bottom_panel.add(room_button, BorderLayout.EAST);
 
-		main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		main_panel.add(search_panel, BorderLayout.NORTH);
+		hotel_search_panel.add(search_panel, BorderLayout.NORTH);
 
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new GridLayout());
 		temp_panel.add(new JScrollPane(result_table));
 		temp_panel.setBackground(Color.WHITE);
 
-		main_panel.add(temp_panel, BorderLayout.CENTER);
-		main_panel.add(bottom_panel, BorderLayout.SOUTH);
+		hotel_search_panel.add(temp_panel, BorderLayout.CENTER);
+		hotel_search_panel.add(bottom_panel, BorderLayout.SOUTH);
 
+		temp_panel = new JPanel();
+		temp_panel.setLayout(new BorderLayout());
+
+		user_logged_in_field = new JTextField();
+		user_logged_in_field.setEditable(false);
+
+		temp_panel.add(createTextInputPanel("Skráður inn sem: ", user_logged_in_field));
+		temp_panel.setBorder(new EmptyBorder(0, 0, 10, 0));
+
+		main_panel.add(temp_panel, BorderLayout.NORTH);
+		main_panel.add(hotel_search_panel, BorderLayout.CENTER);
 
 		main_frame.add(main_panel);
-		main_frame.setVisible(true);
 	}
 
-	public static JPanel createInfoPanel(String label, JTextField info_field) {
+	public static JPanel createTextInputPanel(String label, JTextField input_field) {
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new BorderLayout());
 
 		temp_panel.setBorder(new EmptyBorder(0, 0, 2, 0));
 		temp_panel.add(new JLabel(label), BorderLayout.WEST);
 
-		temp_panel.add(info_field, BorderLayout.CENTER);
+		temp_panel.add(input_field, BorderLayout.CENTER);
 
 		return temp_panel;
 	}
 
 	public static void createRoomsFrame() {
-		room_frame = new JFrame();
+		room_frame = new JFrame("Herbergi");
 		room_frame.setSize(500, 500);
 
 		room_main_panel = new JPanel();
@@ -243,9 +299,16 @@ class View extends JPanel {
 	public static void main(String[] args) throws SQLException {
 		api = new HotelAPI();
 		//test_user = new User(1);
-
+		createLoginFrame();
 		createMainFrame();
 		createRoomsFrame();
+
+		login_frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent event){
+				System.out.println("exiting...");
+				System.exit(0);
+			}
+		});
 
 		main_frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event){
@@ -259,6 +322,61 @@ class View extends JPanel {
 				city_field.setText("");
 				min_rating_combo.setSelectedIndex(0);
 				max_rating_combo.setSelectedIndex(0);
+			}
+		});
+
+		user_new_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String name = name_input.getText();
+				String email = email_input.getText();
+
+				if(name.equals("") || email.equals("")) {
+					JOptionPane.showMessageDialog(null, "Vinsamlegast fyllið í eyðurnar.");
+					return;
+				}
+
+				try {
+					if(api.getUser(name, email) == null) {
+						test_user = api.makeUser(name, email);
+						JOptionPane.showMessageDialog(null, "Nýskráning tókst!");
+						login_frame.setVisible(false);
+						user_logged_in_field.setText(test_user.email);
+						main_frame.setVisible(true);
+					}else {
+						JOptionPane.showMessageDialog(null, "Notandi er nú þegar til í gagnagrunninum!");
+					}
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		});
+
+		user_login_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String name = name_input.getText();
+				String email = email_input.getText();
+
+				if(name.equals("") || email.equals("")) {
+					JOptionPane.showMessageDialog(null, "Vinsamlegast fyllið í eyðurnar.");
+					return;
+				}
+
+				try {
+					User user = api.getUser(name, email);
+
+					if(user == null) {
+						JOptionPane.showMessageDialog(null, "Þessi notandi er ekki til!");
+						return;
+					}else {
+						test_user = user;
+						JOptionPane.showMessageDialog(null, "Innskráning tókst!");
+						login_frame.setVisible(false);
+						user_logged_in_field.setText(test_user.email);
+						main_frame.setVisible(true);
+					}
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 
@@ -320,7 +438,7 @@ class View extends JPanel {
 		book_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					api.bookRoomForUser(api.makeUser("Jón Jónsson", "jon@jon.com"), rooms.get(room_selected_index));
+					api.bookRoomForUser(test_user, rooms.get(room_selected_index), 0, 0);
 					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
 				}catch(SQLException e) {
 					System.out.println(e.getMessage());
