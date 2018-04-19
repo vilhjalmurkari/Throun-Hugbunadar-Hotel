@@ -34,6 +34,18 @@ public class HotelAPI {
 		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating);
 	}
 
+	public static boolean isRoomFree(Room r, Date start_date, Date end_date) throws SQLException {
+		return DBmanager.isRoomFree(r, start_date, end_date);
+	}
+
+	public ArrayList<Room> availableRooms(Hotel hotel, Date start_date, Date end_date) {
+		ArrayList<Room> result = new ArrayList<Room>();
+
+		for(Room r : hotel.rooms) {
+			if(isRoomFree(r)) result.add(r);
+		}
+	}
+
 	// Notkun: makeUser(n,e)
 	// Fyrir:  n er nafn notanda,
 	//         e er tölvupóstfang notenda
@@ -53,7 +65,7 @@ public class HotelAPI {
 	// Fyrir:  u er notandi, r er herbergi
 	// Eftir:  herbergi r hefur verið bókað fyrir u í gagnagrunni,
 	//         bókun hefur verið bætt við í u.
-	public void bookRoomForUser(User user, Room room, long start_date, long end_date) throws SQLException {
+	public void bookRoomForUser(User user, Room room, Date start_date, Date end_date) throws SQLException {
 		user.makeBooking(room,start_date,end_date);
 	}
 
@@ -64,5 +76,4 @@ public class HotelAPI {
 	public void deleteUser(String email) throws SQLException {
 		DBmanager.deleteUser(email);
 	}
-
 }

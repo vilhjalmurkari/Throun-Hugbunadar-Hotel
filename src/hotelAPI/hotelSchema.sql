@@ -4,12 +4,6 @@ CREATE TABLE Hotels(
 	description VARCHAR(140),
 	city VARCHAR(32),
 	PRIMARY KEY(name, city)
-	/*
-	name + city make-ar sense því held það séu ekki hótel á sama stað með sama nafn
-	ef við værum með id þá værum við í raun og veru að gera þetta nema við myndum leyfa það að
-	hótel megi hafa sama nafn og vera í sömu borg samtímis, og þá þyrftum við einhvernveginn að vinna
-	okkur úr því ef það kemur upp, en hér segjum við einfaldlega að það sé ekki leyfilegt.
-	*/
 );
 
 CREATE TABLE Hotel_tags(

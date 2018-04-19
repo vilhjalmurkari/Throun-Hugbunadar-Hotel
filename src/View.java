@@ -11,7 +11,6 @@ import hotelAPI.*;
 
 /*
 TODO:
-	- sýna hvaða notandi er að bóka
 	- geta valið tímabil bókunar
 	- er herbergi frátekið?
 	- ætti sennilega að láta room gluggann uppfærast þegar þú velur eitthvað annað hótel
@@ -440,6 +439,10 @@ class View extends JPanel {
 				try {
 					api.bookRoomForUser(test_user, rooms.get(room_selected_index), 0, 0);
 					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
+					room_table_model.removeRow(room_selected_index);
+					Room r = rooms.remove(room_selected_index);
+					rooms.add(r);
+					
 				}catch(SQLException e) {
 					System.out.println(e.getMessage());
 				}
