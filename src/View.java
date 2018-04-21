@@ -3,7 +3,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
-import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
 import hotelAPI.*;
@@ -382,6 +381,7 @@ class View extends JPanel {
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
+					/*
 					int row_count = room_table_model.getRowCount();
 
 					for(int i = 0; i < row_count; i++) {
@@ -393,7 +393,7 @@ class View extends JPanel {
 					for(Room r : rooms) {
 						room_table_model.addRow(new Object[] {r.size, r.bed_count, r.price});
 					}
-
+					*/
 					room_frame.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
