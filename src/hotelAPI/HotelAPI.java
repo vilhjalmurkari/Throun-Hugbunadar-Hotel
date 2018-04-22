@@ -33,7 +33,7 @@ public class HotelAPI {
 		if(hotel_city_or_name == null) hotel_city_or_name = "";
 		if(min_rating == -1) min_rating = 0;
 		if(max_rating == -1) max_rating = 5;
-		if(start_date == -1) start_date = (long)0;
+		if(start_date == -1) start_date = Long.MIN_VALUE;
 		if(end_date == -1) end_date = Long.MAX_VALUE;
 
 		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating, start_date, end_date);
