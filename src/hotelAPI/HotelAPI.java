@@ -39,6 +39,19 @@ public class HotelAPI {
 		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating, start_date, end_date);
 	}
 
+	/** ATH: þetta er sértilvik af hotelSearch sem leitar eitt ár fram í tímann frá deginum í dag.
+	 *	Notkun: hotelSearch(c,min,max)
+	 *  Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg),
+	 *          en null ef hann skiptir ekki máli.
+	 *          min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
+	 *          en er -1 ef ekki skiptir máli.
+	 *  Skilar: lista af hótelum sem uppfylla leitarskilyrði.
+	 */
+	public ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+		long current_time = System.currentTimeMillis() / 1000L; 
+		return hotelSearch(hotel_city_or_name, min_rating, max_rating, current_time, current_time + (365 * 24 * 60 * 60));
+	}
+
 	/** Notkun: availableRooms(r,start,end)
 	 *  Fyrir:
 	 * Skilar:
