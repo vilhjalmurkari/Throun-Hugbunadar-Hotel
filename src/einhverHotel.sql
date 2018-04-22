@@ -1,3 +1,6 @@
+
+insert into Users (name, email, is_admmin) values ('villi','villi@villi.com',1);
+
 insert into Hotels (name, rating, description, city) values ('Hotel Holt', 3, 'Fínt hótel með góðri þjónustu, nálægt miðbæ Reykjavíkur', "Reykjavík");
 insert into Hotels (name, rating, description, city) values ('Hotel Borg', 4, 'Hótel staðset í miðbæ Reykjavíkur', "Reykjavík");
 insert into Hotels (name, rating, description, city) values ('Hotel Foss', 4, 'Virkilega flott hótel', "Reykjavík");
