@@ -186,4 +186,45 @@ class HotelAPITest {
 	        System.err.println(e.getMessage());
 	    }
 	}
+	
+	@Test
+	void deleteHotelTest() {
+		try {
+			Hotel ht = test.getAllHotels();
+			int old_hotel_count = ht.size();
+
+			testRoom = new Hotel("bla1", 4, "50", "Reykjavík", null, null);
+
+			test.deleteHotel( testRoom );
+
+			ht = test.getAllHotels();
+
+			assertTrue("Ã¾aÃ° eru færri herbergi eftir kall Ã¡ Ã¾etta fall", ht.size() < old_hotel_count);
+		}
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }
+	}
+
+	
+
+	@Test
+	void deleteRoomTest() {
+		try {
+			Hotel ht = test.getAllHotels().get(0);
+			int old_room_count = ht.rooms.size();
+	
+			testRoom = new Room(50, 400, 4, null);
+
+			test.deleteRoom( testRoom );
+			ht = test.getAllHotels().get(0);
+
+			assertTrue("Ã¾aÃ° eru fleiri herbergi eftir kall Ã¡ Ã¾etta fall", ht.rooms.size() < old_room_count);
+		}
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }
+	}
 }
