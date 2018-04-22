@@ -467,7 +467,7 @@ public class DBmanager {
 
 		HashMap<Integer,Booking> bookings = new HashMap<Integer,Booking>();
 		while(rs.next()) {
-			Room r = getRoomById(rs.getInt("room_id"));
+			Room r = null;
 			long s = rs.getLong("start_date");
 			long e = rs.getLong("end_date");
 			Booking b = new Booking(r,s,e);
