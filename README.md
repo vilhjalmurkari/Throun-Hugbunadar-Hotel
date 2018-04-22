@@ -42,6 +42,7 @@ void | addHotels(ArrayList<Hotel> hotels) | Bætirhótelum í gagnagrunn
 void | addRoomToHotel(Room room, Hotel hotel) | Bætir herbergi við viðeigandi hótel
 void | deleteHotel(Hotel hotel) | Eyðir viðeigandi hóteli úr gagnagrunninum
 void | deleteRoom(Room room) | Eyðir viðeigandi herbergi úr gagnagrunni
+void | changeHotelDescription(String description, Hotel hotel) | Breyti lýsingu á hóteli
 
 ----
 

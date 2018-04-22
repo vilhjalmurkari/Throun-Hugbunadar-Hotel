@@ -125,4 +125,14 @@ public class AdminAPI {
 			DBmanager.deleteRoom(room);
 		}
 	}
+	
+	// Notkun: changeHotelDescription(d,h)
+	// Fyrir:  d er lýsing, h er hótel.
+	// Eftir:  h hefur lýsingu u.
+	public void changeHotelDescription(String description, Hotel hotel) throws SQLException {
+		if(isAdmin) {
+			DBmanager.changeHotelDescription(description, hotel);
+		}
+	}
+
 }
