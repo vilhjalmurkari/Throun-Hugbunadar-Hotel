@@ -11,6 +11,7 @@ import hotelAPI.*;
 class HotelAPITest {
 	private static HotelAPI test;
 	private static User testUser;
+	private static Room testRoom;
 
 	@BeforeAll
 	static void setUp() throws Exception {
@@ -29,7 +30,7 @@ class HotelAPITest {
 	static void tearDown() {
 
 		try {
-			test.deleteUser(testUser.email);
+			test.deleteUser(testUser);
 
 			testUser = null;
 			test = null;
@@ -75,7 +76,7 @@ class HotelAPITest {
 
 	@Test
 	void hotelSearchTest() {
-		try {
+		/*try {
 			// Prófa fyrir margar mismunandi innsetningar aðferðir
 			// Eins og við höfum þetta í GUI, þá er einungis hægt að velja
 			// tölur úr lista frá 1-5.
@@ -101,12 +102,12 @@ class HotelAPITest {
 		catch(SQLException e)
 	    {
 	        System.err.println(e.getMessage());
-	    }
+	    }*/
 	}
 
 
 	@Test
-	void addUserTest() {
+	void makeUserTest() {
 		try {
 
 			User newUser = test.makeUser( "Testing", "test@test.com" );
@@ -114,6 +115,23 @@ class HotelAPITest {
 			assertTrue("Rangt", rettEmail.equals(newUser.email));
 
 
+
+		}
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }
+	}
+	
+	@Test
+	void getUserTest() {
+		try {
+
+			User user = test.getUser( "Testing", "test@test.com" );
+			String rettEmail = "test@test.com";
+			String rettNafn = "Testing";
+			assertTrue("Rangt", rettEmail.equals(user.email));
+			assertTrue("Rangt", rettNafn.equals(user.name));
 
 		}
 		catch(SQLException e)
