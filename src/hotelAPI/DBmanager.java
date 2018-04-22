@@ -73,7 +73,7 @@ public class DBmanager {
 			sqlStatement.execute("PRAGMA case_sensitive_like = false");
 		}
 
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels AS h, Rooms AS r WHERE (h.name=r.hotel_name AND h.city=r.hotel_city) AND (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ? AND r.id <> (SELECT room_id FROM Rooms AS r1, Bookings AS b1 WHERE r1.id = b1.room_id AND b1.start_date >= ? AND b1.end_date <= ?)");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM (Hotels, Rooms) LEFT OUTER JOIN Bookings WHERE hotel_name = name AND hotel_city = city AND (name LIKE ? OR city LIKE ?) AND rating >= ? AND rating <= ? AND NOT EXISTS(SELECT * FROM Bookings WHERE room_id = Rooms.id AND ? < end_date AND start_date < ?) GROUP BY Rooms.id");
 
 		ps.setString(1, "%" + hotel_city_or_name + "%");
 		ps.setString(2, "%" + hotel_city_or_name + "%");

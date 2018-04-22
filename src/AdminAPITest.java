@@ -1,3 +1,4 @@
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
@@ -9,16 +10,14 @@ import hotelAPI.*;
 
 
 class HotelAPITest {
-	private static HotelAPI test;
+	private static AdminAPI test;
 	private static User testUser;
-	private static Room testRoom;
 
 	@BeforeAll
 	static void setUp() throws Exception {
 		try {
-
-			test = new HotelAPI();
-			testUser = new User("Testing", "test@test.com");
+			testUser = new User("Test Admin", "admin@test.com");
+			test = new HotelAPI(testUser);
 		}
 		catch(SQLException e)
 	    {
@@ -30,7 +29,7 @@ class HotelAPITest {
 	static void tearDown() {
 
 		try {
-			test.deleteUser(testUser);
+			test.deleteUser(testUser.email);
 
 			testUser = null;
 			test = null;
@@ -44,15 +43,15 @@ class HotelAPITest {
 	@Test
 	void getHotelTest() {
 		try {
-			//Prófa fyrir margar mismunandi innsetningar aðferðir
-			Hotel resultHotel = test.getHotel("Hotel Holt", "Reykjavík");
+			//PrÃ³fa fyrir margar mismunandi innsetningar aÃ°ferÃ°ir
+			Hotel resultHotel = test.getHotel("Hotel Holt", "ReykjavÃ­k");
 			String rettNafn = "Hotel Holt";
 			assertTrue( "Rangt",rettNafn.equals(resultHotel.name));
 
-			resultHotel = test.getHotel("bull strengur", "Reykjavík");
+			resultHotel = test.getHotel("bull strengur", "ReykjavÃ­k");
 			assertTrue( "Rangt", resultHotel == null);
 
-			resultHotel = test.getHotel(null, "Reykjavík");
+			resultHotel = test.getHotel(null, "ReykjavÃ­k");
 			assertTrue( "Rangt", resultHotel == null);
 
 			resultHotel = test.getHotel("Hotel Holt", "Reykk");
@@ -76,10 +75,10 @@ class HotelAPITest {
 
 	@Test
 	void hotelSearchTest() {
-		/*try {
-			// Prófa fyrir margar mismunandi innsetningar aðferðir
-			// Eins og við höfum þetta í GUI, þá er einungis hægt að velja
-			// tölur úr lista frá 1-5.
+		try {
+			// PrÃ³fa fyrir margar mismunandi innsetningar aÃ°ferÃ°ir
+			// Eins og viÃ° hÃ¶fum Ã¾etta Ã­ GUI, Ã¾Ã¡ er einungis hÃ¦gt aÃ° velja
+			// tÃ¶lur Ãºr lista frÃ¡ 1-5.
 			ArrayList<Hotel> resultlist = test.hotelSearch("reyk", 2, 5);
 			assertEquals(8, resultlist.size());
 
@@ -102,12 +101,12 @@ class HotelAPITest {
 		catch(SQLException e)
 	    {
 	        System.err.println(e.getMessage());
-	    }*/
+	    }
 	}
 
 
 	@Test
-	void makeUserTest() {
+	void addUserTest() {
 		try {
 
 			User newUser = test.makeUser( "Testing", "test@test.com" );
@@ -115,23 +114,6 @@ class HotelAPITest {
 			assertTrue("Rangt", rettEmail.equals(newUser.email));
 
 
-
-		}
-		catch(SQLException e)
-	    {
-	        System.err.println(e.getMessage());
-	    }
-	}
-	
-	@Test
-	void getUserTest() {
-		try {
-
-			User user = test.getUser( "Testing", "test@test.com" );
-			String rettEmail = "test@test.com";
-			String rettNafn = "Testing";
-			assertTrue("Rangt", rettEmail.equals(user.email));
-			assertTrue("Rangt", rettNafn.equals(user.name));
 
 		}
 		catch(SQLException e)
@@ -285,7 +267,7 @@ class HotelAPITest {
 
 			testHotel = new Hotel("bla", 4, "hello my dude", 111, null,null);
 			test.addHotel(testHotel);
-			assertTrue("Ã¾etta er Ã­ lagi", testHotel != null);
+			assertTrue("ÃƒÂ¾etta er ÃƒÂ­ lagi", testHotel != null);
 		}
 		catch(SQLException e)
 	    {
@@ -303,7 +285,7 @@ class HotelAPITest {
 
 			test.addRoomToHotel( testRoom, ht);
 
-			assertTrue("Ã¾aÃ° eru fleiri herbergi eftir kall Ã¡ Ã¾etta fall", ht.rooms.size() > old_room_count);
+			assertTrue("ÃƒÂ¾aÃƒÂ° eru fleiri herbergi eftir kall ÃƒÂ¡ ÃƒÂ¾etta fall", ht.rooms.size() > old_room_count);
 		}
 		catch(SQLException e)
 	    {
