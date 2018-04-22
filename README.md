@@ -17,7 +17,7 @@ Skilagildi | Fallakall | Um notkun
 :---|:---|:---
 void | HotelAPI() | Initialiser
 Hotel | getHotel(String name, String city) | Sækir eina hótelið sem uppfyllir tvenndina (nafn,borg)
-ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rating | Leitar að hótelum með leitarstreng city_or_name en síar skv. fjöldi stjarna sem hótelin hafa [min_rating;max_rating]
+ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rating | Leitar að hótelum með leitarstreng city_or_name en síar skv. fjöldi stjarna sem hótelin hafa [min_rating;max_rating] og eru laus
 boolean | isRoomFree(Room r, long start_date, long end_date) | Athugar hvort viðeigandi herbergi sé laust
 ArrayList<Room> | availableRooms(Hotel hotel, long start_date, long end_date) | Athugar hvaða herbergi í viðeigandi hóteli séu laus
 User | makeUser(String name, String email) | Býr til notanda í gagnagrunni m.v. nafn og email, og skilar svo þeim notanda sem hlut
