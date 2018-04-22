@@ -7,7 +7,7 @@ Verkefni í Þróun Hugbúnaðar.
 
 
 ### Að keyra hótelleit
-Sæktu /src/ og keyrðu ```build.sh run``` eða ```build.bat run``` eftir því hvort þú sért á Unix eða Windows.   
+Sæktu ```/src/``` og keyrðu ```build.sh run``` eða ```build.bat run``` eftir því hvort þú sért á Unix eða Windows.   
 Það ætti að birtast notendaviðmót sem leyfir þér að velja hótel og síðan herbergi.
 
 ----
@@ -17,7 +17,7 @@ Skilagildi | Fallakall | Um notkun
 :---|:---|:---
 void | HotelAPI() | Initialiser
 Hotel | getHotel(String name, String city) | Sækir eina hótelið sem uppfyllir tvenndina (nafn,borg)
-ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rating | Leitar að hótelum með leitarstreng city_or_name en síar skv. fjöldi stjarna sem hótelin hafa [min_rating;max_rating] og eru laus
+ArrayList<Hotel> | hotelSearch(String city_or_name, int min_rating, int max_rating, long start_date, long end_date) | Leitar að hótelum með leitarstreng city_or_name en síar skv. fjöldi stjarna sem hótelin hafa [min_rating;max_rating] og eru laus
 boolean | isRoomFree(Room r, long start_date, long end_date) | Athugar hvort viðeigandi herbergi sé laust
 ArrayList<Room> | availableRooms(Hotel hotel, long start_date, long end_date) | Athugar hvaða herbergi í viðeigandi hóteli séu laus
 User | makeUser(String name, String email) | Býr til notanda í gagnagrunni m.v. nafn og email, og skilar svo þeim notanda sem hlut
@@ -30,9 +30,9 @@ void | deleteUser(String email) | Eyðir notanda úr gagnagrunni með netfangið ema
 ## AdminAPI
 Skilagildi | Fallakall | Um notkun
 :---|:---|:---
-void | AdminAPI() | Initialiser
-void | escalateUserPriveleges(User user) | Gefur user admin réttindi.
-void | descalateUserPriveleges(User user) | Lætur user missa admin réttindi.
+void | AdminAPI(User user) | Initialiser; user verður að hafa admin réttindi til að geta notað föll
+void | escalateUserPriveleges(User user) | Gefur user admin réttindi
+void | descalateUserPriveleges(User user) | Lætur user missa admin réttindi
 void | setRoomPrice(int new_price, Room room) | Verði á viðeigandi herbergi hefur verið breytt
 void | setRoomPrice(int new_price, ArrayList<Room> rooms) | Verði á viðeigandi herbergjum hefur verið breytt
 void | changeRoomPriceByAmount(int price_change, Room room) | Verð á viðeigandi herbergi hækkar eða lækkar um price_change
@@ -59,7 +59,7 @@ ArrayList<Room> | rooms | Listi af herbergjum í hóteli
 #### Föll
 Skilagildi | Fallakall | Um notkun
 :---|:---|:---
-void | Hotel() | Initialiser
+void | Hotel(String name, int rating, String description, String city, ArrayList<String> tags, ArrayList<Room> rooms) | Initialiser
 void | printHotel() | Prentar upplýsingar um hótelið á skynsamlegan máta
 
 ----
@@ -74,4 +74,10 @@ int | size | Fermetrafjöldi þessa herbergis
 int | price | Verð þessa herbergis
 int | bed_count | Fjöldi rúma í þessu herbergi
 ArrayList<String> | tags | Tög sem þetta herbergi hefur
+
+#### Föll
+Skilagildi | Fallakall | Um notkun
+:---|:---|:---
+void | Room(int size, int bed_count, int price, ArrayList<String> tags) | Initialiser
+
 
