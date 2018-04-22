@@ -1,8 +1,9 @@
-package hotelAPI
+package hotelAPI;
 
 import java.util.ArrayList;
+import java.sql.*;
 
-class AdminAPI {
+public class AdminAPI {
 	private User user;
 	private boolean isAdmin;
 
@@ -25,7 +26,7 @@ class AdminAPI {
 		}
 	}
 
-	// Notkun: escalateUserPriveleges(u)
+	// Notkun: descalateUserPriveleges(u)
 	// Fyrir:  u er notandi.
 	// Eftir:  u hefur misst (ef hafði) admin réttindi.
 	public void descalateUserPriveleges(User user) {
