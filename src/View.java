@@ -68,8 +68,8 @@ class View extends JPanel {
 		JPanel login_panel = new JPanel();
 		login_panel.setLayout(new BorderLayout());
 
-		name_input = new JTextField("villi");
-		email_input = new JTextField("villi@villi.com");
+		name_input = new JTextField();
+		email_input = new JTextField();
 
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new GridLayout(0, 1));
