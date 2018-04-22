@@ -59,6 +59,8 @@ class View extends JPanel {
 	private static DefaultTableModel room_table_model;
 	private static int room_selected_index = -1;
 
+	private static LocalDateTime current_date;
+
 	public static void createLoginFrame() {
 		login_frame = new JFrame("Login");
 		login_frame.setSize(200, 160);
@@ -243,13 +245,15 @@ class View extends JPanel {
 		JPanel date_combo_panel =  new JPanel();
 		date_combo_panel.setLayout(new GridLayout(2, 2));
 
-		LocalDateTime current_date = LocalDateTime.now();
+		current_date = LocalDateTime.now();
 		ArrayList<String> dates = new ArrayList<String>();
 
 		for(int i = 0; i < 365; i++) {
 			dates.add(current_date.getDayOfMonth() + " - " + current_date.getMonth() + " - " + current_date.getYear());
 			current_date = current_date.plusDays(1);
 		}
+
+		current_date = LocalDateTime.now();
 
 		start_date_combo = new JComboBox(dates.toArray());
 		end_date_combo = new JComboBox(dates.toArray());
@@ -334,14 +338,36 @@ class View extends JPanel {
 		room_frame.add(room_main_panel);
 	}
 
+	public static void clearRoomTable() {
+		rooms.clear();
+
+		int row_count = room_table_model.getRowCount();
+
+		for(int i = 0; i < row_count; i++) {
+			room_table_model.removeRow(0);
+		}
+	}
+
+	public static void updateRoomTable(LocalDate start_date, LocalDate end_date) throws SQLException {
+		clearRoomTable();
+
+		for(Room r : hotels.get(table_selected_index).rooms) {
+			if(api.isRoomFree(r, start_date.toEpochDay(), end_date.toEpochDay())) {
+				rooms.add(r);
+				room_table_model.addRow(new Object[] {r.size, r.bed_count, r.price});
+			}
+		}
+	}
+
 	public static void main(String[] args) throws SQLException {
 		api = new HotelAPI();
+
+		hotels = new ArrayList<Hotel>();
+		rooms = new ArrayList<Room>();
 		//test_user = new User(1);
 		createLoginFrame();
 		createMainFrame();
 		createRoomsFrame();
-
-		System.gc();
 
 		login_frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event){
@@ -423,21 +449,10 @@ class View extends JPanel {
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
-					/*
-					int row_count = room_table_model.getRowCount();
-
-					for(int i = 0; i < row_count; i++) {
-						room_table_model.removeRow(0);
-					}
-
-					rooms = hotels.get(table_selected_index).rooms;
-
-					for(Room r : rooms) {
-						room_table_model.addRow(new Object[] {r.size, r.bed_count, r.price});
-					}
-					*/
+					clearRoomTable();
+					start_date_combo.setSelectedIndex(0);
+					end_date_combo.setSelectedIndex(0);
 					room_frame.setVisible(true);
-					JOptionPane.showMessageDialog(null, "Stilltu tímabil");
 				}else {
 					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
 				}
@@ -477,10 +492,40 @@ class View extends JPanel {
 			}
 		});
 
+		start_date_combo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					LocalDateTime start_date = current_date.plusDays(start_date_combo.getSelectedIndex());
+					LocalDateTime end_date = current_date.plusDays(end_date_combo.getSelectedIndex());
+
+					updateRoomTable(start_date.toLocalDate(), end_date.toLocalDate());
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		});
+
+		end_date_combo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					LocalDateTime start_date = current_date.plusDays(start_date_combo.getSelectedIndex());
+					LocalDateTime end_date = current_date.plusDays(end_date_combo.getSelectedIndex());
+
+					updateRoomTable(start_date.toLocalDate(), end_date.toLocalDate());
+				}catch(SQLException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		});
+
 		book_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					api.bookRoomForUser(test_user, rooms.get(room_selected_index), 0, 0);
+					//oj
+					api.bookRoomForUser(test_user, rooms.get(room_selected_index),
+										current_date.plusDays(start_date_combo.getSelectedIndex()).toLocalDate().toEpochDay(),
+										current_date.plusDays(end_date_combo.getSelectedIndex()).toLocalDate().toEpochDay());
+
 					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
 					room_table_model.removeRow(room_selected_index);
 					Room r = rooms.remove(room_selected_index);

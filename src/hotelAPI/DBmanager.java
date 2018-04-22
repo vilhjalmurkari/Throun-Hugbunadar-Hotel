@@ -409,7 +409,10 @@ public class DBmanager {
 	//         Skilar satt ef herbergið var bókað,
 	//         ósatt ef herbergið var ekki laust.
 	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
-		if( !isRoomFree(room, start_date, end_date) ) return false;
+		if(!isRoomFree(room, start_date, end_date)) {
+			System.out.println("room is not free");
+			return false;
+		}
 
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Bookings(user_email, room_id, start_date, end_date, confirmed) VALUES(?, ?, ?, ?, ?)");
 
@@ -418,6 +421,7 @@ public class DBmanager {
 		ps.setLong(3, start_date);
 		ps.setLong(4, end_date);
 		ps.setBoolean(5, false); // Bókanir eru alltaf fyrst óstaðfestar.
+		System.out.println("hello");
 
 		ps.executeUpdate();
 		return true;
@@ -427,12 +431,18 @@ public class DBmanager {
 	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
 	public static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS total FROM Bookings WHERE ((? >= start_date AND ? <= end_date) OR (? >= start_date AND ? <= end_date) OR (? < start_date AND ? > end_date)) AND ? = room_id");
 
-		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS total FROM Bookings WHERE start_date < ? AND ? > end_date AND room_id = ?");
-		ps.setLong(1, start_date); // Opna bilið ]s;e[
-		ps.setLong(2, end_date);
-		ps.setInt(3, r.id);
+		ps.setLong(1, start_date);
+		ps.setLong(2, start_date);
+		ps.setLong(3, end_date);
+		ps.setLong(4, end_date);
+		ps.setLong(5, start_date);
+		ps.setLong(6, end_date);
+		ps.setInt(7, r.id);
+		
 		ResultSet rs = ps.executeQuery();
+
 		return rs.getInt("total") == 0;
 	}
 
