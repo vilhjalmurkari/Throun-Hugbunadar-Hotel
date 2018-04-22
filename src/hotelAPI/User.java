@@ -6,9 +6,9 @@ import java.sql.*;
 
 public class User {
 
-	protected String name;
-	protected String email;
-	protected HashMap<Integer, Booking> bookings;
+	public String name;
+	public String email;
+	public HashMap<Integer, Booking> bookings;
 
 	public User(String name, String email) throws SQLException {
 		this.name = name;
