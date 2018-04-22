@@ -3,6 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.sql.*;
 import hotelAPI.*;
@@ -49,6 +52,8 @@ class View extends JPanel {
 	private static int table_selected_index = -1;
 
 	private static JButton room_button;
+	private static JComboBox start_date_combo;
+	private static JComboBox end_date_combo;
 	private static JButton book_button;
 	private static JTable room_table;
 	private static DefaultTableModel room_table_model;
@@ -61,8 +66,8 @@ class View extends JPanel {
 		JPanel login_panel = new JPanel();
 		login_panel.setLayout(new BorderLayout());
 
-		name_input = new JTextField();
-		email_input = new JTextField();
+		name_input = new JTextField("villi");
+		email_input = new JTextField("villi@villi.com");
 
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new GridLayout(0, 1));
@@ -231,13 +236,47 @@ class View extends JPanel {
 		room_main_panel.setLayout(new BorderLayout());
 		room_main_panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+		JPanel top_panel = new JPanel();
+		top_panel.setLayout(new BorderLayout());
+		top_panel.setBorder(new EmptyBorder(0, 0, 5, 0));
+
+		JPanel date_combo_panel =  new JPanel();
+		date_combo_panel.setLayout(new GridLayout(2, 2));
+
+		LocalDateTime current_date = LocalDateTime.now();
+		ArrayList<String> dates = new ArrayList<String>();
+
+		for(int i = 0; i < 365; i++) {
+			dates.add(current_date.getDayOfMonth() + " - " + current_date.getMonth() + " - " + current_date.getYear());
+			current_date = current_date.plusDays(1);
+		}
+
+		start_date_combo = new JComboBox(dates.toArray());
+		end_date_combo = new JComboBox(dates.toArray());
+
+		String[] label_names = new String[] {"Upphaf bókunar", "Lok bókunar"};
+		for(String s : label_names) {
+			JLabel label = new JLabel(s);
+			label.setBorder(new EmptyBorder(0, 5, 0, 0));
+			date_combo_panel.add(label);
+		}
+		
+		date_combo_panel.add(start_date_combo);
+		date_combo_panel.add(end_date_combo);
+
+		top_panel.add(date_combo_panel, BorderLayout.WEST);
+		room_main_panel.add(top_panel, BorderLayout.NORTH);
+
+		JPanel rest_panel = new JPanel();
+		rest_panel.setLayout(new BorderLayout());
+
 		JPanel temp_panel = new JPanel();
 		temp_panel.setLayout(new BorderLayout());
 		temp_panel.setBorder(new EmptyBorder(0, 0, 5, 0));
 
 		temp_panel.add(new JLabel("Herbergi:"), BorderLayout.WEST);
 
-		room_main_panel.add(temp_panel, BorderLayout.NORTH);
+		rest_panel.add(temp_panel, BorderLayout.NORTH);
 
 		room_table_model = new DefaultTableModel(new String[]{"Stærð", "Fjöldi rúma", "verð"}, 0) {
 			@Override
@@ -282,14 +321,15 @@ class View extends JPanel {
 		temp_panel.add(new JScrollPane(room_table));
 		temp_panel.setBackground(Color.WHITE);
 
-		room_main_panel.add(temp_panel, BorderLayout.CENTER);
+		rest_panel.add(temp_panel, BorderLayout.CENTER);
 
 		temp_panel = new JPanel();
 		temp_panel.setLayout(new BorderLayout());
 		book_button = new JButton("bóka");
 		temp_panel.add(book_button, BorderLayout.EAST);
 
-		room_main_panel.add(temp_panel, BorderLayout.SOUTH);
+		rest_panel.add(temp_panel, BorderLayout.SOUTH);
+		room_main_panel.add(rest_panel, BorderLayout.CENTER);
 
 		room_frame.add(room_main_panel);
 	}
@@ -300,6 +340,8 @@ class View extends JPanel {
 		createLoginFrame();
 		createMainFrame();
 		createRoomsFrame();
+
+		System.gc();
 
 		login_frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event){
@@ -312,14 +354,6 @@ class View extends JPanel {
 			public void windowClosing(WindowEvent event){
 				System.out.println("exiting...");
 				System.exit(0);
-			}
-		});
-
-		reset_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				city_field.setText("");
-				min_rating_combo.setSelectedIndex(0);
-				max_rating_combo.setSelectedIndex(0);
 			}
 		});
 
@@ -378,6 +412,14 @@ class View extends JPanel {
 			}
 		});
 
+		reset_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				city_field.setText("");
+				min_rating_combo.setSelectedIndex(0);
+				max_rating_combo.setSelectedIndex(0);
+			}
+		});
+
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
@@ -395,6 +437,7 @@ class View extends JPanel {
 					}
 					*/
 					room_frame.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Stilltu tímabil");
 				}else {
 					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
 				}
