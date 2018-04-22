@@ -398,7 +398,7 @@ class View extends JPanel {
 						test_user = api.makeUser(name, email);
 						JOptionPane.showMessageDialog(null, "Nýskráning tókst!");
 						login_frame.setVisible(false);
-						user_logged_in_field.setText(test_user.email);
+						user_logged_in_field.setText(email);
 						main_frame.setVisible(true);
 					}else {
 						JOptionPane.showMessageDialog(null, "Notandi er nú þegar til í gagnagrunninum!");
@@ -429,7 +429,7 @@ class View extends JPanel {
 						test_user = user;
 						JOptionPane.showMessageDialog(null, "Innskráning tókst!");
 						login_frame.setVisible(false);
-						user_logged_in_field.setText(test_user.email);
+						user_logged_in_field.setText(email);
 						main_frame.setVisible(true);
 					}
 				}catch(SQLException e) {
