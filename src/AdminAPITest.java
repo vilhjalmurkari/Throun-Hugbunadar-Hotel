@@ -9,7 +9,7 @@ import java.sql.*;
 import hotelAPI.*;
 
 
-class HotelAPITest {
+class AdminAPITest {
 	private static AdminAPI test;
 	private static User testUser;
 	private static HotelAPI hotelAPI;
@@ -34,8 +34,8 @@ class HotelAPITest {
 	static void tearDown() {
 
 		try {
-			hotelAPI.deleteUser(testUser.email);
-			hotelAPI.deleteUser(someUser.email);
+			hotelAPI.deleteUser(testUser);
+			hotelAPI.deleteUser(someUser);
 
 			testUser = null;
 			someUser = null;
@@ -79,22 +79,22 @@ class HotelAPITest {
 	@Test
 	void setRoomPriceTest() {
 		try {
-			Room test_room = hotelAPI.getRoomsFromHotel(hotelAPI.getAllHotels().get(0)).get(0);
+			Room test_room = hotelAPI.getRoomsFromHotel(hotelAPI.hotelSearch("",-1,-1,-1,-1).get(0)).get(0);
 			int new_value = -1;
 			test.setRoomPrice(new_value, test_room);
-			assertEquals(test_room.price, new_value);
+			assertEqual(test_room.price, new_value);
 			
-			int new_value = 800;
+			new_value = 800;
 			test.setRoomPrice(new_value, test_room);
-			assertEquals(test_room.price, new_value);
+			assertEqual(test_room.price, new_value);
 	
 
 			// Testing list of hotels
-			ArrayList<Room> rvkHotels = hotelAPI.hotelSearch("Reykjavík", -1,-1,-1,-1);
+			ArrayList<Hotel> rvkHotels = hotelAPI.hotelSearch("Reykjavík", -1,-1,-1,-1);
 			int newPrice = 500;
-			test.setRoomPrice(newPrice, rvkHotels);
+			test.setRoomPrice(newPrice, rvkHotels.get(0));
 			for(int i = 0; i < newPrices.length; i++) {
-				assertEqual(newPrice,rvkHotels.get(i).price);
+				assertEqual(newPrice,rvkHotels.get(0).rooms.get(i).price);
 			}
 		}
 		catch(SQLException e)
@@ -106,12 +106,12 @@ class HotelAPITest {
 	@Test
 	void changeRoomPriceByAmountTest() {
 		try {
-			Room test_room = test.getRoomsFromHotel(test.getAllHotels().get(0)).get(0);
+			Room test_room = test.getRoomsFromHotel(test.hotelSearch("",-1,-1,-1,-1).get(0)).get(0);
 			int original_price = test_room.price;
 
 			test.changeRoomPriceByAmount(1000, test_room);
 
-			assertEquals(test_room.price, original_price + 1000);
+			assertEqual(test_room.price, original_price + 1000);
 		}
 		catch(SQLException e)
 	    {
@@ -127,7 +127,7 @@ class HotelAPITest {
 
 			test.changeRoomPriceByPercent(100, test_room);
 
-			assertEquals(test_room.price, original_price * 2.0);
+			assertEqual(test_room.price, original_price * 2.0);
 		}
 		catch(SQLException e)
 	    {
@@ -180,6 +180,47 @@ class HotelAPITest {
 			test.addRoomToHotel( testRoom, ht);
 
 			assertTrue("Ã¾aÃ° eru fleiri herbergi eftir kall Ã¡ Ã¾etta fall", ht.rooms.size() > old_room_count);
+		}
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }
+	}
+	
+	@Test
+	void deleteHotelTest() {
+		try {
+			Hotel ht = test.getAllHotels();
+			int old_hotel_count = ht.size();
+
+			testRoom = new Hotel("bla1", 4, "50", "Reykjavík", null, null);
+
+			test.deleteHotel( testRoom );
+
+			ht = test.getAllHotels();
+
+			assertTrue("Ã¾aÃ° eru færri herbergi eftir kall Ã¡ Ã¾etta fall", ht.size() < old_hotel_count);
+		}
+		catch(SQLException e)
+	    {
+	        System.err.println(e.getMessage());
+	    }
+	}
+
+	
+
+	@Test
+	void deleteRoomTest() {
+		try {
+			Hotel ht = test.getAllHotels().get(0);
+			int old_room_count = ht.rooms.size();
+	
+			testRoom = new Room(50, 400, 4, null);
+
+			test.deleteRoom( testRoom );
+			ht = test.getAllHotels().get(0);
+
+			assertTrue("Ã¾aÃ° eru fleiri herbergi eftir kall Ã¡ Ã¾etta fall", ht.rooms.size() < old_room_count);
 		}
 		catch(SQLException e)
 	    {

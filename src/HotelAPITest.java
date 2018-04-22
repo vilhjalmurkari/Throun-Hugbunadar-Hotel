@@ -140,7 +140,7 @@ class HotelAPITest {
 	    }
 	}
 
-
+// Gömul föll
 /*
 	@Test
 	void getAllHotelsTest() {
