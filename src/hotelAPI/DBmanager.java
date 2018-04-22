@@ -58,24 +58,29 @@ public class DBmanager {
 	}
 
 
-	// Notkun: hotelSearch(c,min,max)
+	// Notkun: hotelSearch(c,min,max,start,end)
 	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg),
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
+	//         start og end eru byrjunar og enda dagsetningar sem leita á efir.
 	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
-	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating, long start_date, long end_date) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
 		if(!hotel_city_or_name.equals("") && hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
+			System.out.println("Setting Case sensitive to TRUE");
 			sqlStatement.execute("PRAGMA case_sensitive_like = true");
 		}else {
 			sqlStatement.execute("PRAGMA case_sensitive_like = false");
 		}
 
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels AS h, Rooms AS r WHERE (h.name=r.hotel_name AND h.city=r.hotel_city) AND (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ? AND r.id <> (SELECT room_id FROM Rooms AS r1, Bookings AS b1 WHERE r1.id = b1.room_id AND b1.start_date >= ? AND b1.end_date <= ?)");
+
 		ps.setString(1, "%" + hotel_city_or_name + "%");
 		ps.setString(2, "%" + hotel_city_or_name + "%");
 		ps.setInt(3, min_rating);
 		ps.setInt(4, max_rating);
+		ps.setLong(5, start_date);
+		ps.setLong(6, end_date);
 
 		ResultSet rset = ps.executeQuery();
 
@@ -385,12 +390,12 @@ public class DBmanager {
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
 	public static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
 
-		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS cunt FROM Bookings WHERE start_date < ? AND ? > end_date AND room_id = ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS total FROM Bookings WHERE start_date < ? AND ? > end_date AND room_id = ?");
 		ps.setLong(1, start_date); // Opna bilið ]s;e[
 		ps.setLong(2, end_date);
 		ps.setInt(3, r.id);
 		ResultSet rs = ps.executeQuery();
-		return rs.getInt("cunt") == 0;
+		return rs.getInt("total") == 0;
 	}
 
 	// Notkun: getBookings(u)
@@ -468,13 +473,46 @@ public class DBmanager {
 	// Fyrir:  u er notandi.
 	// Eftir:  u hefur verið bætt í gagnagrunn.
 	protected static void addUser(User user) throws SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO Users(name,email) VALUES(?,?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO Users(name,email,is_admin) VALUES(?,?,?)");
 		ps.setString(1,user.name);
 		ps.setString(2,user.email);
+		ps.setBoolean(3,false);
+		ps.executeUpdate();
+	}
+
+	// Notkun: isUserAdmin(u)
+	// Fyrir:  u er notandi.
+	// Skilar: Satt e.o.a.e. u er admin í gagnagrunni.
+	protected static boolean isUserAdmin(User user) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS total FROM Users WHERE name = ? AND email = ? AND is_admin = ?");
+	
+		ps.setString(1, user.name);
+		ps.setString(2, user.email);
+		ps.setBoolean(3, true);
+
+		ResultSet rs = ps.executeQuery();
+
+		return rs.getInt("total") == 0;
+	}
+
+
+	// Notkun: setUserPriveleges(u,a)
+	// Fyrir:  u er notandi, a er boolean gildi.
+	// Eftir:  u er admin ef a, en annars ekki.
+	protected static void setUserPriveleges(User user, boolean isAdmin) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("UPDATE User SET is_admin = ? WHERE name = ? AND email = ?");
+	
+		ps.setBoolean(1, isAdmin);
+		ps.setString(2, user.name);
+		ps.setString(3, user.email);
+
 		ps.executeUpdate();
 	}
 
 
+	// Notkun: getUser(n,e)
+	// Fyrir:  n er nafn, e er netfang.
+	// Skilar: User hlut sem svarar til n og e, null ef ekki til.
 	protected static User getUser(String name, String email) throws SQLException {
 		User user = null;
 

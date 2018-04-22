@@ -28,13 +28,15 @@ public class HotelAPI {
 	 *          en er -1 ef ekki skiptir máli.
 	 *  Skilar: lista af hótelum sem uppfylla leitarskilyrði.
 	 */
-	public ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+	public ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating, long start_date, long end_date) throws SQLException {
 
 		if(hotel_city_or_name == null) hotel_city_or_name = "";
 		if(min_rating == -1) min_rating = 0;
 		if(max_rating == -1) max_rating = 5;
+		if(start_date == -1) start_date = (long)0;
+		if(end_date == -1) end_date = Long.MAX_VALUE;
 
-		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating);
+		return DBmanager.hotelSearch(hotel_city_or_name, min_rating, max_rating, start_date, end_date);
 	}
 
 	/** Notkun: availableRooms(r,start,end)
