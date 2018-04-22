@@ -101,7 +101,16 @@ public class HotelAPI {
 	 *          bókun hefur verið bætt við í u.
 	 */
 	public void bookRoomForUser(User user, Room room, long start_date, long end_date) throws SQLException {
-		user.makeBooking(room, start_date, end_date);
+		//user.makeBooking(room, start_date, end_date);
+
+		//hér var assert en þar sem það er ekki kveikt á assert tók ég það í burtu
+		if(DBmanager.bookRoom(room, user, start_date, end_date)) {
+			Booking booking = new Booking(room, start_date, end_date);
+			user.bookings.put(booking.id, booking);
+			System.out.println("booked");
+		}else {
+			System.out.println("room is not free");
+		}
 	}
 
 	
