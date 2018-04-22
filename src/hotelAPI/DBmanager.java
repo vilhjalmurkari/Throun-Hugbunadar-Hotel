@@ -480,13 +480,6 @@ public class DBmanager {
 		return bookings;
 	}
 
-	// Notkun: getRoomById(i)
-	// Fyrir:  i er bókunarnúmer einhverrar bókunnar.
-	// Skilar: Room hlut sem fylgir bókunarnúmerinu i.
-	private static Room getRoomById(int id) throws SQLException {
-		//PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE id = ?");
-		return null;
-	}
 
 	// Notkun: confirmBooking(b)
 	// Fyrir:  b er bókun.
@@ -554,10 +547,10 @@ public class DBmanager {
 	}
 
 
-	// Notkun: setUserPriveleges(u,a)
+	// Notkun: setUserPrivileges(u,a)
 	// Fyrir:  u er notandi, a er boolean gildi.
 	// Eftir:  u er admin ef a, en annars ekki.
-	protected static void setUserPriveleges(User user, boolean isAdmin) throws SQLException {
+	protected static void setUserPrivileges(User user, boolean isAdmin) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE User SET is_admin = ? WHERE name = ? AND email = ?");
 	
 		ps.setBoolean(1, isAdmin);
