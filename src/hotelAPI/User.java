@@ -16,7 +16,7 @@ public class User {
 		this.bookings = DBmanager.getBookings(this);
 	}
 
-	public void cancelAllUnconfirmed() throws SQLException {
+	protected void cancelAllUnconfirmed() throws SQLException {
 		Set<Integer> keys = bookings.keySet();
 		for(Integer key : keys) {
 			if(!bookings.get(key).confirmed) {
@@ -28,7 +28,7 @@ public class User {
 	}
 
 
-	public void cancelBooking(int key) throws SQLException {
+	protected void cancelBooking(int key) throws SQLException {
 		if( bookings.containsKey(key) ) {
 			bookings.get(key).cancelBooking();
 			bookings.remove(key);
@@ -39,7 +39,7 @@ public class User {
 		System.out.println("Sorry, this booking has already been confirmed or doesn't exist.");
 	}
 	
-	public void confirmBooking(int id) throws SQLException {
+	protected void confirmBooking(int id) throws SQLException {
 		Booking b = bookings.get(id);
 		if(b != null) {
 			b.confirmBooking();
@@ -49,7 +49,7 @@ public class User {
 	}
 
 	/*
-	public void makeBooking(Room room, long start_date, long end_date) throws SQLException {
+	protected void makeBooking(Room room, long start_date, long end_date) throws SQLException {
 		// returns true iff room was free and booked.
 		assert(!DBmanager.bookRoom(room, this, start_date, end_date));
 
