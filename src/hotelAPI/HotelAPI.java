@@ -107,7 +107,6 @@ public class HotelAPI {
 		if(DBmanager.bookRoom(room, user, start_date, end_date)) {
 			Booking booking = new Booking(room, start_date, end_date);
 			user.bookings.put(booking.id, booking);
-			System.out.println("booked");
 		}else {
 			System.out.println("room is not free");
 		}
