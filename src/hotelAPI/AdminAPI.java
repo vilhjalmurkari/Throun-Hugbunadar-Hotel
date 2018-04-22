@@ -3,8 +3,8 @@ package hotelAPI
 import java.util.ArrayList;
 
 class AdminAPI {
-	User user;
-	boolean isAdmin;
+	private User user;
+	private boolean isAdmin;
 
 	// Notkun: AdminAPI(u)
 	// Fyrir:  u er notandi.
@@ -15,11 +15,22 @@ class AdminAPI {
 		this.user = user;
 		isAdmin = DBmanager.isUserAdmin(user);
 	}
-
+	
+	// Notkun: escalateUserPriveleges(u)
+	// Fyrir:  u er notandi.
+	// Eftir:  u hefur fengið admin réttindi.
 	public void escalateUserPriveleges(User user) {
 		if(isAdmin) {
-			///HEHEHEHEHe
-			//
+			DBmanager.setUserPriveleges(user,true);
+		}
+	}
+
+	// Notkun: escalateUserPriveleges(u)
+	// Fyrir:  u er notandi.
+	// Eftir:  u hefur misst (ef hafði) admin réttindi.
+	public void descalateUserPriveleges(User user) {
+		if(isAdmin) {
+			DBmanager.setUserPriveleges(user,false);
 		}
 	}
 

@@ -43,5 +43,6 @@ CREATE TABLE Bookings(
 
 CREATE TABLE Users(
 	name VARCHAR(64),
-	email VARCHAR(255) PRIMARY KEY
+	email VARCHAR(255) PRIMARY KEY,
+	is_admin BOOLEAN
 );
