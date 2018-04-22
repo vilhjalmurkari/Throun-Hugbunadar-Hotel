@@ -557,7 +557,7 @@ public class DBmanager {
 	// Notkun: setUserPriveleges(u,a)
 	// Fyrir:  u er notandi, a er boolean gildi.
 	// Eftir:  u er admin ef a, en annars ekki.
-	protected static void setUserPriveleges(User user, boolean isAdmin) throws SQLException {
+	public static void setUserPriveleges(User user, boolean isAdmin) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE User SET is_admin = ? WHERE name = ? AND email = ?");
 	
 		ps.setBoolean(1, isAdmin);
