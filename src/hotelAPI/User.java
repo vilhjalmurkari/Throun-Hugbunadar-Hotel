@@ -44,6 +44,7 @@ public class User {
 		if(b != null) {
 			b.confirmBooking();
 			b.confirmed = true;
+			bookings.remove(id);
 		}
 	}
 

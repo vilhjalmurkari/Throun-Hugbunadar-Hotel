@@ -16,6 +16,13 @@ class AdminAPI {
 		isAdmin = DBmanager.isUserAdmin(user);
 	}
 
+	public void escalateUserPriveleges(User user) {
+		if(isAdmin) {
+			///HEHEHEHEHe
+			//
+		}
+	}
+
 	// Notkun: setRoomPrice(p,r)
 	// Fyrir:  p er nýtt verð,
 	//         r er herbergi sem breyta á verði á.
