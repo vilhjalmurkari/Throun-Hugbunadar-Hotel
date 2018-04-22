@@ -41,3 +41,35 @@ void | addHotels(ArrayList<Hotel> hotels) | Bætirhótelum í gagnagrunn
 void | addRoomToHotel(Room room, Hotel hotel) | Bætir herbergi við viðeigandi hótel
 void | deleteHotel(Hotel hotel) | Eyðir viðeigandi hóteli úr gagnagrunninum
 void | deleteRoom(Room room) | Eyðir viðeigandi herbergi úr gagnagrunni
+
+
+## Hotel
+#### Breytur
+Tag | Breytunafn | Um breytu
+:---|:---:|---
+String | name | Nafn hótels
+int | rating | Fjöldi stjarna sem hótelið hefur
+String | description | Lýsing á hótelinu
+String | city | Nafn borgar sem hótelið er staðsett í
+ArrayList<String> | tags | Listi af tögum sem hótelið hefur
+ArrayList<Room> | rooms | Listi af herbergjum í hóteli
+
+#### Föll
+Skilagildi | Fallakall | Um notkun
+:---|:---|:---
+void | Hotel() | Initialiser
+void | printHotel() | Prentar upplýsingar um hótelið á skynsamlegan máta
+
+
+
+## Room
+#### Breytur
+Tag | Breytunafn | Um breytu
+:---|:---:|---
+String | name | Nafn hótels
+int | id | Auðkenni þessa herbergis
+int | size | Fermetrafjöldi þessa herbergis
+int | price | Verð þessa herbergis
+int | bed_count | Fjöldi rúma í þessu herbergi
+ArrayList<String> | tags | Tög sem þetta herbergi hefur
+
