@@ -3,7 +3,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
-import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
 import hotelAPI.*;
@@ -11,7 +10,6 @@ import hotelAPI.*;
 
 /*
 TODO:
-	- sýna hvaða notandi er að bóka
 	- geta valið tímabil bókunar
 	- er herbergi frátekið?
 	- ætti sennilega að láta room gluggann uppfærast þegar þú velur eitthvað annað hótel
@@ -383,6 +381,7 @@ class View extends JPanel {
 		room_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if(table_selected_index > -1) {
+					/*
 					int row_count = room_table_model.getRowCount();
 
 					for(int i = 0; i < row_count; i++) {
@@ -394,7 +393,7 @@ class View extends JPanel {
 					for(Room r : rooms) {
 						room_table_model.addRow(new Object[] {r.size, r.bed_count, r.price});
 					}
-
+					*/
 					room_frame.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(null, "ekkert hótel valið!");
@@ -440,6 +439,10 @@ class View extends JPanel {
 				try {
 					api.bookRoomForUser(test_user, rooms.get(room_selected_index), 0, 0);
 					JOptionPane.showMessageDialog(null, "Bókun heppnaðist!");
+					room_table_model.removeRow(room_selected_index);
+					Room r = rooms.remove(room_selected_index);
+					rooms.add(r);
+					
 				}catch(SQLException e) {
 					System.out.println(e.getMessage());
 				}

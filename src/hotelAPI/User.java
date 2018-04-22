@@ -51,8 +51,7 @@ public class User {
 	public void makeBooking(Room room, long start_date, long end_date) throws SQLException {
 		
 		// returns true iff room was free and booked.
-		if( !DBmanager.bookRoom( room, this, start_date, end_date) )
-			return;
+		assert(!DBmanager.bookRoom( room, this, start_date, end_date));
 
 		Booking booking = new Booking(room, start_date, end_date);
 		bookings.put(booking.id, booking);
