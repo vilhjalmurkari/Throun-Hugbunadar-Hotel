@@ -10,7 +10,7 @@ Verkefni í Þróun Hugbúnaðar.
 Sæktu /src/ og keyrðu ```build.sh run``` eða ```build.bat run``` eftir því hvort þú sért á Unix eða Windows.   
 Það ætti að birtast notendaviðmót sem leyfir þér að velja hótel og síðan herbergi.
 
-
+----
 
 ## HotelAPI
 Skilagildi | Fallakall | Um notkun
@@ -25,6 +25,7 @@ User | getUser(String name, String email) | Sækir notandann úr gagnagrunninum
 void | bookRoomForUser(User user, Room room, long start_date, long end_date) | Viðeigandi herbergi hefur verið bókað fyrir veiðeigandi notanda í gagnagrunni og bókun hefur verið bætt við notandann
 void | deleteUser(String email) | Eyðir notanda úr gagnagrunni með netfangið email
 
+----
 
 ## AdminAPI
 Skilagildi | Fallakall | Um notkun
@@ -42,8 +43,9 @@ void | addRoomToHotel(Room room, Hotel hotel) | Bætir herbergi við viðeigandi hó
 void | deleteHotel(Hotel hotel) | Eyðir viðeigandi hóteli úr gagnagrunninum
 void | deleteRoom(Room room) | Eyðir viðeigandi herbergi úr gagnagrunni
 
+----
 
-### Hotel
+## Hotel
 #### Breytur
 Tag | Breytunafn | Um breytu
 :---|:---:|---
@@ -62,7 +64,7 @@ void | printHotel() | Prentar upplýsingar um hótelið á skynsamlegan máta
 
 ----
 
-### Room
+## Room
 #### Breytur
 Tag | Breytunafn | Um breytu
 :---|:---:|---
