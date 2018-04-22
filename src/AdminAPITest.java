@@ -9,7 +9,7 @@ import java.sql.*;
 import hotelAPI.*;
 
 
-class HotelAPITest {
+class AdminAPITest {
 	private static AdminAPI test;
 	private static User testUser;
 	private static HotelAPI hotelAPI;
