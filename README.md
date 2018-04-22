@@ -30,6 +30,8 @@ void | deleteUser(String email) | Eyðir notanda úr gagnagrunni með netfangið ema
 Skilagildi | Fallakall | Um notkun
 :---|:---|:---
 void | AdminAPI() | Initialiser
+void | escalateUserPriveleges(User user) | Gefur user admin réttindi.
+void | descalateUserPriveleges(User user) | Lætur user missa admin réttindi.
 void | setRoomPrice(int new_price, Room room) | Verði á viðeigandi herbergi hefur verið breytt
 void | setRoomPrice(int new_price, ArrayList<Room> rooms) | Verði á viðeigandi herbergjum hefur verið breytt
 void | changeRoomPriceByAmount(int price_change, Room room) | Verð á viðeigandi herbergi hækkar eða lækkar um price_change
