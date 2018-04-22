@@ -43,7 +43,7 @@ void | deleteHotel(Hotel hotel) | Eyðir viðeigandi hóteli úr gagnagrunninum
 void | deleteRoom(Room room) | Eyðir viðeigandi herbergi úr gagnagrunni
 
 
-## Hotel
+### Hotel
 #### Breytur
 Tag | Breytunafn | Um breytu
 :---|:---:|---
@@ -60,9 +60,9 @@ Skilagildi | Fallakall | Um notkun
 void | Hotel() | Initialiser
 void | printHotel() | Prentar upplýsingar um hótelið á skynsamlegan máta
 
+----
 
-
-## Room
+### Room
 #### Breytur
 Tag | Breytunafn | Um breytu
 :---|:---:|---
