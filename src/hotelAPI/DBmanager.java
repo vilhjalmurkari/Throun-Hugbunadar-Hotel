@@ -14,7 +14,7 @@ public class DBmanager {
 	//         Verður að vera kallað áður en önnur föll eru notuð.
 	// Eftir:  Connection og Statement hafa verið upphafsstillt
 	//         svo unnt er að framkvæma SQL aðgerðir.
-	protected static void init() throws SQLException {
+	public static void init() throws SQLException {
 		if(connection == null) {
 			try {
 				Class.forName("org.sqlite.JDBC");
@@ -29,7 +29,7 @@ public class DBmanager {
 
 	// Notkun: getAllHotels()
 	// Skilar: ArrayList af öllum hótelum í gagnagrunni.
-	protected static ArrayList<Hotel> getAllHotels() throws SQLException {
+	public static ArrayList<Hotel> getAllHotels() throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		ResultSet rset = sqlStatement.executeQuery("SELECT * FROM Hotels");
 
@@ -63,7 +63,7 @@ public class DBmanager {
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
 	//         start og end eru byrjunar og enda dagsetningar sem leita á efir.
 	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
-	protected static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating, long start_date, long end_date) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating, long start_date, long end_date) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
 		if(!hotel_city_or_name.equals("") && hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
@@ -105,7 +105,7 @@ public class DBmanager {
 		return result;
 	}
 
-	protected static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
  		ArrayList<Hotel> result = new ArrayList<Hotel>();
  
  		if(!hotel_city_or_name.equals("") && hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
@@ -146,7 +146,7 @@ public class DBmanager {
 	// Notkun: getHotel(name,city);
 	// Fyrir:  name og city eru nákvæmir strengir til að leita eftir.
 	// Skilar: fyrsta hótelið sem finnst.
-	protected static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
+	public static Hotel getHotel(String hotel_name, String hotel_city) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name= ? AND city = ?");
 		ps.setString(1,hotel_name);
 		ps.setString(2,hotel_city);
@@ -178,7 +178,7 @@ public class DBmanager {
 	// Notkun: getHotelsByName(leit);
 	// Fyrir:  leit er einhver leitarstrengur.
 	// Skilar: listi af Hótelum sem innihalda "leit".
-	protected static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
+	public static ArrayList<Hotel> getHotelsByName(String hotel_name) throws SQLException {
 		ArrayList<Hotel> listOfHotels = new ArrayList<Hotel>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE name LIKE ?");
 		ps.setString(1, "%" + hotel_name + "%");
@@ -233,7 +233,7 @@ public class DBmanager {
 
 	// Notkun: getRoomsFromHotel( hotel_name, hotel_city)
 	// Skilar: ArrayList af herbergjum sem eru í viðeigandi hóteli.
-	protected static ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
+	public static ArrayList<Room> getRoomsFromHotel(String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<Room> listOfRooms = new ArrayList<Room>();
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Rooms WHERE hotel_name= ? AND hotel_city = ?");
 		ps.setString(1,hotel_name);
@@ -288,7 +288,7 @@ public class DBmanager {
 	// Notkun: setRoomPrice(price,rooms)
 	// Fyrir:  price er eitthvert nýtt verð, rooms er listi herbergja sem breyta á verði í.
 	// Eftir:  Verðum rooms hefur verið breytt í hlut og gagnagrunni.
-	protected static void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
+	public static void setRoomPrice(int new_price, ArrayList<Room> rooms) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		ps.setInt(1, new_price);
@@ -302,7 +302,7 @@ public class DBmanager {
 	// Notkun: changeRoomPriceByAmount(delta, room);
 	// Fyrir:  delta er hækkun/lækkun í verði, room er herbergishlutur.
 	// Eftir:  room hefur hækkað um delta í verði í hlut og gagnagrunni.
-	protected static void changeRoomPriceByAmount(int price_change, Room room) throws SQLException {
+	public static void changeRoomPriceByAmount(int price_change, Room room) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Rooms SET price = ? WHERE id = ?");
 
 		room.price += price_change;
@@ -317,7 +317,7 @@ public class DBmanager {
 	// Notkun: changeRoomPriceByPercent(percent, room);
 	// Fyrir:  percent er prósentuleg hækkun í verði, room er herbergishlutur.
 	// Eftir:  room hefur hækkað um percent prósent í verði í hlut og gagnagrunni.
-	protected static void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
+	public static void changeRoomPriceByPercent(double percent, Room room) throws SQLException {
 		int delta = (int)(room.price * percent);
 		changeRoomPriceByAmount(delta, room);
 	}
@@ -325,7 +325,7 @@ public class DBmanager {
 	// Notkun: addHotel(hotel)
 	// Fyrir:  hotel er Hotel hlutur.
 	// Eftir:  gögnum hotel hefur verið bætt við í gagnagrunni.
-	protected static void addHotel(Hotel hotel) throws SQLException {
+	public static void addHotel(Hotel hotel) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Hotels(name, rating, description, city) VALUES(?, ?, ?, ?)");
 
 		ps.setString(1, hotel.name);
@@ -358,7 +358,7 @@ public class DBmanager {
 	// Notkun: addHotels(hotels)
 	// Fyrir:  hotel er listi af Hotel hlutum.
 	// Eftir:  Öll gögn hótela í hotels hefur verið bætt við gagnagrunni.
-	protected static void addHotels(ArrayList<Hotel> hotels) throws SQLException {
+	public static void addHotels(ArrayList<Hotel> hotels) throws SQLException {
 		for(Hotel h : hotels) {
 			addHotel(h);
 		}
@@ -367,7 +367,7 @@ public class DBmanager {
 	// Notkun: addRoomToHotel(room,hotel,city)
 	// Fyrir:  room er herbergishlutur, hotel og city er nákvæmt nafn og borg hótels.
 	// Eftir:  Gögnum room hefur verið bætt við í gagnagrunn á viðeigandi stað.
-	protected static void addRoomToHotel(Room room, String hotel_name, String hotel_city) throws SQLException {
+	public static void addRoomToHotel(Room room, String hotel_name, String hotel_city) throws SQLException {
 		ArrayList<Room> al = new ArrayList<Room>();
 		al.add(room);
 		addRoomsToHotel(al, hotel_name, hotel_city);
@@ -376,7 +376,7 @@ public class DBmanager {
 	// Notkun: addRoomsToHotel(rooms,hotel,city)
 	// Fyrir:  rooms er ArrayList herbergja, hotel og city er nákvæmt nafn og borg hótels.
 	// Eftir:  Gögnum herbergja í rooms hefur verið bætt við í gagnagrunn á viðeigandi stað.
-	protected static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, String hotel_city) throws SQLException {
+	public static void addRoomsToHotel(ArrayList<Room> rooms, String hotel_name, String hotel_city) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO Rooms(id, hotel_name, hotel_city, size, price, bed_count) VALUES(?, ?, ?, ?, ?, ?)");
 
 		ps.setString(2, hotel_name);
@@ -401,6 +401,16 @@ public class DBmanager {
 		ps.executeUpdate();
 	}
 
+	public static void changeHotelDescription(String hotel_name, String hotel_city, String new_description) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("UPDATE Hotels SET description = ? WHERE hotel_name = ? and hotel_city = ?");
+
+		ps.setInt(1, hotel_name);
+		ps.setInt(2, hotel_city);
+		ps.setInt(3, new_description);
+
+		ps.executeUpdate();
+	}
+
 	// Notkun: bookRoom(r,u,s,h)
 	// Fyrir:  r er herbergi sem á að bóka,
 	//         u er notandi,
@@ -408,7 +418,7 @@ public class DBmanager {
 	// Eftir:  r hefur verið bókað frá s til h í nafni u.
 	//         Skilar satt ef herbergið var bókað,
 	//         ósatt ef herbergið var ekki laust.
-	protected static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
+	public static boolean bookRoom(Room room, User user, long start_date, long end_date) throws SQLException {
 		if(!isRoomFree(room, start_date, end_date)) {
 			System.out.println("room is not free");
 			return false;
@@ -430,7 +440,7 @@ public class DBmanager {
 	// Notkun: isRoomFree(r,s,e)
 	// Fyrir:  r er herbergi, s,e eru upphafs- og lokadags.
 	// Skilar: satt e.o.a.e. herbergi er laust þetta tímabil.
-	protected static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
+	public static boolean isRoomFree(Room r, long start_date, long end_date) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT COUNT(*) AS total FROM Bookings WHERE ((? >= start_date AND ? <= end_date) OR (? >= start_date AND ? <= end_date) OR (? < start_date AND ? > end_date)) AND ? = room_id");
 
 		ps.setLong(1, start_date);
@@ -449,7 +459,7 @@ public class DBmanager {
 	// Notkun: getBookings(u)
 	// Fyrir:  u er notandi.
 	// Skilar: HashMap<Integer,Booking> af <bókunarnúmerum,bókunum>.
-	protected static HashMap<Integer,Booking> getBookings(User user) throws SQLException {
+	public static HashMap<Integer,Booking> getBookings(User user) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Bookings WHERE user_email = ?");
 		ps.setString(1,user.email);
 
@@ -481,7 +491,7 @@ public class DBmanager {
 	// Notkun: confirmBooking(b)
 	// Fyrir:  b er bókun.
 	// Eftir:  b hefur verið staðfest í gagnagrunni.
-	protected static void confirmBooking(Booking b) throws SQLException {
+	public static void confirmBooking(Booking b) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Bookings SET confirmed = TRUE WHERE id = ?");
 		ps.setInt(1, b.id);
 		ps.executeUpdate();
@@ -490,7 +500,7 @@ public class DBmanager {
 	// Notkun: cancelBooking(b)
 	// Fyrir:  b er bókun.
 	// Eftir:  b hefur verið hætt við í gagnagrunni.
-	protected static void cancelBooking(Booking booking) throws SQLException {
+	public static void cancelBooking(Booking booking) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Bookings WHERE id = ?");
 		ps.setInt(1, booking.id);
 		ps.executeUpdate();
@@ -499,7 +509,7 @@ public class DBmanager {
 	// Notkun: deleteHotel(h)
 	// Fyrir:  h er hótel.
 	// Eftir:  h hefur verið eytt úr gagnagrunnni.
-	protected static void deleteHotel( Hotel h ) throws SQLException {
+	public static void deleteHotel( Hotel h ) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Hotels WHERE name = ? AND city = ?");
 		ps.setString(1, h.name);
 		ps.setString(2, h.city);
@@ -510,7 +520,7 @@ public class DBmanager {
 	// Notkun: deleteRoom(r)
 	// Fyrir:  r er herbergi.
 	// Eftir:  r hefur verið eytt úr gagnagrunnni.
-	protected static void deleteRoom( Room r ) throws SQLException {
+	public static void deleteRoom( Room r ) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM Rooms WHERE id = ?");
 		ps.setInt(1, r.id);
 
