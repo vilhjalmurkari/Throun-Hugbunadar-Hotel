@@ -58,11 +58,12 @@ public class DBmanager {
 	}
 
 
-	// Notkun: hotelSearch(c,min,max)
+	// Notkun: hotelSearch(c,min,max,start,end)
 	// Fyrir:  c er leitarstrengur fyrir einhverja borg (nafn hótels eða borg),
 	//         min og max eru lægstu og hæstu stjörnur sem hótel má hafa,
+	//         start og end eru byrjunar og enda dagsetningar sem leita á efir.
 	// Skilar: lista af hótelum sem uppfylla leitarskilyrði.
-	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating) throws SQLException {
+	public static ArrayList<Hotel> hotelSearch(String hotel_city_or_name, int min_rating, int max_rating, long start_date, long end_date) throws SQLException {
 		ArrayList<Hotel> result = new ArrayList<Hotel>();
 
 		if(!hotel_city_or_name.equals("") && hotel_city_or_name.charAt(0) == Character.toUpperCase(hotel_city_or_name.charAt(0))) {
@@ -71,11 +72,14 @@ public class DBmanager {
 			sqlStatement.execute("PRAGMA case_sensitive_like = false");
 		}
 
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels WHERE (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ?");
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM Hotels AS h, Rooms AS r WHERE (h.name=r.hotel_name AND h.city=r.hotel_city) AND (city LIKE ? OR name LIKE ?) AND rating >= ? AND rating <= ? AND r.id <> (SELECT room_id FROM Rooms AS r1, Bookings AS b1 WHERE r1.id = b1.room_id AND b1.start_date >= ? AND b1.end_date <= ?)");
+
 		ps.setString(1, "%" + hotel_city_or_name + "%");
 		ps.setString(2, "%" + hotel_city_or_name + "%");
 		ps.setInt(3, min_rating);
 		ps.setInt(4, max_rating);
+		ps.setLong(5, start_date);
+		ps.setLong(6, end_date);
 
 		ResultSet rset = ps.executeQuery();
 
