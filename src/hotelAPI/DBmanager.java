@@ -404,9 +404,9 @@ public class DBmanager {
 	public static void changeHotelDescription(String hotel_name, String hotel_city, String new_description) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("UPDATE Hotels SET description = ? WHERE hotel_name = ? and hotel_city = ?");
 
-		ps.setInt(1, hotel_name);
-		ps.setInt(2, hotel_city);
-		ps.setInt(3, new_description);
+		ps.setString(1, hotel_name);
+		ps.setString(2, hotel_city);
+		ps.setString(3, new_description);
 
 		ps.executeUpdate();
 	}
